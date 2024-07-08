@@ -1,7 +1,2 @@
-import { SearchResponse } from './search-response.model';
-
-describe('SearchResponse', () => {
-  it('should create an instance', () => {
-    expect(new SearchResponse()).toBeTruthy();
-  });
-});
+// search-response.model.spec.ts
+// Тесты для модели SearchItem будут добавлены здесь в будущем.

@@ -10,7 +10,14 @@ import { SearchResultsComponent } from './features/search/search-results/search-
 import { SearchItemComponent } from './features/search/search-item/search-item.component';
 
 @NgModule({
-  declarations: [AppComponent, HeaderComponent, FooterComponent, SearchBarComponent, SearchResultsComponent, SearchItemComponent],
+  declarations: [
+    AppComponent,
+    HeaderComponent,
+    FooterComponent,
+    SearchBarComponent,
+    SearchResultsComponent,
+    SearchItemComponent,
+  ],
   imports: [BrowserModule, AppRoutingModule],
   providers: [],
   bootstrap: [AppComponent],
