@@ -13,22 +13,20 @@ import { SearchResultsComponent } from './features/search/search-results/search-
 import { SearchItemComponent } from './features/search/search-item/search-item.component';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    HeaderComponent,
-    FooterComponent,
-    SearchBarComponent,
-    SearchResultsComponent,
-    SearchItemComponent,
-  ],
+  declarations: [],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule, // Необходим для анимаций Material
     MatButtonModule,
     MatIconModule,
+    AppComponent,
+    HeaderComponent,
+    FooterComponent,
+    SearchBarComponent,
+    SearchItemComponent,
+    SearchResultsComponent,
   ],
   providers: [],
-  bootstrap: [AppComponent],
 })
 export default class AppModule {}
