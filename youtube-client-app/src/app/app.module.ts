@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { RouterModule } from '@angular/router';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { HeaderComponent } from './core/header/header.component';
 import { FooterComponent } from './core/footer/footer.component';
 import { SearchBarComponent } from './features/search/search-bar/search-bar.component';
 import { SearchResultsComponent } from './features/search/search-results/search-results.component';
@@ -17,11 +17,11 @@ import { SearchItemComponent } from './features/search/search-item/search-item.c
   imports: [
     BrowserModule,
     AppRoutingModule,
+    RouterModule,
     BrowserAnimationsModule, // Необходим для анимаций Material
     MatButtonModule,
     MatIconModule,
     AppComponent,
-    HeaderComponent,
     FooterComponent,
     SearchBarComponent,
     SearchItemComponent,
@@ -29,4 +29,4 @@ import { SearchItemComponent } from './features/search/search-item/search-item.c
   ],
   providers: [],
 })
-export default class AppModule {}
+export class AppModule {}
