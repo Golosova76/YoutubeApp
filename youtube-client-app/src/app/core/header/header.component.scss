@@ -1,0 +1,26 @@
+.header .mat-toolbar-row,
+.mat-toolbar-single-row {
+  min-height: 104px;
+}
+
+.mat-mdc-form-field {
+  height: 24px;
+}
+
+.input-search {
+  max-width: 396px;
+  width: 100%;
+}
+
+.header .mat-toolbar-row .mat-mdc-form-field {
+  max-width: 396px !important;
+  width: 100% !important;
+}
+
+.header {
+  & .form-input-search {
+    input {
+      height: 44px;
+    }
+  }
+}
