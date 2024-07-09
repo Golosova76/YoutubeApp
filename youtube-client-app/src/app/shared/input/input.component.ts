@@ -9,7 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
   selector: 'app-input',
   standalone: true,
   templateUrl: './input.component.html',
-  styleUrl: './input.component.scss',
+  styleUrls: ['./input.component.scss'],
   imports: [CommonModule, MatFormFieldModule, MatInputModule, MatButtonModule],
 })
 export class InputComponent {
