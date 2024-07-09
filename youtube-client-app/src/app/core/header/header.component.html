@@ -3,4 +3,12 @@
     <img src="assets/logo.svg" alt="Logotype">
   </div>
   <app-input class="input-search" placeholder="What are you want to find out?"></app-input>
+  <app-custom-button class="button-search" (click)="onSearch()">
+    <mat-icon>search</mat-icon> Search
+  </app-custom-button>
+  <app-custom-button class="button-settings" (click)="handleButtonClick()">
+    <div class="icon-button">
+      <img src="assets/search_settings.svg" alt="Search Setting">
+    </div>
+  </app-custom-button>
 </mat-toolbar>
