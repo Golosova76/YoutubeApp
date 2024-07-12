@@ -20,10 +20,7 @@ import { CustomButtonComponent } from 'app/shared/custom-button/custom-button.co
 })
 export class HeaderComponent {
   // eslint-disable-next-line class-methods-use-this
-  onSearch() {
-    console.log('Search initiated');
-    // Тут может быть реализация логики поиска или вызов сервиса
-  }
+  onSearch() {}
 
   // eslint-disable-next-line class-methods-use-this
   handleButtonClick() {}

@@ -1,14 +1,27 @@
+<!-- <mat-toolbar color="primary">
+  <div class="logo">
+    <img src="assets/logo.svg" alt="Logotype">
+  </div>
+  <app-input class="input-search" placeholder="What are you want to find out?"></app-input>
+  <app-custom-button [raisedButton]="true" class="button-search" (click)="onSearch()">Search</app-custom-button>
+  <app-custom-button [iconButton]="true" class="button-settings" (click)="handleButtonClick()">
+    <img src="assets/search_settings.svg" alt="Search Setting">
+  </app-custom-button>
+  <app-custom-button [iconButton]="true" class="button-login" (click)="handleButtonClick()">
+    <img src="assets/login.svg" alt="Login">
+  </app-custom-button>
+</mat-toolbar> -->
+
 <mat-toolbar color="primary">
   <div class="logo">
     <img src="assets/logo.svg" alt="Logotype">
   </div>
   <app-input class="input-search" placeholder="What are you want to find out?"></app-input>
-  <app-custom-button class="button-search" (click)="onSearch()">
-    <mat-icon>search</mat-icon> Search
+  <app-custom-button buttonType="raised" class="button-search" (click)="onSearch()">Search</app-custom-button>
+  <app-custom-button buttonType="icon" class="button-settings" (click)="handleButtonClick()">
+    <img src="assets/search_settings.svg" alt="Search Setting">
   </app-custom-button>
-  <app-custom-button class="button-settings" (click)="handleButtonClick()">
-    <div class="icon-button">
-      <img src="assets/search_settings.svg" alt="Search Setting">
-    </div>
+  <app-custom-button buttonType="icon" class="button-login" (click)="handleButtonClick()">
+    <img src="assets/login.svg" alt="Login">
   </app-custom-button>
 </mat-toolbar>
