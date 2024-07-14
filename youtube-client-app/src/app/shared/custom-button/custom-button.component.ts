@@ -9,11 +9,5 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./custom-button.component.scss'],
 })
 export class CustomButtonComponent {
-  @Input() isIconBtn: boolean = true;
-
-  // @Input() iconButton: boolean = false;
-
-  // @Input() raisedButton: boolean = false;
-
-  @Input() buttonType: string = 'default';
+  @Input() buttonClass: string = '';
 }

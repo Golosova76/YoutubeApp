@@ -1,12 +1,7 @@
 <!-- <button class="custom-button" [attr.mat-icon-button]="iconButton ? '' : null" [attr.mat-raised-button]="raisedButton ? '' : null">
   <ng-content></ng-content>
 </button> -->
-@if (!isIconBtn) {
-<button>
-  <ng-content select="raised"></ng-content>
+
+<button class="button" [ngClass]="buttonClass">
+  <ng-content></ng-content>
 </button>
-} @else {
-<button>
-  <ng-content select="icon"></ng-content>
-</button>
-}
