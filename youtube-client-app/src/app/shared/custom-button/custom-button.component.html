@@ -1,14 +1,12 @@
 <!-- <button class="custom-button" [attr.mat-icon-button]="iconButton ? '' : null" [attr.mat-raised-button]="raisedButton ? '' : null">
   <ng-content></ng-content>
 </button> -->
-<ng-container [ngSwitch]="buttonType">
-  <button *ngSwitchCase="'icon'" class="custom-button" mat-icon-button>
-    <ng-content></ng-content>
-  </button>
-  <button *ngSwitchCase="'raised'" class="custom-button" mat-raised-button>
-    <ng-content></ng-content>
-  </button>
-  <button *ngSwitchDefault class="custom-button">
-    <ng-content></ng-content>
-  </button>
-</ng-container>
+@if (!isIconBtn) {
+<button>
+  <ng-content select="raised"></ng-content>
+</button>
+} @else {
+<button>
+  <ng-content select="icon"></ng-content>
+</button>
+}

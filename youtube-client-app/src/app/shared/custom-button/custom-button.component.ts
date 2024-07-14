@@ -1,15 +1,16 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-custom-button',
   standalone: true,
-  imports: [CommonModule, MatButtonModule],
+  imports: [CommonModule],
   templateUrl: './custom-button.component.html',
   styleUrls: ['./custom-button.component.scss'],
 })
 export class CustomButtonComponent {
+  @Input() isIconBtn: boolean = true;
+
   // @Input() iconButton: boolean = false;
 
   // @Input() raisedButton: boolean = false;

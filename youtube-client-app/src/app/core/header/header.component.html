@@ -12,16 +12,28 @@
   </app-custom-button>
 </mat-toolbar> -->
 
-<mat-toolbar color="primary">
+<div class="header">
   <div class="logo">
     <img src="assets/logo.svg" alt="Logotype">
   </div>
   <app-input class="input-search" placeholder="What are you want to find out?"></app-input>
-  <app-custom-button buttonType="raised" class="button-search" (click)="onSearch()">Search</app-custom-button>
-  <app-custom-button buttonType="icon" class="button-settings" (click)="handleButtonClick()">
-    <img src="assets/search_settings.svg" alt="Search Setting">
+
+  <app-custom-button class="button-search" (click)="onSearch()">
+    <ng-container ngProjectAs="raised">
+      Search
+    </ng-container>
   </app-custom-button>
-  <app-custom-button buttonType="icon" class="button-login" (click)="handleButtonClick()">
-    <img src="assets/login.svg" alt="Login">
+
+  <app-custom-button [isIconBtn]="true" class="button-settings" (click)="handleButtonClick()">
+    <ng-container ngProjectAs="icon">
+      <img src="assets/search_settings.svg" alt="Search Setting">
+    </ng-container>
   </app-custom-button>
-</mat-toolbar>
+
+  <app-custom-button [isIconBtn]="true" class="button-login" (click)="handleButtonClick()">
+    <ng-container ngProjectAs="icon">
+      <img src="assets/login.svg" alt="Login">
+    </ng-container>
+  </app-custom-button>
+
+</div>
