@@ -42,6 +42,7 @@ module.exports = {
     sourceType: 'module',
   },
   rules: {
+    'object-curly-newline': ['error', { multiline: true, consistent: true }],
     '@typescript-eslint/no-explicit-any': 'error',
     'import/prefer-default-export': 'off',
     quotes: ['error', 'single', { allowTemplateLiterals: true }],

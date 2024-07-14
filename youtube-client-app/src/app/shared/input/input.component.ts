@@ -14,4 +14,6 @@ export class InputComponent {
   @Input() type: string = 'text';
 
   @Input() label: string = '';
+
+  @Input() inputClass: string = '';
 }

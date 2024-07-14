@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 
 import { InputComponent } from 'app/shared/input/input.component';
 import { CustomButtonComponent } from 'app/shared/custom-button/custom-button.component';
@@ -15,6 +15,22 @@ export class HeaderComponent {
   // eslint-disable-next-line class-methods-use-this
   onSearch() {}
 
-  // eslint-disable-next-line class-methods-use-this
-  handleButtonClick() {}
+  // Свойство для отслеживания видимости search-bar
+  searchBarVisible: boolean = false;
+
+  handleButtonClick() {
+    this.toggleSearch();
+    this.emitToggle();
+  }
+
+  emitToggle() {
+    this.searchBarVisible = !this.searchBarVisible; // Переключить видимость
+  }
+
+  // передать событие клика дальше вверх к AppComponent
+  @Output() toggleSearchEvent = new EventEmitter<void>();
+
+  toggleSearch() {
+    this.toggleSearchEvent.emit(); // запускаем событие при клике на кнопку
+  }
 }

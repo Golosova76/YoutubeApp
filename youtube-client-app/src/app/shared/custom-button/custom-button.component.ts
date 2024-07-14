@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-custom-button',
@@ -10,4 +11,10 @@ import { Component, Input } from '@angular/core';
 })
 export class CustomButtonComponent {
   @Input() buttonClass: string = '';
+
+  @Output() buttonClick = new EventEmitter<void>();
+
+  onClick() {
+    this.buttonClick.emit();
+  }
 }

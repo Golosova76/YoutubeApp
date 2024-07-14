@@ -1,7 +1,3 @@
-<!-- <button class="custom-button" [attr.mat-icon-button]="iconButton ? '' : null" [attr.mat-raised-button]="raisedButton ? '' : null">
-  <ng-content></ng-content>
-</button> -->
-
-<button class="button" [ngClass]="buttonClass">
+<button class="button" [ngClass]="buttonClass" (click)="onClick()">
   <ng-content></ng-content>
 </button>
