@@ -1,12 +1,17 @@
 <article class="search-item">
   <div class="search-item-container">
     <div class="search-item-image">
-      <img src="@img" alt="">
+      <img src="assets/caption.jpg" alt="">
     </div>
-    <div class="search-item-statictics"></div>
+    <div class="search-item-statictics">
+      <div *ngFor="let stat of stats" class="stat-item">
+        <fa-icon [icon]="stat.icon"></fa-icon>
+        <span>{{ stat.value }}</span>
+      </div>
+    </div>
     <div class="search-item-about">
-      <div class="search-item-title"></div>
-      <div class="search-item-title-count"></div>
+      <div class="search-item-title">Kuji Podcast </div>
+      <div class="search-item-title-count">#</div>
     </div>
     <div class="search-item-more">
       <app-custom-button buttonClass="button-search-item-more">more...

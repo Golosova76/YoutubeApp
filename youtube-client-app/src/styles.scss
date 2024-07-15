@@ -46,18 +46,6 @@ $color-text-dark: black;
 $color-background-body: #bfb0a3;
 $main-background-color: $color-background-body;
 
-@mixin margin-bottom40 {
-  &:not(:last-child) {
-    margin-bottom: 40px;
-  }
-}
-
-@mixin margin-bottom20 {
-  &:not(:last-child) {
-    margin-bottom: 20px;
-  }
-}
-
 * {
   margin: 0;
   padding: 0;

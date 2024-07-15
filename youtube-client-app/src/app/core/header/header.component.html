@@ -7,22 +7,23 @@
 
 
     <div class="header-search">
-      <div class="header-input">
-        <app-input inputClass="header-input-search" placeholder="What are you want to find out?"></app-input>
-      </div>
+      <form class="header-search-form" (ngSubmit)="onSearch()">
+        <div class="header-input">
+          <app-input inputClass="header-input-search" placeholder="What are you want to find out?"></app-input>
+        </div>
 
-      <app-custom-button buttonClass="button-search" (click)="onSearch()">
-        Search
+        <app-custom-button type="submit" buttonClass="button-search" (click)="onSearch()">
+          Search
+        </app-custom-button>
+      </form>
+
+      <app-custom-button buttonClass="button-settings" (buttonClick)="handleButtonClick()">
+        <img src="assets/search_settings.svg" alt="Search Setting">
+      </app-custom-button>
+
+      <app-custom-button class="button-login">
+        <img src="assets/login.svg" alt="Login">
       </app-custom-button>
     </div>
 
-    <app-custom-button buttonClass="button-settings" (buttonClick)="handleButtonClick()">
-      <img src="assets/search_settings.svg" alt="Search Setting">
-    </app-custom-button>
-
-    <app-custom-button class="button-login">
-      <img src="assets/login.svg" alt="Login">
-    </app-custom-button>
   </div>
-
-</div>
