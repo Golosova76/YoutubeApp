@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import {
   createVideosData,
@@ -14,8 +14,12 @@ import { SearchItemComponent } from './search-item/search-item.component';
   standalone: true,
   imports: [CommonModule, SearchItemComponent],
 })
-export class SearchResultsComponent {
+export class SearchResultsComponent implements OnInit {
   public videosData!: YouTubeVideoListResponse;
+
+  ngOnInit() {
+    this.loadData();
+  }
 
   async loadData() {
     // eslint-disable-next-line operator-linebreak
@@ -28,6 +32,7 @@ export class SearchResultsComponent {
       }
       const responseData = await response.json();
       this.videosData = createVideosData(responseData);
+      console.log('Data loaded:', this.videosData);
     } catch (error) {
       console.error('Error loading the videos', error);
     }

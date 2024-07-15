@@ -1,1 +1,5 @@
-<app-search-item></app-search-item>
+<div class="video-list-container" *ngIf="videosData && videosData.items">
+  <div *ngFor="let video of videosData.items">
+    <app-search-item [videoData]="video"></app-search-item>
+  </div>
+</div>
