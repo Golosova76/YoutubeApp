@@ -2,6 +2,7 @@
   font-size: 16px;
   background-color: #c18183;
   border: 2px solid #fff;
+  border-radius: 5px;
   box-shadow: 0 4px 8px rgb(0 0 0 / 60%);
   transition:
     background-color 0.4s ease,
@@ -26,5 +27,12 @@
 }
 
 .button.button-search {
-  width: 500px;
+  width: 150px;
+  height: 30px;
+}
+
+.button-search-bar-date,
+.button-search-bar-count {
+  width: 150px;
+  height: 30px;
 }

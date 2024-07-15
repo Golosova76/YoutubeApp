@@ -3,13 +3,20 @@ import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { HeaderComponent } from './core/header/header.component';
 import { SearchComponent } from './features/search/search.component';
+import { SearchResultsComponent } from './features/search/search-results/search-results.component';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
   standalone: true,
-  imports: [CommonModule, RouterModule, HeaderComponent, SearchComponent],
+  imports: [
+    CommonModule,
+    RouterModule,
+    HeaderComponent,
+    SearchComponent,
+    SearchResultsComponent,
+  ],
 })
 export class AppComponent {
   title = 'youtube-client-app';

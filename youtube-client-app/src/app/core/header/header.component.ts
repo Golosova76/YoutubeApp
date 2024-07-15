@@ -15,16 +15,8 @@ export class HeaderComponent {
   // eslint-disable-next-line class-methods-use-this
   onSearch() {}
 
-  // Свойство для отслеживания видимости search-bar
-  searchBarVisible: boolean = false;
-
   handleButtonClick() {
     this.toggleSearch();
-    this.emitToggle();
-  }
-
-  emitToggle() {
-    this.searchBarVisible = !this.searchBarVisible; // Переключить видимость
   }
 
   // передать событие клика дальше вверх к AppComponent

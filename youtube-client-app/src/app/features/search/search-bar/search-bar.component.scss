@@ -1,0 +1,15 @@
+.search-bar-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  background-color: #ffa500;
+  min-height: 94px;
+}
+
+.search-bar-input {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
