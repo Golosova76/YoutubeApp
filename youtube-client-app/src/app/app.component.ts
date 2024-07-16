@@ -25,11 +25,17 @@ export class AppComponent {
 
   searchResultsVisible: boolean = false;
 
+  searchQuery: string = '';
+
   handleBarSearch() {
-    this.searchBarVisible = !this.searchBarVisible; // Переключаем видимость по событию
+    this.searchBarVisible = !this.searchBarVisible;
   }
 
   handleSearchResults(visibleResults: boolean) {
     this.searchResultsVisible = visibleResults;
+  }
+
+  handleSearch(searchQuery: string) {
+    this.searchQuery = searchQuery;
   }
 }

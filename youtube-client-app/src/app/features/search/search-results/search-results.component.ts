@@ -1,10 +1,17 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  SimpleChanges,
+  OnChanges,
+} from '@angular/core';
 
 import {
   createVideosData,
   YouTubeVideoListResponse,
 } from 'app/shared/models/search-response.model';
+import { VideoItem } from 'app/shared/models/search-item.model';
 import { SearchItemComponent } from './search-item/search-item.component';
 
 @Component({
@@ -14,13 +21,27 @@ import { SearchItemComponent } from './search-item/search-item.component';
   standalone: true,
   imports: [CommonModule, SearchItemComponent],
 })
-export class SearchResultsComponent implements OnInit {
+export class SearchResultsComponent implements OnInit, OnChanges {
   public videosData!: YouTubeVideoListResponse;
+
+  public filteredVideos: VideoItem[] = [];
 
   @Input() visibleResults: boolean = false;
 
+  @Input() searchQuery: string = '';
+
   ngOnInit() {
     this.loadData();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (
+      changes['searchQuery'] &&
+      changes['searchQuery'].currentValue !== undefined &&
+      this.videosData
+    ) {
+      this.filterVideos(this.searchQuery);
+    }
   }
 
   async loadData() {
@@ -38,5 +59,11 @@ export class SearchResultsComponent implements OnInit {
     } catch (error) {
       console.error('Error loading the videos', error);
     }
+  }
+
+  filterVideos(searchString: string) {
+    this.filteredVideos = this.videosData.items.filter((item) =>
+      item.snippet.title.toLowerCase().includes(searchString.toLowerCase()),
+    );
   }
 }

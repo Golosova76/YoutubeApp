@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-input',
@@ -16,4 +16,12 @@ export class InputComponent {
   @Input() label: string = '';
 
   @Input() inputClass: string = '';
+
+  @ViewChild('inputField', { static: true })
+  // eslint-disable-next-line indent
+  inputField!: ElementRef<HTMLInputElement>;
+
+  get value(): string {
+    return this.inputField.nativeElement.value;
+  }
 }

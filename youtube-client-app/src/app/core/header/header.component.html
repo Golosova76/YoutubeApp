@@ -9,10 +9,10 @@
     <div class="header-search">
       <form class="header-search-form" (ngSubmit)="onSearch()">
         <div class="header-input">
-          <app-input inputClass="header-input-search" placeholder="What are you want to find out?"></app-input>
+          <app-input #searchInput inputClass="header-input-search" placeholder="What are you want to find out?"></app-input>
         </div>
 
-        <app-custom-button #searchInput type="submit" buttonClass="button-search" (click)="onSearch()">
+        <app-custom-button #searchInput type="submit" buttonClass="button-search">
           Search
         </app-custom-button>
       </form>
