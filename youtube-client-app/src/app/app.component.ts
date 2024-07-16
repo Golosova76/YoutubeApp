@@ -23,7 +23,13 @@ export class AppComponent {
 
   searchBarVisible: boolean = false;
 
-  handleToggleSearch() {
+  searchResultsVisible: boolean = false;
+
+  handleBarSearch() {
     this.searchBarVisible = !this.searchBarVisible; // Переключаем видимость по событию
+  }
+
+  handleSearchResults(visibleResults: boolean) {
+    this.searchResultsVisible = visibleResults;
   }
 }

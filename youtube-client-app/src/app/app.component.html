@@ -1,6 +1,6 @@
-<app-header (toggleSearchEvent)="handleToggleSearch()"></app-header>
+<app-header (settingsSearchEvent)="handleBarSearch()" (resultsSearchEvent)="handleSearchResults($event)"></app-header>
 <app-search [visible]="searchBarVisible"></app-search>
-<div class="main-container"><app-search-results></app-search-results></div>
+<div class="main-container"><app-search-results [visibleResults]="searchResultsVisible"></app-search-results></div>
 
 
 

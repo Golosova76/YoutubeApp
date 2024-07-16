@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 import {
   createVideosData,
@@ -16,6 +16,8 @@ import { SearchItemComponent } from './search-item/search-item.component';
 })
 export class SearchResultsComponent implements OnInit {
   public videosData!: YouTubeVideoListResponse;
+
+  @Input() visibleResults: boolean = false;
 
   ngOnInit() {
     this.loadData();
