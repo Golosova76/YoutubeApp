@@ -43,4 +43,19 @@ export class SearchItemComponent {
       { icon: faComments, value: this.videoData.statistics?.commentCount || 0 },
     ];
   }
+
+  getThumbnailUrl(): string {
+    if (this.videoData?.snippet?.thumbnails?.maxres) {
+      return this.videoData.snippet.thumbnails.maxres.url;
+    }
+    if (this.videoData?.snippet?.thumbnails?.high) {
+      return this.videoData.snippet.thumbnails.high.url;
+    }
+    if (this.videoData?.snippet?.thumbnails?.medium) {
+      return this.videoData.snippet.thumbnails.medium.url;
+    }
+    return (
+      this.videoData?.snippet?.thumbnails?.default?.url || 'assets/caption.jpg'
+    );
+  }
 }
