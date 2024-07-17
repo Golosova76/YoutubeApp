@@ -9,6 +9,7 @@ module.exports = {
     'plugin:@angular-eslint/recommended',
     'plugin:@angular-eslint/template/process-inline-templates',
     'eslint-config-airbnb-base',
+    'plugin:prettier/recommended',
   ],
   overrides: [
     {

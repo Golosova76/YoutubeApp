@@ -9,13 +9,19 @@ import {
   faComments,
 } from '@fortawesome/free-solid-svg-icons';
 import { VideoItem } from 'app/shared/models/search-item.model';
+import { DateBackgroundDirective } from 'app/shared/directives/line-back-directive';
 
 @Component({
   selector: 'app-search-item',
   templateUrl: './search-item.component.html',
   styleUrls: ['./search-item.component.scss'],
   standalone: true,
-  imports: [CommonModule, CustomButtonComponent, FontAwesomeModule],
+  imports: [
+    CommonModule,
+    CustomButtonComponent,
+    FontAwesomeModule,
+    DateBackgroundDirective,
+  ],
 })
 export class SearchItemComponent {
   @Input() videoData?: VideoItem;
