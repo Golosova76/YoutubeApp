@@ -27,6 +27,10 @@ export class AppComponent {
 
   searchQuery: string = '';
 
+  sortField: string = '';
+
+  sortOrder: string = '';
+
   handleBarSearch() {
     this.searchBarVisible = !this.searchBarVisible;
   }
@@ -37,5 +41,15 @@ export class AppComponent {
 
   handleSearch(searchQuery: string) {
     this.searchQuery = searchQuery;
+  }
+
+  handleSortChange(sortData: { field: string; order: string }) {
+    console.log(`sortField: ${sortData.field}, sortOrder: ${sortData.order}`);
+    if (this.sortField === sortData.field) {
+      this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortField = sortData.field;
+      this.sortOrder = 'asc';
+    }
   }
 }
