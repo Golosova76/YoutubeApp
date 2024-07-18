@@ -14,13 +14,19 @@ import {
 import { VideoItem } from 'app/shared/models/search-item.model';
 import { SearchItemComponent } from './search-item/search-item.component';
 import { SortVideosPipe } from 'app/shared/pipe/sort-date-count.pipe';
+import { FilterVideosPipe } from 'app/shared/pipe/filter-words.pipe';
 
 @Component({
   selector: 'app-search-results',
   templateUrl: './search-results.component.html',
   styleUrls: ['./search-results.component.scss'],
   standalone: true,
-  imports: [CommonModule, SearchItemComponent, SortVideosPipe],
+  imports: [
+    CommonModule,
+    SearchItemComponent,
+    SortVideosPipe,
+    FilterVideosPipe,
+  ],
 })
 export class SearchResultsComponent implements OnInit, OnChanges {
   public videosData!: YouTubeVideoListResponse;
@@ -32,7 +38,10 @@ export class SearchResultsComponent implements OnInit, OnChanges {
   @Input() searchQuery: string = '';
 
   @Input() sortField: 'date' | 'count' = 'date';
+
   @Input() sortOrder: 'asc' | 'desc' = 'asc';
+
+  @Input() searchQueryWords: string = '';
 
   ngOnChanges(changes: SimpleChanges) {
     if (

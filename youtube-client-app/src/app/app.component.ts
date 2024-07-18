@@ -27,6 +27,8 @@ export class AppComponent {
 
   searchQuery: string = '';
 
+  searchQueryWords: string = '';
+
   sortField: 'date' | 'count' = 'date';
 
   sortOrder: 'asc' | 'desc' = 'asc';
@@ -53,5 +55,9 @@ export class AppComponent {
       this.sortField = sortData.field;
       this.sortOrder = 'asc';
     }
+  }
+
+  handleFilterEvent(query: string) {
+    this.searchQueryWords = query;
   }
 }

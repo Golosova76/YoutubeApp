@@ -17,10 +17,16 @@ export class SearchComponent {
     order: 'asc' | 'desc';
   }>();
 
+  @Output() filterQueryChange = new EventEmitter<string>();
+
   handleSortChange(sortData: {
     field: 'date' | 'count';
     order: 'asc' | 'desc';
   }) {
     this.sortRequested.emit(sortData);
+  }
+
+  handleFilterEvent(query: string) {
+    this.filterQueryChange.emit(query);
   }
 }
