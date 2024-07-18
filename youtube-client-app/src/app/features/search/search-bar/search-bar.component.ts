@@ -13,18 +13,16 @@ import { InputComponent } from 'app/shared/input/input.component';
 export class SearchBarComponent {
   // EventEmitter отправляет объект с данными о том, как нужно сортировать результаты.
   @Output() sortRequested = new EventEmitter<{
-    field: string;
-    order: string;
+    field: 'date' | 'count';
+    order: 'asc' | 'desc';
   }>();
 
   // Методы вызываются при клике на соответствующие кнопки
   sortByDate() {
-    console.log('sortByDate called in SearchBarComponent');
     this.sortRequested.emit({ field: 'date', order: 'asc' });
   }
 
   sortByCount() {
-    console.log('sortByCount called in SearchBarComponent');
     this.sortRequested.emit({ field: 'count', order: 'asc' });
   }
 }

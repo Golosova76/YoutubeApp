@@ -13,14 +13,14 @@ export class SearchComponent {
   @Input() visible: boolean = false;
 
   @Output() sortRequested = new EventEmitter<{
-    field: string;
-    order: string;
+    field: 'date' | 'count';
+    order: 'asc' | 'desc';
   }>();
 
-  handleSortChange(sortData: { field: string; order: string }) {
-    console.log(
-      `handleSortChange in SearchComponent called with field: ${sortData.field}, order: ${sortData.order}`,
-    );
+  handleSortChange(sortData: {
+    field: 'date' | 'count';
+    order: 'asc' | 'desc';
+  }) {
     this.sortRequested.emit(sortData);
   }
 }

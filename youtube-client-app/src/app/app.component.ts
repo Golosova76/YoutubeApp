@@ -27,9 +27,9 @@ export class AppComponent {
 
   searchQuery: string = '';
 
-  sortField: string = '';
+  sortField: 'date' | 'count' = 'date';
 
-  sortOrder: string = '';
+  sortOrder: 'asc' | 'desc' = 'asc';
 
   handleBarSearch() {
     this.searchBarVisible = !this.searchBarVisible;
@@ -43,8 +43,10 @@ export class AppComponent {
     this.searchQuery = searchQuery;
   }
 
-  handleSortChange(sortData: { field: string; order: string }) {
-    console.log(`sortField: ${sortData.field}, sortOrder: ${sortData.order}`);
+  handleSortChange(sortData: {
+    field: 'date' | 'count';
+    order: 'asc' | 'desc';
+  }) {
     if (this.sortField === sortData.field) {
       this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
     } else {
