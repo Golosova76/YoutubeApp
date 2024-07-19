@@ -23,6 +23,13 @@ export class HeaderComponent implements AfterViewInit {
 
   visibleResults: boolean = false;
 
+  // передать событие клика дальше вверх к AppComponent
+  @Output() settingsSearchEvent = new EventEmitter<void>(); // открытие панели настроек
+
+  @Output() resultsSearchEvent = new EventEmitter<boolean>(); // открытие панели поиска
+
+  @Output() searchEvent = new EventEmitter<string>(); // поиск
+
   @ViewChild('searchInput', { static: true }) searchInput!: InputComponent;
 
   ngAfterViewInit() {
@@ -30,7 +37,7 @@ export class HeaderComponent implements AfterViewInit {
       this.searchInput.inputField.nativeElement.addEventListener(
         'input',
         // eslint-disable-next-line @typescript-eslint/comma-dangle
-        this.onInput.bind(this)
+        this.onInput.bind(this),
       );
     }
   }
@@ -58,13 +65,6 @@ export class HeaderComponent implements AfterViewInit {
   handleButtonClick() {
     this.settingsSearch();
   }
-
-  // передать событие клика дальше вверх к AppComponent
-  @Output() settingsSearchEvent = new EventEmitter<void>(); // открытие панели настроек
-
-  @Output() resultsSearchEvent = new EventEmitter<boolean>(); // открытие панели поиска
-
-  @Output() searchEvent = new EventEmitter<string>(); // поиск
 
   settingsSearch() {
     this.settingsSearchEvent.emit(); // запускаем событие при клике на кнопку

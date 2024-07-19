@@ -1,10 +1,13 @@
-<article *ngIf="videoData" class="search-item">
+<article *ngIf="videoData"
+         class="search-item">
   <div class="search-item-container">
     <div class="search-item-image">
-      <img [src]="getThumbnailUrl()" alt=" {{ videoData.snippet.title }} ">
+      <img [src]="getThumbnailUrl()"
+           alt=" {{ videoData.snippet.title }} ">
     </div>
     <div class="search-item-statictics">
-      <div *ngFor="let stat of stats" class="stat-item">
+      <div *ngFor="let stat of stats"
+           class="stat-item">
         <fa-icon [icon]="stat.icon"></fa-icon>
         <span>{{ stat.value }}</span>
       </div>
@@ -19,4 +22,5 @@
     </div>
   </div>
 </article>
-<span class="search-item-line" [appDateBackground]="videoData?.snippet?.publishedAt"></span>
+<span class="search-item-line"
+      [appDateBackground]="videoData?.snippet?.publishedAt"></span>

@@ -17,41 +17,29 @@ export class SortVideosPipe implements PipeTransform {
     }
 
     // Проверка и приведение sortField к допустимым значениям
-    const validSortFields: ('date' | 'count')[] = ['date', 'count'];
-    if (!validSortFields.includes(sortField as 'date' | 'count')) {
+    const validSortFields = ['date', 'count'];
+    if (!validSortFields.includes(sortField)) {
       console.error(`Invalid sortField: ${sortField}`);
       return items;
     }
 
-    return items.sort((a, b) => {
-      let valueA: number = 0; // Инициализация значением 0
-      let valueB: number = 0; // Инициализация значением 0
-
-      if (sortField === 'date') {
-        valueA = a.snippet?.publishedAt
-          ? new Date(a.snippet.publishedAt).getTime()
-          : 0;
-        valueB = b.snippet?.publishedAt
-          ? new Date(b.snippet.publishedAt).getTime()
-          : 0;
-      } else if (sortField === 'count') {
-        valueA = a.statistics?.viewCount
-          ? parseInt(a.statistics.viewCount, 10)
-          : 0;
-        valueB = b.statistics?.viewCount
-          ? parseInt(b.statistics.viewCount, 10)
-          : 0;
+    const getValue = (item: VideoItem): number => {
+      switch (sortField) {
+        case 'date':
+          return item.snippet?.publishedAt
+            ? new Date(item.snippet.publishedAt).getTime()
+            : 0;
+        case 'count':
+          return item.statistics?.viewCount ? +item.statistics.viewCount : 0;
+        default:
+          return 0;
       }
+    };
 
-      return valueA < valueB
-        ? sortOrder === 'asc'
-          ? -1
-          : 1
-        : valueA > valueB
-          ? sortOrder === 'asc'
-            ? 1
-            : -1
-          : 0;
+    return items.sort((a, b) => {
+      const valueA = getValue(a);
+      const valueB = getValue(b);
+      return sortOrder === 'asc' ? valueA - valueB : valueB - valueA;
     });
   }
 }
