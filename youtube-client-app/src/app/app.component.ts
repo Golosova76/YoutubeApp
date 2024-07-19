@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { HeaderComponent } from './core/header/header.component';
 import { SearchComponent } from './features/search/search.component';
 import { SearchResultsComponent } from './features/search/search-results/search-results.component';
+import { LoginPageComponent } from './auth/pages/login-page/login-page.component';
 
 @Component({
   selector: 'app-root',
@@ -16,6 +17,7 @@ import { SearchResultsComponent } from './features/search/search-results/search-
     HeaderComponent,
     SearchComponent,
     SearchResultsComponent,
+    LoginPageComponent,
   ],
 })
 export class AppComponent {

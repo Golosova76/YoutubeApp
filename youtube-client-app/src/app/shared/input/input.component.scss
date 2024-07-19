@@ -16,3 +16,16 @@
   width: 300px;
   height: 30px;
 }
+
+.login-input,
+.password-input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #bdbcbc;
+  border-radius: 4px;
+  outline-style: none;
+  cursor: pointer;
+}

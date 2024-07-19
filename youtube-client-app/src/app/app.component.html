@@ -5,11 +5,15 @@
 <app-search [visible]="searchBarVisible"
             (sortRequested)="handleSortChange($event)"
             (filterQueryChange)="handleFilterEvent($event)"></app-search>
-<div class="main-container"><app-search-results [visibleResults]="searchResultsVisible"
+<div class="main-container">
+  <app-search-results [visibleResults]="searchResultsVisible"
                       [searchQuery]="searchQuery"
                       [searchQueryWords]="searchQueryWords"
                       [sortField]="sortField"
-                      [sortOrder]="sortOrder"></app-search-results></div>
+                      [sortOrder]="sortOrder">
+  </app-search-results>
+  <app-login-page></app-login-page>
+</div>
 
 
 
