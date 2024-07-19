@@ -9,6 +9,7 @@ module.exports = {
     'plugin:@angular-eslint/recommended',
     'plugin:@angular-eslint/template/process-inline-templates',
     'eslint-config-airbnb-base',
+    'plugin:prettier/recommended',
   ],
   overrides: [
     {
@@ -42,6 +43,7 @@ module.exports = {
     sourceType: 'module',
   },
   rules: {
+    'object-curly-newline': ['error', { multiline: true, consistent: true }],
     '@typescript-eslint/no-explicit-any': 'error',
     'import/prefer-default-export': 'off',
     quotes: ['error', 'single', { allowTemplateLiterals: true }],

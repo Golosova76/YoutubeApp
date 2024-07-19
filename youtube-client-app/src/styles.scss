@@ -1,1 +1,110 @@
-/* You can add global styles to this file, and also import other style files */
+// Fonts
+@font-face {
+  font-family: "Roboto";
+  src:
+    url("../src/assets/fonts/Roboto-Regular.woff2") format("woff2"),
+    url("../src/assets/fonts/Roboto-Regular.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Roboto";
+  src:
+    url("../src/assets/fonts/Roboto-Medium.woff2") format("woff2"),
+    url("../src/assets/fonts/Roboto-Medium.woff") format("woff");
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Roboto";
+  src:
+    url("../src/assets/fonts/Roboto-Bold.woff2") format("woff2"),
+    url("../src/assets/fonts/Roboto-Bold.woff") format("woff");
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Roboto";
+  src:
+    url("../src/assets/fonts/Roboto-Black.woff2") format("woff2"),
+    url("../src/assets/fonts/Roboto-Black.woff") format("woff");
+  font-weight: 900;
+  font-style: normal;
+}
+
+//основные стили
+
+$font-family: "Roboto", sans-serif;
+$font-size: 20px;
+$font-weight: 400;
+$font-line-height: 150%;
+
+$color-text-dark: black;
+$color-background-body: #bfb0a3;
+$main-background-color: $color-background-body;
+
+* {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+ul li {
+  list-style: none;
+}
+
+a {
+  color: inherit;
+}
+
+a:link,
+a:visited {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+img {
+  vertical-align: top;
+}
+
+body,
+html {
+  height: 100%;
+}
+
+input,
+button,
+textarea {
+  font-family: $font-family;
+  font-size: inherit;
+}
+
+button {
+  cursor: pointer;
+  color: inherit;
+  background-color: inherit;
+}
+
+//основные стили

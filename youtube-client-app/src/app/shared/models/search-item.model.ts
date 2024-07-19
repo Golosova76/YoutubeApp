@@ -1,5 +1,3 @@
-// export default class SearchItem {}
-
 export interface Localized {
   title: string;
   description: string;

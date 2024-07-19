@@ -1,1 +1,37 @@
-<p>header works!</p>
+<div class="header">
+
+  <div class="header-container">
+    <div class="header-logo">
+      <img src="assets/logo.svg"
+           alt="Logotype">
+    </div>
+
+
+    <div class="header-search">
+      <form class="header-search-form"
+            (ngSubmit)="onSearch()">
+        <div class="header-input">
+          <app-input #searchInput
+                     inputClass="header-input-search"
+                     placeholder="What are you want to find out?"></app-input>
+        </div>
+
+        <app-custom-button type="submit"
+                           buttonClass="button-search">
+          Search
+        </app-custom-button>
+      </form>
+
+      <app-custom-button buttonClass="button-settings"
+                         (buttonClick)="handleButtonClick()">
+        <img src="assets/search_settings.svg"
+             alt="Search Setting">
+      </app-custom-button>
+
+      <app-custom-button class="button-login">
+        <img src="assets/login.svg"
+             alt="Login">
+      </app-custom-button>
+    </div>
+
+  </div>

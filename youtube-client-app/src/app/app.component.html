@@ -1,6 +1,15 @@
-<div>
-  <span>Welcome</span>
-</div>
+<app-header (settingsSearchEvent)="handleBarSearch()"
+            (resultsSearchEvent)="handleSearchResults($event)"
+            (searchEvent)="handleSearch($event)">
+</app-header>
+<app-search [visible]="searchBarVisible"
+            (sortRequested)="handleSortChange($event)"
+            (filterQueryChange)="handleFilterEvent($event)"></app-search>
+<div class="main-container"><app-search-results [visibleResults]="searchResultsVisible"
+                      [searchQuery]="searchQuery"
+                      [searchQueryWords]="searchQueryWords"
+                      [sortField]="sortField"
+                      [sortOrder]="sortOrder"></app-search-results></div>
 
 
 
