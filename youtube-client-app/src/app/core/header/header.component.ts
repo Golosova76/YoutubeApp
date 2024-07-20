@@ -38,6 +38,7 @@ export class HeaderComponent {
       this.router.navigate(['/search-results', { query: searchValue }]);
     } else {
       this.searchService.clearSearchQuery();
+      this.router.navigate(['/main-page']); // Возврат на главную страницу
     }
   }
 
