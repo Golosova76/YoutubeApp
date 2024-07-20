@@ -10,6 +10,8 @@ import { FormsModule } from '@angular/forms';
 
 import { InputComponent } from 'app/shared/input/input.component';
 import { CustomButtonComponent } from 'app/shared/custom-button/custom-button.component';
+import { SearchService } from 'app/youtube/services/search';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -18,55 +20,34 @@ import { CustomButtonComponent } from 'app/shared/custom-button/custom-button.co
   standalone: true,
   imports: [CommonModule, InputComponent, CustomButtonComponent, FormsModule],
 })
-export class HeaderComponent implements AfterViewInit {
-  visible: boolean = false;
-
-  visibleResults: boolean = false;
-
-  // передать событие клика дальше вверх к AppComponent
+export class HeaderComponent {
+  // передать событие клика на кнопке настроек поиска дальше вверх к AppComponent
   @Output() settingsSearchEvent = new EventEmitter<void>(); // открытие панели настроек
-
-  @Output() resultsSearchEvent = new EventEmitter<boolean>(); // открытие панели поиска
-
-  @Output() searchEvent = new EventEmitter<string>(); // поиск
 
   @ViewChild('searchInput', { static: true }) searchInput!: InputComponent;
 
-  ngAfterViewInit() {
-    if (this.searchInput && this.searchInput.inputField) {
-      this.searchInput.inputField.nativeElement.addEventListener(
-        'input',
-        // eslint-disable-next-line @typescript-eslint/comma-dangle
-        this.onInput.bind(this),
-      );
-    }
-  }
+  constructor(
+    private router: Router,
+    private searchService: SearchService,
+  ) {}
 
-  onInput(event: Event) {
-    const inputElement = event.target as HTMLInputElement;
-    if (inputElement.value.trim().length === 0) {
-      this.visibleResults = false;
-      this.resultsSearchEvent.emit(this.visibleResults);
-    }
-  }
-
-  onSearch() {
-    const searchValue = this.searchInput.value; // Получаем значение из input
+  onSearch(): void {
+    const searchValue = this.searchInput.value;
     if (searchValue.trim().length > 0) {
-      this.searchEvent.emit(searchValue);
-      this.visibleResults = true;
-      this.resultsSearchEvent.emit(this.visibleResults);
+      this.searchService.setSearchQuery(searchValue);
+      this.router.navigate(['/search-results', { query: searchValue }]);
     } else {
-      this.visibleResults = false;
-      this.resultsSearchEvent.emit(this.visibleResults);
+      this.searchService.clearSearchQuery();
     }
   }
 
+  // кнопка настроек поиска
   handleButtonClick() {
     this.settingsSearch();
   }
 
+  // запускаем событие при клике на кнопку
   settingsSearch() {
-    this.settingsSearchEvent.emit(); // запускаем событие при клике на кнопку
+    this.settingsSearchEvent.emit();
   }
 }

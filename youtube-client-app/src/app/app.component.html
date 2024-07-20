@@ -1,21 +1,8 @@
-<app-header (settingsSearchEvent)="handleBarSearch()"
-            (resultsSearchEvent)="handleSearchResults($event)"
-            (searchEvent)="handleSearch($event)">
+<app-header (settingsSearchEvent)="handleBarSearch()">
 </app-header>
 <app-search [visible]="searchBarVisible"
             (sortRequested)="handleSortChange($event)"
             (filterQueryChange)="handleFilterEvent($event)"></app-search>
 <div class="main-container">
-  <app-search-results [visibleResults]="searchResultsVisible"
-                      [searchQuery]="searchQuery"
-                      [searchQueryWords]="searchQueryWords"
-                      [sortField]="sortField"
-                      [sortOrder]="sortOrder">
-  </app-search-results>
-  <app-login-page></app-login-page>
+  <router-outlet></router-outlet>
 </div>
-
-
-
-
-<router-outlet></router-outlet>

@@ -4,7 +4,6 @@ import { RouterModule } from '@angular/router';
 import { HeaderComponent } from './core/header/header.component';
 import { SearchComponent } from './features/search/search.component';
 import { SearchResultsComponent } from './features/search/search-results/search-results.component';
-import { LoginPageComponent } from './auth/pages/login-page/login-page.component';
 
 @Component({
   selector: 'app-root',
@@ -17,12 +16,9 @@ import { LoginPageComponent } from './auth/pages/login-page/login-page.component
     HeaderComponent,
     SearchComponent,
     SearchResultsComponent,
-    LoginPageComponent,
   ],
 })
 export class AppComponent {
-  title = 'youtube-client-app';
-
   searchBarVisible: boolean = false;
 
   searchResultsVisible: boolean = false;
@@ -37,14 +33,6 @@ export class AppComponent {
 
   handleBarSearch() {
     this.searchBarVisible = !this.searchBarVisible;
-  }
-
-  handleSearchResults(visibleResults: boolean) {
-    this.searchResultsVisible = visibleResults;
-  }
-
-  handleSearch(searchQuery: string) {
-    this.searchQuery = searchQuery;
   }
 
   handleSortChange(sortData: {
