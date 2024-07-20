@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { HeaderComponent } from './core/header/header.component';
-import { SearchComponent } from './features/search/search.component';
+import { SearchComponent } from './youtube/pages/search/search.component';
 import { SearchResultsComponent } from './youtube/pages/search-results/search-results.component';
 
 @Component({
