@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { SearchResultsComponent } from './features/search/search-results/search-results.component';
+import { SearchResultsComponent } from './youtube/pages/search-results/search-results.component';
 import { MainComponent } from './core/main/main.component';
 
 const routes: Routes = [
