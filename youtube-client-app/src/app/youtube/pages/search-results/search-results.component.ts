@@ -6,11 +6,13 @@ import {
   YouTubeVideoListResponse,
 } from 'app/shared/models/search-response.model';
 import { VideoItem } from 'app/shared/models/search-item.model';
-import { SearchItemComponent } from './search-item/search-item.component';
+import { SearchItemComponent } from '../../components/search-item/search-item.component';
+import { SearchBarComponent } from '../../components/search-bar/search-bar.component';
 import { SortVideosPipe } from 'app/shared/pipe/sort-date-count.pipe';
 import { FilterVideosPipe } from 'app/shared/pipe/filter-words.pipe';
 import { SearchService } from 'app/youtube/services/search';
 import { ActivatedRoute } from '@angular/router';
+import { SortService } from 'app/youtube/services/sortsearch';
 
 @Component({
   selector: 'app-search-results',
@@ -20,6 +22,7 @@ import { ActivatedRoute } from '@angular/router';
   imports: [
     CommonModule,
     SearchItemComponent,
+    SearchBarComponent,
     SortVideosPipe,
     FilterVideosPipe,
   ],
@@ -29,21 +32,19 @@ export class SearchResultsComponent implements OnInit {
 
   public filteredVideos: VideoItem[] = [];
 
-  @Input() sortField: 'date' | 'count' = 'date';
-
-  @Input() sortOrder: 'asc' | 'desc' = 'asc';
-
-  @Input() searchQueryWords: string = '';
-
   public searchResultsVisible: boolean = false;
+
+  public sortPanelVisible: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
     private searchService: SearchService,
+    private sortService: SortService,
   ) {}
 
   ngOnInit() {
     this.route.params.subscribe((params) => {
+      this.updateSortPanelVisibility();
       const searchQuery = params['query'];
       if (searchQuery) {
         this.searchService.setSearchQuery(searchQuery);
@@ -71,6 +72,7 @@ export class SearchResultsComponent implements OnInit {
       if (this.searchResultsVisible) {
         this.updateFilteredVideos();
       }
+      this.updateSortPanelVisibility();
     } catch (error) {
       console.error('Error loading the videos', error);
     }
@@ -88,5 +90,22 @@ export class SearchResultsComponent implements OnInit {
     this.filteredVideos = this.videosData.items.filter((item) =>
       item.snippet.title.toLowerCase().includes(searchString.toLowerCase()),
     );
+  }
+
+  get sortField(): string {
+    return this.sortService.getsortField();
+  }
+
+  get sortOrder(): string {
+    return this.sortService.getsortOrder();
+  }
+
+  get searchQueryWords(): string {
+    return this.sortService.getSearchQuery();
+  }
+
+  updateSortPanelVisibility() {
+    this.sortPanelVisible = this.sortService.getsortPanelVisible();
+    console.log('Updated sortPanelVisible:', this.sortPanelVisible);
   }
 }

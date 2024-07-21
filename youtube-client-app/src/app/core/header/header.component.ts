@@ -1,17 +1,12 @@
 import { CommonModule } from '@angular/common';
-import {
-  Component,
-  EventEmitter,
-  Output,
-  ViewChild,
-  AfterViewInit,
-} from '@angular/core';
+import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { InputComponent } from 'app/shared/input/input.component';
 import { CustomButtonComponent } from 'app/shared/custom-button/custom-button.component';
 import { SearchService } from 'app/youtube/services/search';
 import { Router } from '@angular/router';
+import { SortService } from 'app/youtube/services/sortsearch';
 
 @Component({
   selector: 'app-header',
@@ -21,14 +16,14 @@ import { Router } from '@angular/router';
   imports: [CommonModule, InputComponent, CustomButtonComponent, FormsModule],
 })
 export class HeaderComponent {
-  // передать событие клика на кнопке настроек поиска дальше вверх к AppComponent
-  @Output() settingsSearchEvent = new EventEmitter<void>(); // открытие панели настроек
-
   @ViewChild('searchInput', { static: true }) searchInput!: InputComponent;
+
+  private sortPanelVisible: boolean = false;
 
   constructor(
     private router: Router,
     private searchService: SearchService,
+    private sortService: SortService,
   ) {}
 
   onSearch(): void {
@@ -49,6 +44,8 @@ export class HeaderComponent {
 
   // запускаем событие при клике на кнопку
   settingsSearch() {
-    this.settingsSearchEvent.emit();
+    console.log('Button clicked, toggling sort panel visibility.');
+    this.sortService.toggleSortPanelVisibility();
+    this.sortPanelVisible = this.sortService.getsortPanelVisible();
   }
 }

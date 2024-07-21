@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { HeaderComponent } from './core/header/header.component';
-import { SearchComponent } from './youtube/pages/search/search.component';
 import { SearchResultsComponent } from './youtube/pages/search-results/search-results.component';
 
 @Component({
@@ -14,7 +13,7 @@ import { SearchResultsComponent } from './youtube/pages/search-results/search-re
     CommonModule,
     RouterModule,
     HeaderComponent,
-    SearchComponent,
+
     SearchResultsComponent,
   ],
 })

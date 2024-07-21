@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
 import { CustomButtonComponent } from 'app/shared/custom-button/custom-button.component';
 import { InputComponent } from 'app/shared/input/input.component';
+import { SortService } from 'app/youtube/services/sortsearch';
 
 @Component({
   selector: 'app-search-bar',
@@ -13,6 +14,8 @@ import { InputComponent } from 'app/shared/input/input.component';
 export class SearchBarComponent {
   @ViewChild('filterInput', { static: true }) filterInput!: InputComponent;
 
+  constructor(private sortService: SortService) {}
+
   ngAfterViewInit() {
     this.filterInput.inputField.nativeElement.addEventListener(
       'input',
@@ -22,23 +25,18 @@ export class SearchBarComponent {
 
   onInput(event: Event) {
     const inputFilterElement = event.target as HTMLInputElement;
-    this.filterEvent.emit(inputFilterElement.value);
+    // Передача значения в сервис для фильтрации
+    this.sortService.setSearchQuery(inputFilterElement.value);
   }
-
-  @Output() filterEvent = new EventEmitter<string>();
-
-  // EventEmitter отправляет объект с данными о том, как нужно сортировать результаты.
-  @Output() sortRequested = new EventEmitter<{
-    field: 'date' | 'count';
-    order: 'asc' | 'desc';
-  }>();
 
   // Методы вызываются при клике на соответствующие кнопки
   sortByDate() {
-    this.sortRequested.emit({ field: 'date', order: 'asc' });
+    this.sortService.setsortField('date'); // Установка поля и порядка сортировки через сервис
+    this.sortService.setsortOrder('asc');
   }
 
   sortByCount() {
-    this.sortRequested.emit({ field: 'count', order: 'asc' });
+    this.sortService.setsortField('count'); // Установка поля и порядка сортировки через сервис
+    this.sortService.setsortOrder('asc');
   }
 }
