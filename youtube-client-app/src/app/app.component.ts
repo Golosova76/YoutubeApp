@@ -17,36 +17,4 @@ import { SearchResultsComponent } from './youtube/pages/search-results/search-re
     SearchResultsComponent,
   ],
 })
-export class AppComponent {
-  searchBarVisible: boolean = false;
-
-  searchResultsVisible: boolean = false;
-
-  searchQuery: string = '';
-
-  searchQueryWords: string = '';
-
-  sortField: 'date' | 'count' = 'date';
-
-  sortOrder: 'asc' | 'desc' = 'asc';
-
-  handleBarSearch() {
-    this.searchBarVisible = !this.searchBarVisible;
-  }
-
-  handleSortChange(sortData: {
-    field: 'date' | 'count';
-    order: 'asc' | 'desc';
-  }) {
-    if (this.sortField === sortData.field) {
-      this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
-    } else {
-      this.sortField = sortData.field;
-      this.sortOrder = 'asc';
-    }
-  }
-
-  handleFilterEvent(query: string) {
-    this.searchQueryWords = query;
-  }
-}
+export class AppComponent {}

@@ -6,16 +6,15 @@ import { Injectable } from '@angular/core';
 export class SortService {
   private sortField: 'date' | 'count' = 'date';
   private sortOrder: 'asc' | 'desc' = 'asc';
-  private sortPanelVisible: boolean = false;
   private searchQueryWords: string = '';
 
   // Геттер для поля сортировки
-  getsortField(): 'date' | 'count' {
+  get getSortField(): 'date' | 'count' {
     return this.sortField;
   }
 
   // Сеттер для поля сортировки
-  setsortField(value: 'date' | 'count') {
+  set setSortField(value: 'date' | 'count') {
     if (this.sortField === value) {
       // Переключаем порядок сортировки, если поле не меняется
       this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
@@ -27,30 +26,13 @@ export class SortService {
   }
 
   // Геттер для порядка сортировки
-  getsortOrder(): 'asc' | 'desc' {
+  get getSortOrder(): 'asc' | 'desc' {
     return this.sortOrder;
   }
 
   // Сеттер для порядка сортировки
-  setsortOrder(value: 'asc' | 'desc') {
+  set setSortOrder(value: 'asc' | 'desc') {
     this.sortOrder = value;
-  }
-
-  // Геттер для видимости панели сортировки
-  getsortPanelVisible(): boolean {
-    // Возвращает текущее значение sortPanelVisible.
-    return this.sortPanelVisible;
-  }
-
-  // Сеттер для видимости панели сортировки
-  setsortPanelVisible(visible: boolean) {
-    this.sortPanelVisible = visible;
-  }
-
-  // Метод просто переключать состояние видимости на противоположное
-  toggleSortPanelVisibility() {
-    this.sortPanelVisible = !this.sortPanelVisible;
-    console.log(`Toggled sortPanelVisible to: ${this.sortPanelVisible}`);
   }
 
   // Метод для обновления порядка сортировки
@@ -59,12 +41,12 @@ export class SortService {
   }
 
   // Геттер для поискового запроса
-  getSearchQuery(): string {
+  get getSearchQueryWords(): string {
     return this.searchQueryWords;
   }
 
   // Сеттер для поискового запроса
-  setSearchQuery(query: string) {
+  set setSearchQueryWords(query: string) {
     this.searchQueryWords = query;
   }
 }

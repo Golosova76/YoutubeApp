@@ -6,7 +6,6 @@
            alt="Logotype">
     </div>
 
-
     <div class="header-search">
       <form class="header-search-form"
             (ngSubmit)="onSearch()">
@@ -35,3 +34,7 @@
     </div>
 
   </div>
+
+  <app-search-bar *ngIf="sortPanelVisible"></app-search-bar>
+
+</div>

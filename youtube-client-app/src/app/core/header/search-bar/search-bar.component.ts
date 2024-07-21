@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
 import { CustomButtonComponent } from 'app/shared/custom-button/custom-button.component';
 import { InputComponent } from 'app/shared/input/input.component';
-import { SortService } from 'app/youtube/services/sortsearch';
+import { SortService } from 'app/youtube/services/sortsearch.service';
 
 @Component({
   selector: 'app-search-bar',
@@ -26,17 +26,17 @@ export class SearchBarComponent {
   onInput(event: Event) {
     const inputFilterElement = event.target as HTMLInputElement;
     // Передача значения в сервис для фильтрации
-    this.sortService.setSearchQuery(inputFilterElement.value);
+    this.sortService.setSearchQueryWords = inputFilterElement.value;
   }
 
   // Методы вызываются при клике на соответствующие кнопки
   sortByDate() {
-    this.sortService.setsortField('date'); // Установка поля и порядка сортировки через сервис
-    this.sortService.setsortOrder('asc');
+    this.sortService.setSortField = 'date';
+    this.sortService.setSortOrder = 'asc';
   }
 
   sortByCount() {
-    this.sortService.setsortField('count'); // Установка поля и порядка сортировки через сервис
-    this.sortService.setsortOrder('asc');
+    this.sortService.setSortField = 'count';
+    this.sortService.setSortOrder = 'asc';
   }
 }

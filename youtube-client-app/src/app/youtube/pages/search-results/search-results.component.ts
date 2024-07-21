@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import {
   createVideosData,
@@ -7,12 +7,11 @@ import {
 } from 'app/shared/models/search-response.model';
 import { VideoItem } from 'app/shared/models/search-item.model';
 import { SearchItemComponent } from '../../components/search-item/search-item.component';
-import { SearchBarComponent } from '../../components/search-bar/search-bar.component';
 import { SortVideosPipe } from 'app/shared/pipe/sort-date-count.pipe';
 import { FilterVideosPipe } from 'app/shared/pipe/filter-words.pipe';
-import { SearchService } from 'app/youtube/services/search';
+import { SearchService } from 'app/youtube/services/search.service';
 import { ActivatedRoute } from '@angular/router';
-import { SortService } from 'app/youtube/services/sortsearch';
+import { SortService } from 'app/youtube/services/sortsearch.service';
 
 @Component({
   selector: 'app-search-results',
@@ -22,7 +21,6 @@ import { SortService } from 'app/youtube/services/sortsearch';
   imports: [
     CommonModule,
     SearchItemComponent,
-    SearchBarComponent,
     SortVideosPipe,
     FilterVideosPipe,
   ],
@@ -34,8 +32,6 @@ export class SearchResultsComponent implements OnInit {
 
   public searchResultsVisible: boolean = false;
 
-  public sortPanelVisible: boolean = false;
-
   constructor(
     private route: ActivatedRoute,
     private searchService: SearchService,
@@ -44,7 +40,6 @@ export class SearchResultsComponent implements OnInit {
 
   ngOnInit() {
     this.route.params.subscribe((params) => {
-      this.updateSortPanelVisibility();
       const searchQuery = params['query'];
       if (searchQuery) {
         this.searchService.setSearchQuery(searchQuery);
@@ -72,7 +67,6 @@ export class SearchResultsComponent implements OnInit {
       if (this.searchResultsVisible) {
         this.updateFilteredVideos();
       }
-      this.updateSortPanelVisibility();
     } catch (error) {
       console.error('Error loading the videos', error);
     }
@@ -92,20 +86,15 @@ export class SearchResultsComponent implements OnInit {
     );
   }
 
-  get sortField(): string {
-    return this.sortService.getsortField();
+  get sortField(): 'date' | 'count' {
+    return this.sortService.getSortField;
   }
 
   get sortOrder(): string {
-    return this.sortService.getsortOrder();
+    return this.sortService.getSortOrder;
   }
 
   get searchQueryWords(): string {
-    return this.sortService.getSearchQuery();
-  }
-
-  updateSortPanelVisibility() {
-    this.sortPanelVisible = this.sortService.getsortPanelVisible();
-    console.log('Updated sortPanelVisible:', this.sortPanelVisible);
+    return this.sortService.getSearchQueryWords;
   }
 }
