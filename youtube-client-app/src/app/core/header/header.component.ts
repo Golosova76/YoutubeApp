@@ -30,17 +30,16 @@ export class HeaderComponent {
   constructor(
     private router: Router,
     private searchService: SearchService,
-    private sortService: SortService,
   ) {}
 
   onSearch(): void {
     const searchValue = this.searchInput.value;
     if (searchValue.trim().length > 0) {
       this.searchService.setSearchQuery(searchValue);
-      this.router.navigate(['/search-results', { query: searchValue }]);
+      this.router.navigate(['/youtube']);
     } else {
       this.searchService.clearSearchQuery();
-      this.router.navigate(['/main-page']); // Возврат на главную страницу
+      this.router.navigate(['/youtube']); // Возврат на главную страницу
     }
   }
 
