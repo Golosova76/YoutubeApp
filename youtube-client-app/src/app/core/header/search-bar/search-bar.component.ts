@@ -32,11 +32,9 @@ export class SearchBarComponent {
   // Методы вызываются при клике на соответствующие кнопки
   sortByDate() {
     this.sortService.setSortField = 'date';
-    this.sortService.setSortOrder = 'asc';
   }
 
   sortByCount() {
     this.sortService.setSortField = 'count';
-    this.sortService.setSortOrder = 'asc';
   }
 }

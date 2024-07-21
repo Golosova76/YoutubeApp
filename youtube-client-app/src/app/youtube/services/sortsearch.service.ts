@@ -21,7 +21,7 @@ export class SortService {
     } else {
       // Устанавливаем новое поле сортировки и обновляем порядок
       this.sortField = value;
-      this.updateSortOrder();
+      this.sortOrder = 'asc';
     }
   }
 
@@ -33,11 +33,6 @@ export class SortService {
   // Сеттер для порядка сортировки
   set setSortOrder(value: 'asc' | 'desc') {
     this.sortOrder = value;
-  }
-
-  // Метод для обновления порядка сортировки
-  private updateSortOrder() {
-    this.sortOrder = this.sortField === 'date' ? 'asc' : 'desc';
   }
 
   // Геттер для поискового запроса
