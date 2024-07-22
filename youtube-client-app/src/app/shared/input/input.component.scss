@@ -1,5 +1,6 @@
 .input {
   font-size: 12px;
+  font-family: "Roboto", sans-serif;
   width: 500px;
   height: 40px;
   padding: 0 10px;
@@ -28,4 +29,7 @@
   border-radius: 4px;
   outline-style: none;
   cursor: pointer;
+  &:focus {
+    border-color: red;
+  }
 }

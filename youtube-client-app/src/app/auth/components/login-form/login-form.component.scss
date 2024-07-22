@@ -1,3 +1,9 @@
+.form-login-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
 .form-login {
   border-radius: 10px;
   background-color: #ffffff;
@@ -8,6 +14,7 @@
     0 5px 20px 10px rgb(120 114 114 / 60%);
   padding: 2vw;
   max-width: 28rem;
+  margin: 0 auto;
   transition: width 0.5s ease;
 }
 .login-container {
@@ -22,21 +29,14 @@
   box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.2);
 }
 .login-title {
+  font-weight: 800;
+  font-size: 20px;
+  &:not(:last-child) {
+    margin-bottom: 21px;
+  }
 }
 .login-label {
-}
-.login-input {
-  width: 300px;
-  padding: 10px;
-  margin: 10px 0;
-  border-width: 1px;
-  border-style: solid;
-  border-color: #bdbcbc;
-  border-radius: 4px;
-  outline-style: none;
-  cursor: pointer;
-}
-.password-input {
-}
-.button-login {
+  color: rgba(0, 0, 0, 0.5);
+  font-size: 16px;
+  font-family: "Roboto", sans-serif;
 }

@@ -27,11 +27,19 @@
              alt="Search Setting">
       </app-custom-button>
 
-      <app-custom-button class="button-login">
+      <app-custom-button buttonClass="button-login"
+                         (buttonClick)="navigateToLogin()">
         <img src="assets/login.svg"
              alt="Login">
       </app-custom-button>
     </div>
+
+    <app-custom-button *ngIf="showLogoutButton"
+                       type="button"
+                       (buttonClick)="logout()"
+                       buttonClass="button-logout">
+      Logout
+    </app-custom-button>
 
   </div>
 

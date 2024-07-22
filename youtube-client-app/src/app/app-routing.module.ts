@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { SearchResultsComponent } from './youtube/pages/search-results/search-results.component';
+import { authGuard } from './core/guards/auth/auth.guard';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: '/auth' },
@@ -14,6 +14,7 @@ const routes: Routes = [
       import('./youtube/youtube-routing.module').then(
         (m) => m.YoutubeRoutingModule,
       ),
+    canActivate: [authGuard],
   },
 ];
 
