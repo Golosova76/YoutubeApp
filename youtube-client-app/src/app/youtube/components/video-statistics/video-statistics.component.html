@@ -1,0 +1,8 @@
+<div *ngIf="videoData"
+     class="search-item-statictics">
+  <div *ngFor="let stat of stats"
+       class="stat-item">
+    <fa-icon [icon]="stat.icon"></fa-icon>
+    <span>{{ stat.value }}</span>
+  </div>
+</div>

@@ -49,10 +49,10 @@ export class HeaderComponent {
     const searchValue = this.searchInput.value;
     if (searchValue.trim().length > 0) {
       this.searchService.setSearchQuery(searchValue);
-      this.router.navigate(['/youtube']);
+      this.router.navigate(['/youtube/search-results', { query: searchValue }]);
     } else {
       this.searchService.clearSearchQuery();
-      this.router.navigate(['/youtube']); // Возврат на главную страницу
+      this.router.navigate(['/youtube/search-results']); // Возврат на главную страницу
     }
   }
 

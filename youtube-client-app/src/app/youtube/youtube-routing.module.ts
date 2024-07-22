@@ -4,8 +4,10 @@ import { SearchResultsComponent } from './pages/search-results/search-results.co
 import { DetailedInformationComponent } from './pages/detailed-information/detailed-information.component';
 
 const routes: Routes = [
-  { path: '', component: SearchResultsComponent },
-  { path: '', component: DetailedInformationComponent },
+  { path: '', redirectTo: 'search', pathMatch: 'full' },
+  { path: 'search-results', component: SearchResultsComponent },
+  { path: 'search-results/:query', component: SearchResultsComponent },
+  { path: 'details', component: DetailedInformationComponent },
 ];
 
 @NgModule({

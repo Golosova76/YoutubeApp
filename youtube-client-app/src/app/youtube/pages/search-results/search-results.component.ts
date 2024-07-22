@@ -43,9 +43,9 @@ export class SearchResultsComponent implements OnInit {
       const searchQuery = params['query'];
       if (searchQuery) {
         this.searchService.setSearchQuery(searchQuery);
-        this.loadData(searchQuery); // Загружаем данные с новым запросом
+        this.loadData(searchQuery);
       } else {
-        this.loadData(); // Загружаем начальные данные
+        this.loadData();
       }
     });
   }
@@ -64,6 +64,10 @@ export class SearchResultsComponent implements OnInit {
       console.log('Data loaded:', this.videosData);
       this.searchResultsVisible =
         this.searchService.getSearchResultsVisibility();
+      console.log(
+        'Data loaded and searchResultsVisible set to:',
+        this.searchResultsVisible,
+      );
       if (this.searchResultsVisible) {
         this.updateFilteredVideos();
       }
