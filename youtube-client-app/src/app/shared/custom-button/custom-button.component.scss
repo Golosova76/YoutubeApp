@@ -29,6 +29,10 @@
 .button.button-search {
   width: 150px;
   height: 30px;
+  @media (max-width: 650px) {
+    width: 80px;
+    height: 25px;
+  }
 }
 
 .button-search-bar-date,

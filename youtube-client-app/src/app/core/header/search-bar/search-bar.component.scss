@@ -5,6 +5,10 @@
   gap: 20px;
   background-color: #ffa500;
   min-height: 94px;
+  padding: 10px;
+  @media (max-width: 720px) {
+    flex-direction: column;
+  }
 }
 
 .search-bar-input {
@@ -12,4 +16,7 @@
   align-items: center;
   justify-content: center;
   gap: 10px;
+  @media (max-width: 720px) {
+    flex-direction: column;
+  }
 }
