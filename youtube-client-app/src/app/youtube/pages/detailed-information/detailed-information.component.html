@@ -10,15 +10,15 @@
           <div class="detail-inform-title">{{ videoData?.snippet?.title }}</div>
           <div class="detail-inform-title-count">#{{ videoData?.snippet?.categoryId }}</div>
         </div>
-        <div class="detail-inform-date">{{ videoData?.snippet?.publishedAt | date }}</div>
+        <div class="detail-inform-date">{{ videoData?.snippet?.publishedAt | date: 'EEEE, MMMM d, y' }}</div>
       </div>
       <div class="detail-inform-description">
         <div class="detail-inform-description-title">Description:</div>
         <div class="detail-inform-description-text">{{ videoData?.snippet?.description }}</div>
       </div>
       <app-video-statistics [videoData]="videoData"></app-video-statistics>
+      <span class="search-item-line"
+            [appDateBackground]="videoData?.snippet?.publishedAt"></span>
     </div>
   </div>
 </article>
-<span class="search-item-line"
-      [appDateBackground]="videoData?.snippet?.publishedAt"></span>
