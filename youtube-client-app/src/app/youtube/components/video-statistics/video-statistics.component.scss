@@ -1,0 +1,20 @@
+.search-item-statictics {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  $font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  gap: 5px;
+  &:not(:last-child) {
+    margin-bottom: 21px;
+  }
+}
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  span {
+    font-size: 14px;
+    $font-family: "Roboto", sans-serif;
+  }
+}

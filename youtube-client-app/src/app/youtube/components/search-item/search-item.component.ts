@@ -6,6 +6,8 @@ import { CustomButtonComponent } from 'app/shared/custom-button/custom-button.co
 import { VideoItem } from 'app/shared/models/search-item.model';
 import { DateBackgroundDirective } from 'app/shared/directives/line-back-directive';
 import { VideoStatisticsComponent } from '../video-statistics/video-statistics.component';
+import { Router } from '@angular/router';
+import { VideoDataService } from 'app/youtube/services/video-data.service';
 
 @Component({
   selector: 'app-search-item',
@@ -22,6 +24,11 @@ import { VideoStatisticsComponent } from '../video-statistics/video-statistics.c
 export class SearchItemComponent {
   @Input() videoData?: VideoItem;
 
+  constructor(
+    private router: Router,
+    private videoDataService: VideoDataService,
+  ) {}
+
   getThumbnailUrl(): string {
     if (this.videoData?.snippet?.thumbnails?.maxres) {
       return this.videoData.snippet.thumbnails.maxres.url;
@@ -35,5 +42,15 @@ export class SearchItemComponent {
     return (
       this.videoData?.snippet?.thumbnails?.default?.url || 'assets/caption.jpg'
     );
+  }
+
+  navigateToDetail() {
+    if (this.videoData) {
+      this.videoDataService.currentVideoData = this.videoData;
+      this.router.navigate([
+        '/youtube/detailed-information',
+        this.videoData.id,
+      ]);
+    }
   }
 }

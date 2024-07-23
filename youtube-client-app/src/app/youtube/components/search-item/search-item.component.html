@@ -11,7 +11,8 @@
       <div class="search-item-title-count">#{{ videoData.snippet.categoryId }}</div>
     </div>
     <div class="search-item-more">
-      <app-custom-button buttonClass="button-search-item-more">more...
+      <app-custom-button (buttonClick)="navigateToDetail()"
+                         buttonClass="button-search-item-more">more...
       </app-custom-button>
     </div>
   </div>

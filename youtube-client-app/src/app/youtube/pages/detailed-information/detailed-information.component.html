@@ -1,22 +1,24 @@
 <article class="detail-inform">
   <div class="detail-inform-container">
     <div class="detail-inform-image">
-      <img src=""
-           alt="">
+      <img [src]="getThumbnailUrl()"
+           alt=" {{ videoData?.snippet?.title }} ">
     </div>
     <div class="detail-inform-content">
       <div class="detail-inform-about">
         <div class="detail-inform-us">
-          <div class="detail-inform-title"></div>
-          <div class="detail-inform-title-count">#</div>
+          <div class="detail-inform-title">{{ videoData?.snippet?.title }}</div>
+          <div class="detail-inform-title-count">#{{ videoData?.snippet?.categoryId }}</div>
         </div>
-        <div class="detail-inform-date"></div>
+        <div class="detail-inform-date">{{ videoData?.snippet?.publishedAt | date }}</div>
       </div>
       <div class="detail-inform-description">
-        <div class="detail-inform-description-title"></div>
-        <div class="detail-inform-description-text"></div>
+        <div class="detail-inform-description-title">Description:</div>
+        <div class="detail-inform-description-text">{{ videoData?.snippet?.description }}</div>
       </div>
-
+      <app-video-statistics [videoData]="videoData"></app-video-statistics>
     </div>
   </div>
 </article>
+<span class="search-item-line"
+      [appDateBackground]="videoData?.snippet?.publishedAt"></span>
