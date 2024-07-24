@@ -12,6 +12,7 @@ import { FilterVideosPipe } from 'app/shared/pipe/filter-words.pipe';
 import { SearchService } from 'app/youtube/services/search.service';
 import { ActivatedRoute } from '@angular/router';
 import { SortService } from 'app/youtube/services/sortsearch.service';
+import { YoutubeApiService } from 'app/youtube/services/youtube-api.service';
 
 @Component({
   selector: 'app-search-results',
@@ -36,6 +37,7 @@ export class SearchResultsComponent implements OnInit {
     private route: ActivatedRoute,
     private searchService: SearchService,
     private sortService: SortService,
+    private youtubeService: YoutubeApiService,
   ) {}
 
   ngOnInit() {
@@ -48,6 +50,20 @@ export class SearchResultsComponent implements OnInit {
         this.loadData();
       }
     });
+    this.searchVideos('cat');
+  }
+
+  searchVideos(query: string): void {
+    this.youtubeService.searchAndFetchDetails(query).subscribe(
+      (videos: VideoItem[]) => {
+        this.filteredVideos = videos;
+        this.searchResultsVisible = this.filteredVideos.length > 0;
+        console.log(this.filteredVideos);
+      },
+      (error: any) => {
+        console.error('Error fetching videos', error);
+      },
+    );
   }
 
   async loadData(searchQuery?: string) {

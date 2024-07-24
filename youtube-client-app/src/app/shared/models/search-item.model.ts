@@ -1,3 +1,4 @@
+// интерфейс для ответа оот videos.list API, который включает id, snippet и statistics.
 export interface Localized {
   title: string;
   description: string;
