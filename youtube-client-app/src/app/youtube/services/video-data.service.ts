@@ -5,17 +5,16 @@ import { VideoItem } from 'app/shared/models/search-item.model';
   providedIn: 'root',
 })
 export class VideoDataService {
-  private _currentVideoData?: VideoItem;
+  set currentVideoData(videoData: VideoItem | undefined) {
+    localStorage.setItem('currentVideo', JSON.stringify(videoData));
+  }
 
   get currentVideoData(): VideoItem | undefined {
-    return this._currentVideoData;
+    const videoData = localStorage.getItem('currentVideo');
+    return videoData ? JSON.parse(videoData) : undefined;
   }
 
-  set currentVideoData(videoData: VideoItem | undefined) {
-    this._currentVideoData = videoData;
-  }
-
-  clearVideoData(): void {
-    this._currentVideoData = undefined;
+  clearVideoData() {
+    localStorage.removeItem('currentVideo');
   }
 }
