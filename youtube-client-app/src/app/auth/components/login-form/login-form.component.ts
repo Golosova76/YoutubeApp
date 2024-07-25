@@ -23,7 +23,7 @@ export class LoginFormComponent {
     const password = this.passwordInput.value;
 
     if (this.loginService.login(username, password)) {
-      this.router.navigate(['/youtube']);
+      this.router.navigate(['youtube']);
     } else {
       alert('Login failed!');
     }

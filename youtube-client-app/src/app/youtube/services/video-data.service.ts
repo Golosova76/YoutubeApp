@@ -7,8 +7,6 @@ import { VideoItem } from 'app/shared/models/search-item.model';
 export class VideoDataService {
   private _currentVideoData?: VideoItem;
 
-  constructor() {}
-
   get currentVideoData(): VideoItem | undefined {
     return this._currentVideoData;
   }
