@@ -12,7 +12,7 @@ import { FilterVideosPipe } from 'app/shared/pipe/filter-words.pipe';
 import { SearchService } from 'app/youtube/services/search.service';
 import { ActivatedRoute } from '@angular/router';
 import { SortService } from 'app/youtube/services/sortsearch.service';
-import { Subject, takeUntil } from 'rxjs';
+import { debounceTime, distinctUntilChanged, Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-search-results',
@@ -42,15 +42,17 @@ export class SearchResultsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
-      const searchQuery = params['query'];
-      if (!searchQuery) {
-        this.loadData();
-        return;
-      }
-      this.searchService.setSearchQuery(searchQuery);
-      this.loadData(searchQuery);
-    });
+    this.route.queryParams
+      .pipe(
+        debounceTime(100),
+        distinctUntilChanged((prev, curr) => prev['search'] === curr['search']),
+        takeUntil(this.destroy$),
+      )
+      .subscribe((params) => {
+        const searchQuery = params['search'];
+        this.searchService.setSearchQuery(searchQuery || '');
+        this.loadData(searchQuery);
+      });
   }
 
   ngOnDestroy() {
@@ -72,10 +74,6 @@ export class SearchResultsComponent implements OnInit {
       console.log('Data loaded:', this.videosData);
       this.searchResultsVisible =
         this.searchService.getSearchResultsVisibility();
-      console.log(
-        'Data loaded and searchResultsVisible set to:',
-        this.searchResultsVisible,
-      );
       if (this.searchResultsVisible) {
         this.updateFilteredVideos();
       }
