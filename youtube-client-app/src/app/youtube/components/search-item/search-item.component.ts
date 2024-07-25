@@ -38,7 +38,8 @@ export class SearchItemComponent {
     if (this.videoData) {
       this.videoDataService.currentVideoData = this.videoData;
       this.router.navigate([
-        '/youtube/detailed-information',
+        'youtube',
+        'detailed-information',
         this.videoData.id,
       ]);
     }

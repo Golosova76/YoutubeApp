@@ -12,6 +12,7 @@ import { FilterVideosPipe } from 'app/shared/pipe/filter-words.pipe';
 import { SearchService } from 'app/youtube/services/search.service';
 import { ActivatedRoute } from '@angular/router';
 import { SortService } from 'app/youtube/services/sortsearch.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-search-results',
@@ -32,6 +33,8 @@ export class SearchResultsComponent implements OnInit {
 
   public searchResultsVisible: boolean = false;
 
+  private destroy$ = new Subject<void>();
+
   constructor(
     private route: ActivatedRoute,
     private searchService: SearchService,
@@ -39,15 +42,20 @@ export class SearchResultsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.route.params.subscribe((params) => {
+    this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
       const searchQuery = params['query'];
-      if (searchQuery) {
-        this.searchService.setSearchQuery(searchQuery);
-        this.loadData(searchQuery);
-      } else {
+      if (!searchQuery) {
         this.loadData();
+        return;
       }
+      this.searchService.setSearchQuery(searchQuery);
+      this.loadData(searchQuery);
     });
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   async loadData(searchQuery?: string) {
