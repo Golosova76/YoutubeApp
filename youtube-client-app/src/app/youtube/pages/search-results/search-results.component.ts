@@ -1,10 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 
-import {
-  createVideosData,
-  YouTubeVideoListResponse,
-} from 'app/shared/models/search-response.model';
+import { YouTubeVideoListResponse } from 'app/shared/models/search-response.model';
 import { VideoItem } from 'app/shared/models/search-item.model';
 import { SearchItemComponent } from '../../components/search-item/search-item.component';
 import { SortVideosPipe } from 'app/shared/pipe/sort-date-count.pipe';
@@ -73,6 +70,10 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
 
   updateFilteredVideos() {
     if (this.filteredVideos) {
+      console.log(
+        'Using search query words:',
+        this.sortService.getSearchQueryWords,
+      );
       this.filterVideos(this.searchService.getSearchQuery());
     } else {
       console.log('Data not loaded or `filteredVideos` is undefined');
