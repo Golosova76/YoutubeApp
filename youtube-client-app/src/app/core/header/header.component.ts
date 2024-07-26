@@ -1,7 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, ViewChild } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { filter, takeUntil } from 'rxjs/operators';
+import { FormControl, FormsModule } from '@angular/forms';
+import {
+  debounceTime,
+  distinctUntilChanged,
+  filter,
+  takeUntil,
+} from 'rxjs/operators';
 
 import { InputComponent } from 'app/shared/input/input.component';
 import { CustomButtonComponent } from 'app/shared/custom-button/custom-button.component';
@@ -49,6 +54,23 @@ export class HeaderComponent {
       .subscribe(() => {
         this.updateLogoutButtonVisibility();
       });
+    // Подписка на изменения значения поиска
+    this.searchInput.inputField.nativeElement.addEventListener(
+      'input',
+      (event: Event) => {
+        const target = event.target as HTMLInputElement;
+        const value = target.value;
+        if (value && value.trim().length > 2) {
+          this.searchService.setSearchQuery(value);
+          this.router.navigate(['youtube', 'search-results'], {
+            queryParams: { search: value },
+          });
+        } else {
+          this.searchService.clearSearchQuery();
+          this.router.navigate(['youtube', 'search-results']); // Возврат на главную страницу
+        }
+      },
+    );
   }
 
   ngOnDestroy() {
@@ -56,6 +78,7 @@ export class HeaderComponent {
     this.destroy$.complete();
   }
 
+  /*
   onSearch(): void {
     const searchValue = this.searchInput.value;
     if (searchValue.trim().length > 0) {
@@ -68,6 +91,7 @@ export class HeaderComponent {
       this.router.navigate(['youtube', 'search-results']); // Возврат на главную страницу
     }
   }
+    */
 
   // кнопка настроек поиска
   handleButtonClick() {

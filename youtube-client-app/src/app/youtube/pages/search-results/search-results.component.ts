@@ -7,10 +7,17 @@ import { SearchItemComponent } from '../../components/search-item/search-item.co
 import { SortVideosPipe } from 'app/shared/pipe/sort-date-count.pipe';
 import { FilterVideosPipe } from 'app/shared/pipe/filter-words.pipe';
 import { SearchService } from 'app/youtube/services/search.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SortService } from 'app/youtube/services/sortsearch.service';
 import { YoutubeApiService } from 'app/youtube/services/youtube-api.service';
-import { debounceTime, distinctUntilChanged, Subject, takeUntil } from 'rxjs';
+import {
+  debounceTime,
+  distinctUntilChanged,
+  Subject,
+  takeUntil,
+  filter,
+} from 'rxjs';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-search-results',
@@ -29,8 +36,10 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
   public filteredVideos: VideoItem[] = [];
   public searchResultsVisible: boolean = false;
   private destroy$ = new Subject<void>();
+  searchControl = new FormControl('');
 
   constructor(
+    private router: Router,
     private route: ActivatedRoute,
     private searchService: SearchService,
     private sortService: SortService,
@@ -38,14 +47,19 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.youtubeService.videos$.pipe(takeUntil(this.destroy$)).subscribe({
-      next: (videos) => {
-        this.filteredVideos = videos;
-        this.searchResultsVisible = this.filteredVideos.length > 0;
-        this.updateFilteredVideos();
-      },
-      error: (error) => console.error('Failed to load videos:', error),
-    });
+    this.searchControl.valueChanges
+      .pipe(
+        debounceTime(100),
+        filter((value) => value !== null && value.length > 2), // Убеждаемся, что value не null и длина больше 2
+        distinctUntilChanged(),
+        takeUntil(this.destroy$),
+      )
+      .subscribe((value) => {
+        const safeValue = value ?? ''; // Устанавливаем пустую строку, если value равно null
+        this.updateSearchQueryInURL(safeValue); // Передаем безопасное значение
+        this.searchService.setSearchQuery(safeValue); // Передаем безопасное значение
+        this.youtubeService.searchAndFetchDetails(safeValue); // Передаем безопасное значение
+      });
 
     this.route.queryParams
       .pipe(
@@ -53,14 +67,20 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
         distinctUntilChanged((prev, curr) => prev['search'] === curr['search']),
         takeUntil(this.destroy$),
       )
-      .subscribe({
-        next: (params) => {
-          const searchQuery = params['search'];
-          this.searchService.setSearchQuery(searchQuery || 'default query');
-          this.youtubeService.searchAndFetchDetails(searchQuery);
-        },
-        error: (error) => console.error('Error handling queryParams:', error),
+      .subscribe((params) => {
+        const searchQuery = params['search'] ?? ''; // Использование пустой строки в качестве значения по умолчанию
+        this.searchControl.setValue(searchQuery, { emitEvent: false });
+        this.searchService.setSearchQuery(searchQuery);
+        this.youtubeService.searchAndFetchDetails(searchQuery);
       });
+  }
+
+  private updateSearchQueryInURL(query: string) {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { search: query },
+      queryParamsHandling: 'merge', // Объединяем новые параметры с текущими
+    });
   }
 
   ngOnDestroy() {

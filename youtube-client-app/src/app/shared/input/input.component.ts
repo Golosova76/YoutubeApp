@@ -1,12 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-input',
   standalone: true,
   templateUrl: './input.component.html',
   styleUrls: ['./input.component.scss'],
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
 })
 export class InputComponent {
   @Input() placeholder: string = '';
@@ -27,5 +28,9 @@ export class InputComponent {
 
   get value(): string {
     return this.inputField.nativeElement.value;
+  }
+
+  set value(val: string) {
+    this.inputField.nativeElement.value = val;
   }
 }
