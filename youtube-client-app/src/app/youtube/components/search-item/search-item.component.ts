@@ -8,6 +8,7 @@ import { DateBackgroundDirective } from 'app/shared/directives/line-back-directi
 import { VideoStatisticsComponent } from '../video-statistics/video-statistics.component';
 import { Router } from '@angular/router';
 import { VideoDataService } from 'app/youtube/services/video-data.service';
+import { getThumbnailUrl } from 'app/shared/utils';
 
 @Component({
   selector: 'app-search-item',
@@ -30,25 +31,15 @@ export class SearchItemComponent {
   ) {}
 
   getThumbnailUrl(): string {
-    if (this.videoData?.snippet?.thumbnails?.maxres) {
-      return this.videoData.snippet.thumbnails.maxres.url;
-    }
-    if (this.videoData?.snippet?.thumbnails?.high) {
-      return this.videoData.snippet.thumbnails.high.url;
-    }
-    if (this.videoData?.snippet?.thumbnails?.medium) {
-      return this.videoData.snippet.thumbnails.medium.url;
-    }
-    return (
-      this.videoData?.snippet?.thumbnails?.default?.url || 'assets/caption.jpg'
-    );
+    return getThumbnailUrl(this.videoData);
   }
 
   navigateToDetail() {
     if (this.videoData) {
       this.videoDataService.currentVideoData = this.videoData;
       this.router.navigate([
-        '/youtube/detailed-information',
+        'youtube',
+        'detailed-information',
         this.videoData.id,
       ]);
     }

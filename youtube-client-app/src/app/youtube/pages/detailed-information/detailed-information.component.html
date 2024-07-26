@@ -1,4 +1,8 @@
 <article class="detail-inform">
+  <app-custom-button (buttonClick)="navigateToDetail()"
+                     buttonClass="button-details-back">
+    <fa-icon [icon]="faBackward"></fa-icon>
+  </app-custom-button>
   <div class="detail-inform-container">
     <div class="detail-inform-image">
       <img [src]="getThumbnailUrl()"

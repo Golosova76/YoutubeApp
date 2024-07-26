@@ -57,6 +57,7 @@ module.exports = {
         tsx: 'never',
       },
     ],
+    'newline-per-chained-call': ['error', { ignoreChainWithDepth: 2 }],
   },
   settings: {
     'import/parsers': {

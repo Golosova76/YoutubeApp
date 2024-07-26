@@ -13,6 +13,7 @@ import { SearchService } from 'app/youtube/services/search.service';
 import { ActivatedRoute } from '@angular/router';
 import { SortService } from 'app/youtube/services/sortsearch.service';
 import { YoutubeApiService } from 'app/youtube/services/youtube-api.service';
+import { debounceTime, distinctUntilChanged, Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-search-results',
@@ -33,6 +34,8 @@ export class SearchResultsComponent implements OnInit {
 
   public searchResultsVisible: boolean = false;
 
+  private destroy$ = new Subject<void>();
+
   constructor(
     private route: ActivatedRoute,
     private searchService: SearchService,
@@ -41,29 +44,22 @@ export class SearchResultsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.route.params.subscribe((params) => {
-      const searchQuery = params['query'];
-      if (searchQuery) {
-        this.searchService.setSearchQuery(searchQuery);
+    this.route.queryParams
+      .pipe(
+        debounceTime(100),
+        distinctUntilChanged((prev, curr) => prev['search'] === curr['search']),
+        takeUntil(this.destroy$),
+      )
+      .subscribe((params) => {
+        const searchQuery = params['search'];
+        this.searchService.setSearchQuery(searchQuery || '');
         this.loadData(searchQuery);
-      } else {
-        this.loadData();
-      }
-    });
-    this.searchVideos('cat');
+      });
   }
 
-  searchVideos(query: string): void {
-    this.youtubeService.searchAndFetchDetails(query).subscribe(
-      (videos: VideoItem[]) => {
-        this.filteredVideos = videos;
-        this.searchResultsVisible = this.filteredVideos.length > 0;
-        console.log(this.filteredVideos);
-      },
-      (error: any) => {
-        console.error('Error fetching videos', error);
-      },
-    );
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   async loadData(searchQuery?: string) {
@@ -80,10 +76,6 @@ export class SearchResultsComponent implements OnInit {
       console.log('Data loaded:', this.videosData);
       this.searchResultsVisible =
         this.searchService.getSearchResultsVisibility();
-      console.log(
-        'Data loaded and searchResultsVisible set to:',
-        this.searchResultsVisible,
-      );
       if (this.searchResultsVisible) {
         this.updateFilteredVideos();
       }

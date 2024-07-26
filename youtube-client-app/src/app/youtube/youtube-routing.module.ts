@@ -6,7 +6,6 @@ import { DetailedInformationComponent } from './pages/detailed-information/detai
 const routes: Routes = [
   { path: '', redirectTo: 'search', pathMatch: 'full' },
   { path: 'search-results', component: SearchResultsComponent },
-  { path: 'search-results/:query', component: SearchResultsComponent },
   { path: 'detailed-information/:id', component: DetailedInformationComponent },
 ];
 

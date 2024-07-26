@@ -1,49 +1,63 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
+
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faBackward } from '@fortawesome/free-solid-svg-icons';
 
 import { VideoStatisticsComponent } from 'app/youtube/components/video-statistics/video-statistics.component';
 import { VideoItem } from 'app/shared/models/search-item.model';
 import { DateBackgroundDirective } from 'app/shared/directives/line-back-directive';
-import { ActivatedRoute, Router } from '@angular/router';
 import { VideoDataService } from 'app/youtube/services/video-data.service';
-
-interface NavigationState {
-  videoData: VideoItem;
-}
+import { getThumbnailUrl } from 'app/shared/utils';
+import { CustomButtonComponent } from 'app/shared/custom-button/custom-button.component';
+import { Router } from '@angular/router';
+import { SearchService } from 'app/youtube/services/search.service';
 
 @Component({
   selector: 'app-detailed-information',
   standalone: true,
-  imports: [CommonModule, VideoStatisticsComponent, DateBackgroundDirective],
+  imports: [
+    CommonModule,
+    VideoStatisticsComponent,
+    DateBackgroundDirective,
+    CustomButtonComponent,
+    FontAwesomeModule,
+  ],
   templateUrl: './detailed-information.component.html',
   styleUrls: ['./detailed-information.component.scss'],
 })
 export class DetailedInformationComponent {
   public videoData?: VideoItem;
 
+  faBackward = faBackward;
+
   constructor(
-    private router: Router,
-    private route: ActivatedRoute,
     private videoDataService: VideoDataService,
+    private router: Router,
+    private searchService: SearchService,
   ) {}
 
   ngOnInit(): void {
+    // Загружаем данные, не удаляем их
     this.videoData = this.videoDataService.currentVideoData;
+  }
+
+  ngOnDestroy(): void {
+    // Очищаем данные при уничтожении компонента
     this.videoDataService.clearVideoData();
   }
 
   getThumbnailUrl(): string {
-    if (this.videoData?.snippet?.thumbnails?.maxres) {
-      return this.videoData.snippet.thumbnails.maxres.url;
-    }
-    if (this.videoData?.snippet?.thumbnails?.high) {
-      return this.videoData.snippet.thumbnails.high.url;
-    }
-    if (this.videoData?.snippet?.thumbnails?.medium) {
-      return this.videoData.snippet.thumbnails.medium.url;
-    }
-    return (
-      this.videoData?.snippet?.thumbnails?.default?.url || 'assets/caption.jpg'
-    );
+    return getThumbnailUrl(this.videoData);
+  }
+
+  navigateToDetail() {
+    // Получаем текущий поисковый запрос из сервиса
+    const currentSearchQuery = this.searchService.getSearchQuery();
+
+    // Передаем этот запрос как параметр URL при навигации
+    this.router.navigate(['youtube', 'search-results'], {
+      queryParams: { search: currentSearchQuery },
+    });
   }
 }
