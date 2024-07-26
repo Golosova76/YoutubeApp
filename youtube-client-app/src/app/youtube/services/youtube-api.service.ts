@@ -2,7 +2,10 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable, switchMap } from 'rxjs';
 import { environment } from 'environments/environment';
-import { YouTubeVideoListResponse } from 'app/shared/models/search-response.model';
+import {
+  createVideosData,
+  YouTubeVideoListResponse,
+} from 'app/shared/models/search-response.model';
 import { YouTubeSearchResponse } from 'app/shared/models/search-list-api.model';
 import { VideoItem } from 'app/shared/models/search-item.model';
 
@@ -45,9 +48,13 @@ export class YoutubeApiService {
         const videoIds = searchResponse.items.map((item) => item.id.videoId);
         return this.getVideoStatistics(videoIds);
       }),
-      map((videoDetailsResponse: YouTubeVideoListResponse) => {
-        return videoDetailsResponse.items;
-      }),
+      map((videoDetailsResponse: YouTubeVideoListResponse) =>
+        createVideosData(videoDetailsResponse),
+      ),
+      map(
+        (processedResponse: YouTubeVideoListResponse) =>
+          processedResponse.items,
+      ), // извлечение items из обработанного ответа
     );
   }
 }
