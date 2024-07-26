@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map, Observable, switchMap } from 'rxjs';
+import { map, Observable, Subject, switchMap } from 'rxjs';
 import { environment } from 'environments/environment';
 import {
   createVideosData,
@@ -18,6 +18,10 @@ export class YoutubeApiService {
   private searchUrl = environment.youtubeSearchUrl;
 
   private videosUrl = environment.youtubeVideosUrl;
+
+  private videosSubject = new Subject<VideoItem[]>();
+
+  public videos$ = this.videosSubject.asObservable();
 
   constructor(private http: HttpClient) {}
 
@@ -39,22 +43,24 @@ export class YoutubeApiService {
     });
   }
 
-  searchAndFetchDetails(
-    query: string,
-    maxResults: number = 15,
-  ): Observable<VideoItem[]> {
-    return this.searchVideos(query, maxResults).pipe(
-      switchMap((searchResponse: YouTubeSearchResponse) => {
-        const videoIds = searchResponse.items.map((item) => item.id.videoId);
-        return this.getVideoStatistics(videoIds);
-      }),
-      map((videoDetailsResponse: YouTubeVideoListResponse) =>
-        createVideosData(videoDetailsResponse),
-      ),
-      map(
-        (processedResponse: YouTubeVideoListResponse) =>
-          processedResponse.items,
-      ), // извлечение items из обработанного ответа
-    );
+  searchAndFetchDetails(query: string, maxResults: number = 15): void {
+    this.searchVideos(query, maxResults)
+      .pipe(
+        switchMap((searchResponse: YouTubeSearchResponse) => {
+          const videoIds = searchResponse.items.map((item) => item.id.videoId);
+          return this.getVideoStatistics(videoIds);
+        }),
+        map((videoDetailsResponse: YouTubeVideoListResponse) =>
+          createVideosData(videoDetailsResponse),
+        ),
+        map(
+          (processedResponse: YouTubeVideoListResponse) =>
+            processedResponse.items,
+        ),
+      )
+      .subscribe({
+        next: (videos) => this.videosSubject.next(videos),
+        error: (error) => console.error('Error fetching videos', error),
+      });
   }
 }
