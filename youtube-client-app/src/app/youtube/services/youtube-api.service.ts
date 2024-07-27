@@ -43,7 +43,7 @@ export class YoutubeApiService {
     });
   }
 
-  searchAndFetchDetails(query: string, maxResults: number = 15): void {
+  searchAndFetchDetails(query: string, maxResults: number = 16): void {
     this.searchVideos(query, maxResults)
       .pipe(
         switchMap((searchResponse: YouTubeSearchResponse) => {

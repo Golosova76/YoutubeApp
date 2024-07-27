@@ -10,8 +10,8 @@ import { InputComponent } from 'app/shared/input/input.component';
   styleUrls: ['./login-form.component.scss'],
 })
 export class LoginFormComponent {
-  @ViewChild('usernameInput', { static: true }) usernameInput!: InputComponent;
-  @ViewChild('passwordInput', { static: true }) passwordInput!: InputComponent;
+  @ViewChild('usernameInput', { static: false }) usernameInput!: InputComponent;
+  @ViewChild('passwordInput', { static: false }) passwordInput!: InputComponent;
 
   constructor(
     private loginService: LoginService,
@@ -19,13 +19,17 @@ export class LoginFormComponent {
   ) {}
 
   onLogin() {
-    const username = this.usernameInput.value;
-    const password = this.passwordInput.value;
+    if (this.usernameInput && this.passwordInput) {
+      const username = this.usernameInput.value;
+      const password = this.passwordInput.value;
 
-    if (this.loginService.login(username, password)) {
-      this.router.navigate(['youtube']);
+      if (username && password && this.loginService.login(username, password)) {
+        this.router.navigate(['youtube']);
+      } else {
+        alert('Login failed!');
+      }
     } else {
-      alert('Login failed!');
+      console.error('Input components are not initialized!');
     }
   }
 }

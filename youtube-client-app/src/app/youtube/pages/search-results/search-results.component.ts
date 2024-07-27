@@ -47,17 +47,23 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.searchControl.valueChanges
+    console.log('Initializing SearchResultsComponent');
+    this.searchService
+      .getSearchQuery()
       .pipe(
         debounceTime(100),
         filter((value) => value !== null && value.length > 2), // Убеждаемся, что value не null и длина больше 2
         distinctUntilChanged(),
         takeUntil(this.destroy$),
       )
-      .subscribe((value) => {
-        const safeValue = value ?? ''; // Устанавливаем пустую строку, если value равно null
+      .subscribe((query) => {
+        const safeValue = query ?? ''; // Устанавливаем пустую строку, если value равно null
+        console.log('Value changed in search control:', safeValue);
         this.updateSearchQueryInURL(safeValue); // Передаем безопасное значение
-        this.searchService.setSearchQuery(safeValue); // Передаем безопасное значение
+        console.log(
+          'Calling youtubeService.searchAndFetchDetails with query:',
+          safeValue,
+        );
         this.youtubeService.searchAndFetchDetails(safeValue); // Передаем безопасное значение
       });
 
@@ -69,9 +75,22 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
       )
       .subscribe((params) => {
         const searchQuery = params['search'] ?? ''; // Использование пустой строки в качестве значения по умолчанию
+        console.log('Query params updated, search for:', searchQuery);
         this.searchControl.setValue(searchQuery, { emitEvent: false });
         this.searchService.setSearchQuery(searchQuery);
+        console.log('Searching for videos with query:', searchQuery);
         this.youtubeService.searchAndFetchDetails(searchQuery);
+      });
+    // Подписка на videos$
+    this.youtubeService.videos$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((videos: VideoItem[]) => {
+        this.filteredVideos = videos;
+        this.searchResultsVisible = videos.length > 0;
+        console.log(
+          'Videos received in SearchResultsComponent:',
+          this.filteredVideos,
+        );
       });
   }
 
@@ -94,7 +113,9 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
         'Using search query words:',
         this.sortService.getSearchQueryWords,
       );
-      this.filterVideos(this.searchService.getSearchQuery());
+      this.searchService.getSearchQuery().subscribe((query) => {
+        this.filterVideos(query);
+      });
     } else {
       console.log('Data not loaded or `filteredVideos` is undefined');
     }

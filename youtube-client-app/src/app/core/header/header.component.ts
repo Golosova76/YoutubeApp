@@ -36,6 +36,8 @@ export class HeaderComponent {
 
   public sortPanelVisible: boolean = false;
 
+  searchControl = new FormControl('');
+
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -54,44 +56,35 @@ export class HeaderComponent {
       .subscribe(() => {
         this.updateLogoutButtonVisibility();
       });
-    // Подписка на изменения значения поиска
-    this.searchInput.inputField.nativeElement.addEventListener(
-      'input',
-      (event: Event) => {
-        const target = event.target as HTMLInputElement;
-        const value = target.value;
-        if (value && value.trim().length > 2) {
-          this.searchService.setSearchQuery(value);
+    // Подписка на изменения значения поиска через EventEmitter
+    this.searchInput.valueChange
+      .pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        filter((query) => query.length >= 3 || query.length === 0),
+        takeUntil(this.destroy$),
+      )
+      .subscribe((query) => {
+        console.log('Query received in HeaderComponent:', query);
+        if (query.length >= 3) {
+          this.searchService.setSearchQuery(query);
           this.router.navigate(['youtube', 'search-results'], {
-            queryParams: { search: value },
+            queryParams: { search: query },
           });
         } else {
           this.searchService.clearSearchQuery();
-          this.router.navigate(['youtube', 'search-results']); // Возврат на главную страницу
+          this.router.navigate(['youtube', 'search-results']);
         }
-      },
-    );
+      });
+  }
+  onSearchInputChange(query: string): void {
+    this.searchService.setSearchQuery(query);
   }
 
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
   }
-
-  /*
-  onSearch(): void {
-    const searchValue = this.searchInput.value;
-    if (searchValue.trim().length > 0) {
-      this.searchService.setSearchQuery(searchValue);
-      this.router.navigate(['youtube', 'search-results'], {
-        queryParams: { search: searchValue },
-      });
-    } else {
-      this.searchService.clearSearchQuery();
-      this.router.navigate(['youtube', 'search-results']); // Возврат на главную страницу
-    }
-  }
-    */
 
   // кнопка настроек поиска
   handleButtonClick() {
