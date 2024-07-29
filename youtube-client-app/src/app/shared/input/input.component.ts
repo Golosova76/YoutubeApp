@@ -17,6 +17,10 @@ export class InputComponent {
 
   @Input() inputClass: string = '';
 
+  @Input() name: string = '';
+
+  @Input() id: string = '';
+
   @ViewChild('inputField', { static: true })
   // eslint-disable-next-line indent
   inputField!: ElementRef<HTMLInputElement>;

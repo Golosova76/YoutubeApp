@@ -5,19 +5,14 @@
       <img [src]="getThumbnailUrl()"
            alt=" {{ videoData.snippet.title }} ">
     </div>
-    <div class="search-item-statictics">
-      <div *ngFor="let stat of stats"
-           class="stat-item">
-        <fa-icon [icon]="stat.icon"></fa-icon>
-        <span>{{ stat.value }}</span>
-      </div>
-    </div>
+    <app-video-statistics [videoData]="videoData"></app-video-statistics>
     <div class="search-item-about">
       <div class="search-item-title">{{ videoData.snippet.title }}</div>
       <div class="search-item-title-count">#{{ videoData.snippet.categoryId }}</div>
     </div>
     <div class="search-item-more">
-      <app-custom-button buttonClass="button-search-item-more">more...
+      <app-custom-button (buttonClick)="navigateToDetail()"
+                         buttonClass="button-search-item-more">more...
       </app-custom-button>
     </div>
   </div>

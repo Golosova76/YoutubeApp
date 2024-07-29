@@ -1,72 +1,95 @@
 import { CommonModule } from '@angular/common';
-import {
-  Component,
-  EventEmitter,
-  Output,
-  ViewChild,
-  AfterViewInit,
-} from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { filter, takeUntil } from 'rxjs/operators';
 
 import { InputComponent } from 'app/shared/input/input.component';
 import { CustomButtonComponent } from 'app/shared/custom-button/custom-button.component';
+import { SearchService } from 'app/youtube/services/search.service';
+import { LoginService } from 'app/auth/services/login.service';
+import { NavigationEnd, Router } from '@angular/router';
+import { SearchBarComponent } from './search-bar/search-bar.component';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
   standalone: true,
-  imports: [CommonModule, InputComponent, CustomButtonComponent, FormsModule],
+  imports: [
+    CommonModule,
+    InputComponent,
+    CustomButtonComponent,
+    FormsModule,
+    SearchBarComponent,
+  ],
 })
-export class HeaderComponent implements AfterViewInit {
-  visible: boolean = false;
-
-  visibleResults: boolean = false;
-
-  // передать событие клика дальше вверх к AppComponent
-  @Output() settingsSearchEvent = new EventEmitter<void>(); // открытие панели настроек
-
-  @Output() resultsSearchEvent = new EventEmitter<boolean>(); // открытие панели поиска
-
-  @Output() searchEvent = new EventEmitter<string>(); // поиск
-
+export class HeaderComponent {
   @ViewChild('searchInput', { static: true }) searchInput!: InputComponent;
 
-  ngAfterViewInit() {
-    if (this.searchInput && this.searchInput.inputField) {
-      this.searchInput.inputField.nativeElement.addEventListener(
-        'input',
-        // eslint-disable-next-line @typescript-eslint/comma-dangle
-        this.onInput.bind(this),
-      );
-    }
+  showLogoutButton: boolean = false;
+
+  public sortPanelVisible: boolean = false;
+
+  private destroy$ = new Subject<void>();
+
+  constructor(
+    private router: Router,
+    private searchService: SearchService,
+    private loginService: LoginService,
+  ) {}
+
+  ngOnInit() {
+    this.updateLogoutButtonVisibility();
+    this.router.events
+      .pipe(
+        filter((event) => event instanceof NavigationEnd),
+        takeUntil(this.destroy$),
+      )
+      .subscribe(() => {
+        this.updateLogoutButtonVisibility();
+      });
   }
 
-  onInput(event: Event) {
-    const inputElement = event.target as HTMLInputElement;
-    if (inputElement.value.trim().length === 0) {
-      this.visibleResults = false;
-      this.resultsSearchEvent.emit(this.visibleResults);
-    }
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
-  onSearch() {
-    const searchValue = this.searchInput.value; // Получаем значение из input
+  onSearch(): void {
+    const searchValue = this.searchInput.value;
     if (searchValue.trim().length > 0) {
-      this.searchEvent.emit(searchValue);
-      this.visibleResults = true;
-      this.resultsSearchEvent.emit(this.visibleResults);
+      this.searchService.setSearchQuery(searchValue);
+      this.router.navigate(['youtube', 'search-results'], {
+        queryParams: { search: searchValue },
+      });
     } else {
-      this.visibleResults = false;
-      this.resultsSearchEvent.emit(this.visibleResults);
+      this.searchService.clearSearchQuery();
+      this.router.navigate(['youtube', 'search-results']); // Возврат на главную страницу
     }
   }
 
+  // кнопка настроек поиска
   handleButtonClick() {
     this.settingsSearch();
   }
 
+  // появление панели при клике на кнопку
   settingsSearch() {
-    this.settingsSearchEvent.emit(); // запускаем событие при клике на кнопку
+    this.sortPanelVisible = !this.sortPanelVisible;
+  }
+
+  navigateToLogin() {
+    this.router.navigate(['auth']);
+  }
+
+  logout() {
+    this.loginService.logout();
+    this.updateLogoutButtonVisibility();
+    this.router.navigate(['auth']);
+  }
+
+  updateLogoutButtonVisibility() {
+    this.showLogoutButton = this.loginService.isLoggedIn();
   }
 }

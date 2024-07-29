@@ -29,6 +29,7 @@
           },
           "configurations": {
             "production": {
+              "baseHref": "./",
               "budgets": [
                 {
                   "type": "initial",
@@ -44,6 +45,7 @@
               "outputHashing": "all"
             },
             "development": {
+              "baseHref": "/",
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true
@@ -54,14 +56,14 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "youtube-client-app:build"
+            "buildTarget": "youtube-client-app:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "youtube-client-app:build:production"
+              "buildTarget": "youtube-client-app:build:production"
             },
             "development": {
-              "browserTarget": "youtube-client-app:build:development"
+              "buildTarget": "youtube-client-app:build:development"
             }
           },
           "defaultConfiguration": "development"

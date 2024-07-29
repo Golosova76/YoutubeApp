@@ -7,16 +7,23 @@
   justify-content: center;
   min-height: 94px;
   gap: 20px;
+  padding: 10px;
 }
 
 .header-search {
   display: flex;
   align-items: center;
   gap: 10px;
+  @media (max-width: 720px) {
+    flex-wrap: wrap;
+  }
 }
 .header-search-form {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
+  @media (max-width: 720px) {
+    flex-direction: column;
+  }
 }

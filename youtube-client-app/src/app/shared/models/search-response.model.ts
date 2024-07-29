@@ -14,7 +14,7 @@ export interface YouTubeVideoListResponse {
 
 export const createVideosData = (
   // eslint-disable-next-line @typescript-eslint/comma-dangle
-  dataResponse: YouTubeVideoListResponse
+  dataResponse: YouTubeVideoListResponse,
 ): YouTubeVideoListResponse => {
   // const kind = dataResponse.kind;
   const { kind, etag } = dataResponse;

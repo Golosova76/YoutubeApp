@@ -1,29 +1,22 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
+import { VideoItem } from 'app/shared/models/search-item.model';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { CustomButtonComponent } from 'app/shared/custom-button/custom-button.component';
 import {
   faEye,
   faHeart,
   faHeartCrack,
   faComments,
 } from '@fortawesome/free-solid-svg-icons';
-import { VideoItem } from 'app/shared/models/search-item.model';
-import { DateBackgroundDirective } from 'app/shared/directives/line-back-directive';
 
 @Component({
-  selector: 'app-search-item',
-  templateUrl: './search-item.component.html',
-  styleUrls: ['./search-item.component.scss'],
+  selector: 'app-video-statistics',
   standalone: true,
-  imports: [
-    CommonModule,
-    CustomButtonComponent,
-    FontAwesomeModule,
-    DateBackgroundDirective,
-  ],
+  imports: [CommonModule, FontAwesomeModule],
+  templateUrl: './video-statistics.component.html',
+  styleUrls: ['./video-statistics.component.scss'],
 })
-export class SearchItemComponent {
+export class VideoStatisticsComponent {
   @Input() videoData?: VideoItem;
 
   // getter для динамического вычисления статистики
@@ -48,20 +41,5 @@ export class SearchItemComponent {
       },
       { icon: faComments, value: this.videoData.statistics?.commentCount || 0 },
     ];
-  }
-
-  getThumbnailUrl(): string {
-    if (this.videoData?.snippet?.thumbnails?.maxres) {
-      return this.videoData.snippet.thumbnails.maxres.url;
-    }
-    if (this.videoData?.snippet?.thumbnails?.high) {
-      return this.videoData.snippet.thumbnails.high.url;
-    }
-    if (this.videoData?.snippet?.thumbnails?.medium) {
-      return this.videoData.snippet.thumbnails.medium.url;
-    }
-    return (
-      this.videoData?.snippet?.thumbnails?.default?.url || 'assets/caption.jpg'
-    );
   }
 }

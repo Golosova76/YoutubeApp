@@ -1,0 +1,13 @@
+<div class="main-search-container">
+  <div *ngIf="searchResultsVisible">
+    <div class="video-list-container"
+         *ngIf="filteredVideos && filteredVideos.length">
+      <div *ngFor="let video of filteredVideos | sortVideos:sortField:sortOrder | filterVideos:searchQueryWords">
+        <app-search-item [videoData]="video"></app-search-item>
+      </div>
+    </div>
+    <div *ngIf="filteredVideos && filteredVideos.length === 0">
+      No results found.
+    </div>
+  </div>
+</div>
