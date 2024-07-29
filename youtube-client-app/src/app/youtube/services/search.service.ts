@@ -11,7 +11,6 @@ export class SearchService {
 
   // присваиваем searchQuery строку запроса и устанавливаем searchResultsVisible в true
   setSearchQuery(query: string) {
-    console.log('Search query set:', query);
     this.searchQuery.next(query);
     this.searchResultsVisible = true; // Показываем результаты поиска
   }

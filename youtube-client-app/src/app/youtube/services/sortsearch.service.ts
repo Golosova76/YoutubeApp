@@ -37,19 +37,11 @@ export class SortService {
 
   // Геттер для поискового запроса
   get getSearchQueryWords(): string {
-    console.log('Current search query words:', this.searchQueryWords);
     return this.searchQueryWords;
   }
 
   // Сеттер для поискового запроса
   set setSearchQueryWords(query: string) {
-    console.log(
-      'Setting search query words from',
-      this.searchQueryWords,
-      'to',
-      query,
-    );
     this.searchQueryWords = query;
-    console.log('Search query words now', this.searchQueryWords);
   }
 }

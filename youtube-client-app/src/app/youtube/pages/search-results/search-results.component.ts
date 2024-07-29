@@ -1,5 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 
 import { YouTubeVideoListResponse } from 'app/shared/models/search-response.model';
 import { VideoItem } from 'app/shared/models/search-item.model';
@@ -39,7 +44,6 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
   public searchResultsVisible: boolean = false;
   private destroy$ = new Subject<void>();
   searchControl = new FormControl('');
-  searchQueryWordsValue: string = '';
 
   constructor(
     private router: Router,
@@ -50,11 +54,6 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    console.log('SearchResultsComponent initialized');
-
-    // Инициализация переменной searchQueryWordsValue
-    this.searchQueryWordsValue = this.sortService.getSearchQueryWords;
-
     // Объединяем два потока данных в один
     const searchQuery$ = this.searchService.getSearchQuery().pipe(
       debounceTime(100),
@@ -74,21 +73,14 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
         const safeValue = query ?? '';
         this.updateSearchQueryInURL(safeValue);
         this.youtubeService.searchAndFetchDetails(safeValue);
-        // Обновляем переменную searchQueryWordsValue при изменении поискового запроса
-        this.searchQueryWordsValue = safeValue;
       });
 
     // Подписка на videos$
     this.youtubeService.videos$
       .pipe(takeUntil(this.destroy$))
       .subscribe((videos: VideoItem[]) => {
-        console.log('videos$ subscription triggered');
         this.filteredVideos = videos;
         this.searchResultsVisible = videos.length > 0;
-        console.log(
-          'Videos received in SearchResultsComponent:',
-          this.filteredVideos,
-        );
       });
   }
 
@@ -132,5 +124,8 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
 
   get sortOrder(): string {
     return this.sortService.getSortOrder;
+  }
+  get searchQueryWords(): string {
+    return this.sortService.getSearchQueryWords;
   }
 }
