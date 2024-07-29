@@ -16,6 +16,8 @@ import {
   Subject,
   takeUntil,
   filter,
+  merge,
+  map,
 } from 'rxjs';
 import { FormControl } from '@angular/forms';
 
@@ -48,41 +50,39 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    console.log('SearchResultsComponent initialized');
+
     // Инициализация переменной searchQueryWordsValue
     this.searchQueryWordsValue = this.sortService.getSearchQueryWords;
 
-    this.searchService
-      .getSearchQuery()
-      .pipe(
-        debounceTime(100),
-        filter((value) => value !== null && value.length > 2), // Убеждаемся, что value не null и длина больше 2
-        distinctUntilChanged(),
-        takeUntil(this.destroy$),
-      )
-      .subscribe((query) => {
-        const safeValue = query ?? ''; // Устанавливаем пустую строку, если value равно null
-        this.updateSearchQueryInURL(safeValue); // Передаем безопасное значение
-        this.youtubeService.searchAndFetchDetails(safeValue); // Передаем безопасное значение
+    // Объединяем два потока данных в один
+    const searchQuery$ = this.searchService.getSearchQuery().pipe(
+      debounceTime(100),
+      filter((value) => value !== null && value.length > 2),
+      distinctUntilChanged(),
+    );
+
+    const queryParams$ = this.route.queryParams.pipe(
+      debounceTime(100),
+      distinctUntilChanged((prev, curr) => prev['search'] === curr['search']),
+      map((params) => params['search'] ?? ''),
+    );
+
+    merge(searchQuery$, queryParams$)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((query: string) => {
+        const safeValue = query ?? '';
+        this.updateSearchQueryInURL(safeValue);
+        this.youtubeService.searchAndFetchDetails(safeValue);
+        // Обновляем переменную searchQueryWordsValue при изменении поискового запроса
+        this.searchQueryWordsValue = safeValue;
       });
 
-    this.route.queryParams
-      .pipe(
-        debounceTime(100),
-        distinctUntilChanged((prev, curr) => prev['search'] === curr['search']),
-        takeUntil(this.destroy$),
-      )
-      .subscribe((params) => {
-        const searchQuery = params['search'] ?? ''; // Использование пустой строки в качестве значения по умолчанию
-        this.searchControl.setValue(searchQuery, { emitEvent: false });
-        this.searchService.setSearchQuery(searchQuery);
-        this.youtubeService.searchAndFetchDetails(searchQuery);
-        // Обновляем переменную searchQueryWordsValue при изменении параметров маршрута
-        this.searchQueryWordsValue = searchQuery;
-      });
     // Подписка на videos$
     this.youtubeService.videos$
       .pipe(takeUntil(this.destroy$))
       .subscribe((videos: VideoItem[]) => {
+        console.log('videos$ subscription triggered');
         this.filteredVideos = videos;
         this.searchResultsVisible = videos.length > 0;
         console.log(
@@ -101,6 +101,7 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    console.log('SearchResultsComponent destroyed');
     this.destroy$.next();
     this.destroy$.complete();
   }

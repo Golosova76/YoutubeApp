@@ -44,6 +44,7 @@ export class YoutubeApiService {
   }
 
   searchAndFetchDetails(query: string, maxResults: number = 16): void {
+    console.log('searchAndFetchDetails called with query:', query);
     this.searchVideos(query, maxResults)
       .pipe(
         switchMap((searchResponse: YouTubeSearchResponse) => {
@@ -59,7 +60,10 @@ export class YoutubeApiService {
         ),
       )
       .subscribe({
-        next: (videos) => this.videosSubject.next(videos),
+        next: (videos) => {
+          console.log('Videos fetched:', videos);
+          this.videosSubject.next(videos);
+        },
         error: (error) => console.error('Error fetching videos', error),
       });
   }
