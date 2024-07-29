@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 
 import { LoginService } from 'app/auth/services/login.service';
 import { InputComponent } from 'app/shared/input/input.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-login-form',
@@ -13,10 +14,25 @@ export class LoginFormComponent {
   @ViewChild('usernameInput', { static: false }) usernameInput!: InputComponent;
   @ViewChild('passwordInput', { static: false }) passwordInput!: InputComponent;
 
+  isLoggedIn: boolean = false;
+  private subscription: Subscription = new Subscription();
+
   constructor(
     private loginService: LoginService,
     private router: Router,
   ) {}
+
+  ngOnInit() {
+    this.subscription.add(
+      this.loginService.isLoggedIn$.subscribe((status) => {
+        this.isLoggedIn = status;
+      }),
+    );
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
 
   onLogin() {
     if (this.usernameInput && this.passwordInput) {
@@ -31,5 +47,9 @@ export class LoginFormComponent {
     } else {
       console.error('Input components are not initialized!');
     }
+  }
+
+  onLogout() {
+    this.loginService.logout();
   }
 }

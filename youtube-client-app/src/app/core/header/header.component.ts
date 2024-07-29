@@ -14,7 +14,7 @@ import { SearchService } from 'app/youtube/services/search.service';
 import { LoginService } from 'app/auth/services/login.service';
 import { NavigationEnd, Router } from '@angular/router';
 import { SearchBarComponent } from './search-bar/search-bar.component';
-import { Subject } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -39,6 +39,8 @@ export class HeaderComponent {
   searchControl = new FormControl('');
 
   private destroy$ = new Subject<void>();
+
+  private subscription: Subscription = new Subscription();
 
   constructor(
     private router: Router,
@@ -75,6 +77,12 @@ export class HeaderComponent {
           this.router.navigate(['youtube', 'search-results']);
         }
       });
+    // подписка на события входа
+    this.subscription.add(
+      this.loginService.isLoggedIn$.subscribe((isLoggedIn) => {
+        this.showLogoutButton = isLoggedIn;
+      }),
+    );
   }
   onSearchInputChange(query: string): void {
     this.searchService.setSearchQuery(query);
@@ -83,6 +91,7 @@ export class HeaderComponent {
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
+    this.subscription.unsubscribe();
   }
 
   // кнопка настроек поиска
