@@ -65,7 +65,6 @@ export class HeaderComponent {
         takeUntil(this.destroy$),
       )
       .subscribe((query) => {
-        console.log('Query received in HeaderComponent:', query);
         if (query.length >= 3) {
           this.searchService.setSearchQuery(query);
           this.router.navigate(['youtube', 'search-results'], {

@@ -37,6 +37,7 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
   public searchResultsVisible: boolean = false;
   private destroy$ = new Subject<void>();
   searchControl = new FormControl('');
+  searchQueryWordsValue: string = '';
 
   constructor(
     private router: Router,
@@ -47,6 +48,9 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    // Инициализация переменной searchQueryWordsValue
+    this.searchQueryWordsValue = this.sortService.getSearchQueryWords;
+
     this.searchService
       .getSearchQuery()
       .pipe(
@@ -72,6 +76,8 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
         this.searchControl.setValue(searchQuery, { emitEvent: false });
         this.searchService.setSearchQuery(searchQuery);
         this.youtubeService.searchAndFetchDetails(searchQuery);
+        // Обновляем переменную searchQueryWordsValue при изменении параметров маршрута
+        this.searchQueryWordsValue = searchQuery;
       });
     // Подписка на videos$
     this.youtubeService.videos$
@@ -125,9 +131,5 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
 
   get sortOrder(): string {
     return this.sortService.getSortOrder;
-  }
-
-  get searchQueryWords(): string {
-    return this.sortService.getSearchQueryWords;
   }
 }
