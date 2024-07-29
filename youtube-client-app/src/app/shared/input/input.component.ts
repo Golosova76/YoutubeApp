@@ -3,6 +3,7 @@ import {
   Component,
   ElementRef,
   EventEmitter,
+  forwardRef,
   Input,
   OnDestroy,
   OnInit,
@@ -10,8 +11,8 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FormControl, FormsModule } from '@angular/forms';
-import { Subject } from 'rxjs';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
   selector: 'app-input',
@@ -19,8 +20,15 @@ import { ReactiveFormsModule } from '@angular/forms';
   templateUrl: './input.component.html',
   styleUrls: ['./input.component.scss'],
   imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => InputComponent),
+      multi: true,
+    },
+  ],
 })
-export class InputComponent {
+export class InputComponent implements ControlValueAccessor, OnInit {
   @Input() placeholder: string = '';
 
   @Input() type: string = 'text';
@@ -41,6 +49,10 @@ export class InputComponent {
   // eslint-disable-next-line indent
   inputField!: ElementRef<HTMLInputElement>;
 
+  private onChange: (value: string) => void = () => {};
+
+  public onTouched: () => void = () => {};
+
   ngOnInit() {
     // Подписываемся на изменения в searchControl
     if (this.searchControl) {
@@ -52,5 +64,31 @@ export class InputComponent {
 
   get value(): string {
     return this.inputField.nativeElement.value;
+  }
+
+  // Реализация методов ControlValueAccessor
+  writeValue(value: string): void {
+    if (this.inputField) {
+      this.inputField.nativeElement.value = value;
+    }
+  }
+
+  registerOnChange(fn: (value: string) => void): void {
+    this.onChange = fn;
+  }
+
+  registerOnTouched(fn: () => void): void {
+    this.onTouched = fn;
+  }
+
+  setDisabledState(isDisabled: boolean): void {
+    if (this.inputField) {
+      this.inputField.nativeElement.disabled = isDisabled;
+    }
+  }
+
+  onInput(value: string): void {
+    this.onChange(value);
+    this.valueChange.emit(value);
   }
 }
