@@ -16,7 +16,14 @@
                  inputClass="title-input"
                  id="title"
                  name="title"
-                 placeholder=""></app-input>
+                 placeholder=""
+                 [class.error-border]="cardForm.get('title')?.invalid && (cardForm.get('title')?.dirty || cardForm.get('title')?.touched)"></app-input>
+      <div *ngIf="cardForm.get('title')?.invalid && (cardForm.get('title')?.dirty || cardForm.get('title')?.touched)"
+           class="error-message">
+        <div *ngIf="cardForm.get('title')?.errors?.['required']">Please enter a title</div>
+        <div *ngIf="cardForm.get('title')?.errors?.['minlength']">Title is too short</div>
+        <div *ngIf="cardForm.get('title')?.errors?.['maxlength']">Title is too long</div>
+      </div>
 
 
       <label class="card-label"
@@ -26,7 +33,12 @@
                  inputClass="description-input"
                  id="description"
                  name="description"
-                 placeholder=""></app-input>
+                 placeholder=""
+                 [class.error-border]="cardForm.get('description')?.invalid && (cardForm.get('description')?.dirty || cardForm.get('description')?.touched)"></app-input>
+      <div *ngIf="cardForm.get('description')?.errors?.['maxlength'] && (cardForm.get('description')?.dirty || cardForm.get('description')?.touched)"
+           class="error-message">
+        The description is too long
+      </div>
 
       <label class="card-label"
              for="img-card">Img</label>
@@ -35,7 +47,12 @@
                  inputClass="img-card-input"
                  id="img-card"
                  name="img-card"
-                 placeholder=""></app-input>
+                 placeholder=""
+                 [class.error-border]="cardForm.get('imgCard')?.invalid && (cardForm.get('imgCard')?.dirty || cardForm.get('imgCard')?.touched)"></app-input>
+      <div *ngIf="cardForm.get('imgCard')?.invalid && (cardForm.get('imgCard')?.dirty || cardForm.get('imgCard')?.touched)"
+           class="error-message">
+        <div *ngIf="cardForm.get('imgCard')?.errors?.['required']">Please enter a link to the image</div>
+      </div>
 
       <label class="card-label"
              for="link-video">Link video</label>
@@ -44,7 +61,27 @@
                  inputClass="link-video-input"
                  id="link-video"
                  name="link-video"
-                 placeholder=""></app-input>
+                 placeholder=""
+                 [class.error-border]="cardForm.get('linkVideo')?.invalid && (cardForm.get('linkVideo')?.dirty || cardForm.get('linkVideo')?.touched)"></app-input>
+      <div *ngIf="cardForm.get('linkVideo')?.invalid && (cardForm.get('linkVideo')?.dirty || cardForm.get('linkVideo')?.touched)"
+           class="error-message">
+        <div *ngIf="cardForm.get('linkVideo')?.errors?.['required']">Please enter a link to the video</div>
+      </div>
+
+      <label class="card-label"
+             for="create-date">Creation date</label>
+      <app-input formControlName="createDate"
+                 type="text"
+                 inputClass="create-date-input"
+                 id="create-date-video"
+                 name="create-date-video"
+                 placeholder=""
+                 [class.error-border]="cardForm.get('createDate')?.invalid && (cardForm.get('createDate')?.dirty || cardForm.get('createDate')?.touched)"></app-input>
+      <div *ngIf="cardForm.get('createDate')?.invalid && (cardForm.get('createDate')?.dirty || cardForm.get('createDate')?.touched)"
+           class="error-message">
+        <div *ngIf="cardForm.get('createDate')?.errors?.['required']">Please enter a creation date</div>
+        <div *ngIf="cardForm.get('createDate')?.errors?.['futureDate']">The date is invalid</div>
+      </div>
 
       <app-custom-button type="submit"
                          buttonClass="button-admin-card-submit">

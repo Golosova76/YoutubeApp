@@ -1,5 +1,12 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  ValidationErrors,
+  Validators,
+} from '@angular/forms';
 import { Router } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 
@@ -9,7 +16,12 @@ import { CustomButtonComponent } from 'app/shared/custom-button/custom-button.co
 @Component({
   selector: 'app-admin',
   standalone: true,
-  imports: [ReactiveFormsModule, InputComponent, CustomButtonComponent],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    InputComponent,
+    CustomButtonComponent,
+  ],
   templateUrl: './admin.component.html',
   styleUrls: ['./admin.component.scss'],
 })
@@ -21,15 +33,28 @@ export class AdminComponent {
     private fb: FormBuilder,
   ) {}
 
-  onLogin() {}
-
   ngOnInit() {
     this.cardForm = this.fb.group({
-      title: ['', Validators.required],
-      description: ['', Validators.required], // Используйте 'description' вместо 'discription', если это опечатка
-      imgCard: [''],
-      linkVideo: [''],
+      title: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(3),
+          Validators.maxLength(20),
+        ],
+      ],
+      description: ['', [Validators.maxLength(255)]],
+      imgCard: ['', Validators.required],
+      linkVideo: ['', Validators.required],
+      createDate: ['', [Validators.required, this.futureDateValidator]],
     });
+  }
+
+  futureDateValidator(control: AbstractControl): ValidationErrors | null {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const inputDate = new Date(control.value);
+    return inputDate > today ? { futureDate: true } : null;
   }
 
   onCreateCard() {
@@ -37,6 +62,7 @@ export class AdminComponent {
       console.log('Submitting card data:', this.cardForm.value);
       // Дальнейшая логика после отправки формы
     } else {
+      this.cardForm.markAllAsTouched();
       console.error('Form is invalid');
     }
   }
