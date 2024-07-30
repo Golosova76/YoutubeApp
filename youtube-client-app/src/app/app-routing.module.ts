@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth/auth.guard';
 import { NotFoundComponent } from './core/notFound/notFound.component';
 import { NoAuthGuard } from './core/guards/no-auth/no-auth.guard';
+import { AdminComponent } from './admin/pages/admin/admin.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: '/auth' },
@@ -17,6 +18,11 @@ const routes: Routes = [
       import('./youtube/youtube-routing.module').then(
         (m) => m.YoutubeRoutingModule,
       ),
+    canActivate: [authGuard],
+  },
+  {
+    path: 'admin',
+    component: AdminComponent,
     canActivate: [authGuard],
   },
   {

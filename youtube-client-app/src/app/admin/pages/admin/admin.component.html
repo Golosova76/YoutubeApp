@@ -1,0 +1,55 @@
+<div class="form-admin-card-container">
+  <form [formGroup]="cardForm"
+        action="#"
+        method="post"
+        autocomplete="on"
+        class="form-card"
+        (ngSubmit)="onCreateCard()">
+    <div class="create-card-container">
+
+      <h1 class="card-title">Create new card</h1>
+
+      <label class="card-label"
+             for="title">Title</label>
+      <app-input formControlName="title"
+                 type="text"
+                 inputClass="title-input"
+                 id="title"
+                 name="title"
+                 placeholder=""></app-input>
+
+
+      <label class="card-label"
+             for="description">Description</label>
+      <app-input formControlName="description"
+                 type="text"
+                 inputClass="description-input"
+                 id="description"
+                 name="description"
+                 placeholder=""></app-input>
+
+      <label class="card-label"
+             for="img-card">Img</label>
+      <app-input formControlName="imgCard"
+                 type="text"
+                 inputClass="img-card-input"
+                 id="img-card"
+                 name="img-card"
+                 placeholder=""></app-input>
+
+      <label class="card-label"
+             for="link-video">Link video</label>
+      <app-input formControlName="linkVideo"
+                 type="text"
+                 inputClass="link-video-input"
+                 id="link-video"
+                 name="link-video"
+                 placeholder=""></app-input>
+
+      <app-custom-button type="submit"
+                         buttonClass="button-admin-card-submit">
+        Create card
+      </app-custom-button>
+    </div>
+  </form>
+</div>

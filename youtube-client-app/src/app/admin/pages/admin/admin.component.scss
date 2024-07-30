@@ -1,0 +1,45 @@
+.form-admin-card-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.form-card {
+  border-radius: 10px;
+  background-color: #ffffff;
+  outline: #fff double 5px;
+  box-shadow:
+    0 3px 10px 4px rgb(227 216 216 / 40%),
+    0 4px 15px 6px rgb(0 0 0 / 50%),
+    0 5px 20px 10px rgb(120 114 114 / 60%);
+  padding: 2vw;
+  max-width: 28rem;
+  margin: 0 auto;
+  transition: width 0.5s ease;
+}
+
+.create-card-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  background-color: #ffffff; /* белый фон для формы */
+  width: 100%;
+  padding: 2.5rem;
+  padding-top: 1.2rem;
+  border-radius: 8px;
+  box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.card-title {
+  font-weight: 800;
+  font-size: 20px;
+  &:not(:last-child) {
+    margin-bottom: 21px;
+  }
+}
+
+.card-label {
+  color: rgba(0, 0, 0, 0.5);
+  font-size: 16px;
+  font-family: "Roboto", sans-serif;
+}

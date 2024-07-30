@@ -34,6 +34,8 @@ export class HeaderComponent {
 
   showLogoutButton: boolean = false;
 
+  showCreateCardButton: boolean = false;
+
   public sortPanelVisible: boolean = false;
 
   searchControl = new FormControl('');
@@ -81,6 +83,7 @@ export class HeaderComponent {
     this.subscription.add(
       this.loginService.isLoggedIn$.subscribe((isLoggedIn) => {
         this.showLogoutButton = isLoggedIn;
+        this.showCreateCardButton = isLoggedIn;
       }),
     );
   }
@@ -116,5 +119,9 @@ export class HeaderComponent {
 
   updateLogoutButtonVisibility() {
     this.showLogoutButton = this.loginService.isLoggedIn();
+  }
+
+  createCard() {
+    this.router.navigate(['admin']);
   }
 }
