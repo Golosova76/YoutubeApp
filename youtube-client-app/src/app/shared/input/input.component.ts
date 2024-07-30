@@ -69,7 +69,7 @@ export class InputComponent implements ControlValueAccessor, OnInit {
   // Реализация методов ControlValueAccessor
   writeValue(value: string): void {
     if (this.inputField) {
-      this.inputField.nativeElement.value = value;
+      this.inputField.nativeElement.value = value || '';
     }
   }
 

@@ -10,7 +10,6 @@ import {
 } from '@angular/forms';
 
 import { LoginService } from 'app/auth/services/login.service';
-import { InputComponent } from 'app/shared/input/input.component';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -66,17 +65,16 @@ export class LoginFormComponent {
   }
 
   onLogin() {
-    console.log(this.loginForm);
     if (this.loginForm.valid) {
       const { username, password } = this.loginForm.value;
-      console.log('Form values:', username, password); // Логирование значений формы
       if (this.loginService.login(username, password)) {
         this.router.navigate(['youtube']);
       } else {
         alert('Login failed!');
       }
     } else {
-      this.loginForm.markAllAsTouched(); // Отметить все поля формы как "затронутые", чтобы показать ошибки
+      // Отметить все поля формы как "затронутые", чтобы показать ошибки
+      this.loginForm.markAllAsTouched();
       console.log('Form is invalid');
     }
   }
