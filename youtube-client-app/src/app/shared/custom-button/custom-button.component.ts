@@ -16,6 +16,8 @@ export class CustomButtonComponent {
 
   @Output() buttonClick = new EventEmitter<void>();
 
+  @Input() disabled?: boolean = false;
+
   onClick() {
     this.buttonClick.emit();
   }

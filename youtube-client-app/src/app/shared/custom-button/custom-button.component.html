@@ -1,6 +1,7 @@
 <button [type]="type"
         class="button"
         [ngClass]="buttonClass"
+        [disabled]="disabled"
         (click)="onClick()">
   <ng-content></ng-content>
 </button>

@@ -32,7 +32,8 @@
 .title-input,
 .img-card-input,
 .link-video-input,
-.create-date-input {
+.create-date-input,
+.create-tag-input {
   width: 100%;
   padding: 10px;
   margin: 10px 0;
@@ -43,6 +44,22 @@
   outline-style: none;
   cursor: pointer;
   &:focus {
+    border-color: #855a5b;
+  }
+  &.error-border {
+    &:focus {
+      border-color: red;
+    }
+  }
+}
+
+.error-border {
+  &:focus {
     border-color: red;
   }
+}
+.error-message {
+  color: red;
+  font-size: 12px;
+  margin-bottom: 10px;
 }

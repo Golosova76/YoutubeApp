@@ -74,3 +74,20 @@
   top: 0;
   left: -33px;
 }
+
+.button-admin-add-tag,
+.button-admin-reset,
+.button-admin-remove-tag {
+  width: 90px;
+  height: 30px;
+}
+
+.button-admin-remove-tag {
+  margin-bottom: 30px;
+}
+
+.button-admin-card-submit:disabled {
+  background-color: #cccccc; /* Серый цвет фона для неактивной кнопки */
+  cursor: not-allowed; /* Указывает, что кнопка неактивна */
+  opacity: 0.6; /* Полупрозрачный вид для неактивной кнопки */
+}

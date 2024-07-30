@@ -15,7 +15,7 @@
               class="input"
               [placeholder]="placeholder"
               [type]="type"
-              [ngClass]="inputClass"
+              [ngClass]="[inputClass, classObject]"
               [name]="name"
               [id]="id"
               (input)="onInput(inputField.value)"

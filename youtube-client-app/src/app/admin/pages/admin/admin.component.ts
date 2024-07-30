@@ -2,7 +2,9 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   AbstractControl,
+  FormArray,
   FormBuilder,
+  FormControl,
   FormGroup,
   ValidationErrors,
   Validators,
@@ -47,6 +49,44 @@ export class AdminComponent {
       imgCard: ['', Validators.required],
       linkVideo: ['', Validators.required],
       createDate: ['', [Validators.required, this.futureDateValidator]],
+      tags: this.fb.array([this.createTagInput()]),
+    });
+  }
+
+  createTagInput(): FormControl {
+    return this.fb.control('', Validators.required);
+  }
+
+  get tags(): FormArray {
+    return this.cardForm.get('tags') as FormArray;
+  }
+
+  addTag() {
+    if (this.tags.length < 5) {
+      this.tags.push(this.createTagInput());
+    }
+  }
+
+  removeTag(index: number) {
+    this.tags.removeAt(index);
+  }
+
+  resetForm() {
+    // Очищаем все теги, кроме первого
+    while (this.tags.length > 1) {
+      this.tags.removeAt(1);
+    }
+    // Сбрасываем значение первого тега
+    this.tags.at(0).reset();
+
+    // Сбрасываем остальные поля формы к начальным значениям
+    this.cardForm.reset({
+      title: '',
+      description: '',
+      imgCard: '',
+      linkVideo: '',
+      createDate: '',
+      tags: this.tags.value, // Передаем текущее значение массива тегов после сброса
     });
   }
 

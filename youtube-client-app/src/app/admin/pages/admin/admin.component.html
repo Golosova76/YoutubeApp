@@ -10,14 +10,13 @@
       <h1 class="card-title">Create new card</h1>
 
       <label class="card-label"
-             for="title">Title</label>
+             for="title">Title<span class="required-star">*</span></label>
       <app-input formControlName="title"
                  type="text"
-                 inputClass="title-input"
+                 [inputClass]="cardForm.get('title')?.invalid && (cardForm.get('title')?.dirty || cardForm.get('title')?.touched) ? 'title-input error-border' : 'title-input'"
                  id="title"
                  name="title"
-                 placeholder=""
-                 [class.error-border]="cardForm.get('title')?.invalid && (cardForm.get('title')?.dirty || cardForm.get('title')?.touched)"></app-input>
+                 placeholder=""></app-input>
       <div *ngIf="cardForm.get('title')?.invalid && (cardForm.get('title')?.dirty || cardForm.get('title')?.touched)"
            class="error-message">
         <div *ngIf="cardForm.get('title')?.errors?.['required']">Please enter a title</div>
@@ -30,61 +29,85 @@
              for="description">Description</label>
       <app-input formControlName="description"
                  type="text"
-                 inputClass="description-input"
+                 [inputClass]="cardForm.get('description')?.invalid && (cardForm.get('description')?.dirty || cardForm.get('description')?.touched) ? 'description-input error-border' : 'description-input'"
                  id="description"
                  name="description"
-                 placeholder=""
-                 [class.error-border]="cardForm.get('description')?.invalid && (cardForm.get('description')?.dirty || cardForm.get('description')?.touched)"></app-input>
+                 placeholder=""></app-input>
       <div *ngIf="cardForm.get('description')?.errors?.['maxlength'] && (cardForm.get('description')?.dirty || cardForm.get('description')?.touched)"
            class="error-message">
         The description is too long
       </div>
 
       <label class="card-label"
-             for="img-card">Img</label>
+             for="img-card">Img<span class="required-star">*</span></label>
       <app-input formControlName="imgCard"
                  type="text"
-                 inputClass="img-card-input"
+                 [inputClass]="cardForm.get('imgCard')?.invalid && (cardForm.get('imgCard')?.dirty || cardForm.get('imgCard')?.touched) ? 'img-card-input error-border' : 'img-card-input'"
                  id="img-card"
                  name="img-card"
-                 placeholder=""
-                 [class.error-border]="cardForm.get('imgCard')?.invalid && (cardForm.get('imgCard')?.dirty || cardForm.get('imgCard')?.touched)"></app-input>
+                 placeholder=""></app-input>
       <div *ngIf="cardForm.get('imgCard')?.invalid && (cardForm.get('imgCard')?.dirty || cardForm.get('imgCard')?.touched)"
            class="error-message">
         <div *ngIf="cardForm.get('imgCard')?.errors?.['required']">Please enter a link to the image</div>
       </div>
 
       <label class="card-label"
-             for="link-video">Link video</label>
+             for="link-video">Link video<span class="required-star">*</span></label>
       <app-input formControlName="linkVideo"
                  type="text"
-                 inputClass="link-video-input"
+                 [inputClass]="cardForm.get('linkVideo')?.invalid && (cardForm.get('linkVideo')?.dirty || cardForm.get('linkVideo')?.touched) ? 'link-video-input error-border' : 'link-video-input'"
                  id="link-video"
                  name="link-video"
-                 placeholder=""
-                 [class.error-border]="cardForm.get('linkVideo')?.invalid && (cardForm.get('linkVideo')?.dirty || cardForm.get('linkVideo')?.touched)"></app-input>
+                 placeholder=""></app-input>
       <div *ngIf="cardForm.get('linkVideo')?.invalid && (cardForm.get('linkVideo')?.dirty || cardForm.get('linkVideo')?.touched)"
            class="error-message">
         <div *ngIf="cardForm.get('linkVideo')?.errors?.['required']">Please enter a link to the video</div>
       </div>
 
       <label class="card-label"
-             for="create-date">Creation date</label>
+             for="create-date">Creation date<span class="required-star">*</span></label>
       <app-input formControlName="createDate"
-                 type="text"
-                 inputClass="create-date-input"
+                 type="date"
+                 [inputClass]="cardForm.get('createDate')?.invalid && (cardForm.get('createDate')?.dirty || cardForm.get('createDate')?.touched) ? 'create-date-input error-border' : 'create-date-input'"
                  id="create-date-video"
                  name="create-date-video"
-                 placeholder=""
-                 [class.error-border]="cardForm.get('createDate')?.invalid && (cardForm.get('createDate')?.dirty || cardForm.get('createDate')?.touched)"></app-input>
+                 placeholder=""></app-input>
       <div *ngIf="cardForm.get('createDate')?.invalid && (cardForm.get('createDate')?.dirty || cardForm.get('createDate')?.touched)"
            class="error-message">
         <div *ngIf="cardForm.get('createDate')?.errors?.['required']">Please enter a creation date</div>
         <div *ngIf="cardForm.get('createDate')?.errors?.['futureDate']">The date is invalid</div>
       </div>
 
+      <!-- Tags Section -->
+      <div formArrayName="tags">
+        <div *ngFor="let tag of tags.controls; let i = index">
+          <label class="card-label"
+                 for="tag-{{i}}">Tag<span class="required-star">*</span></label>
+          <app-input formControlName="{{i}}"
+                     type="text"
+                     inputClass="create-tag-input"
+                     id="tag"
+                     name="tag"
+                     placeholder=""></app-input>
+          <app-custom-button type="button"
+                             (click)="removeTag(i)"
+                             *ngIf="tags.length > 1"
+                             buttonClass="button-admin-remove-tag">Remove</app-custom-button>
+        </div>
+      </div>
+      <div class="block-button-card">
+        <app-custom-button type="button"
+                           (click)="addTag()"
+                           *ngIf="tags.length < 5"
+                           buttonClass="button-admin-add-tag">Add Tag</app-custom-button>
+        <app-custom-button type="button"
+                           (click)=" resetForm()"
+                           buttonClass="button-admin-reset">Reset</app-custom-button>
+      </div>
+
       <app-custom-button type="submit"
-                         buttonClass="button-admin-card-submit">
+                         buttonClass="button-admin-card-submit"
+                         [disabled]="!cardForm.valid">
         Create card
       </app-custom-button>
     </div>

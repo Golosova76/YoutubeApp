@@ -43,6 +43,8 @@ export class InputComponent implements ControlValueAccessor, OnInit {
 
   @Input() searchControl?: FormControl;
 
+  @Input() classObject: string = '';
+
   @Output() valueChange = new EventEmitter<string>();
 
   @ViewChild('inputField', { static: false })
