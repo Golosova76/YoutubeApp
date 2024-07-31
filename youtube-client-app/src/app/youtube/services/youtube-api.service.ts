@@ -13,8 +13,6 @@ import { VideoItem } from 'app/shared/models/search-item.model';
   providedIn: 'root',
 })
 export class YoutubeApiService {
-  private apiKey = environment.youtubeApiKey;
-
   private searchUrl = environment.youtubeSearchUrl;
 
   private videosUrl = environment.youtubeVideosUrl;
@@ -30,17 +28,13 @@ export class YoutubeApiService {
     maxResults: number = 15,
   ): Observable<YouTubeSearchResponse> {
     const url = `${this.searchUrl}?type=video&part=snippet&maxResults=${maxResults}&q=${query}`;
-    return this.http.get<YouTubeSearchResponse>(url, {
-      params: { key: this.apiKey },
-    });
+    return this.http.get<YouTubeSearchResponse>(url);
   }
 
   getVideoStatistics(videoIds: string[]): Observable<YouTubeVideoListResponse> {
     const ids = videoIds.join(',');
     const url = `${this.videosUrl}?id=${ids}&part=snippet,statistics`;
-    return this.http.get<YouTubeVideoListResponse>(url, {
-      params: { key: this.apiKey },
-    });
+    return this.http.get<YouTubeVideoListResponse>(url);
   }
 
   searchAndFetchDetails(query: string, maxResults: number = 16): void {
