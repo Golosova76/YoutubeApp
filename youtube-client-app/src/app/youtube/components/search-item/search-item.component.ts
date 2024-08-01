@@ -8,7 +8,7 @@ import { DateBackgroundDirective } from 'app/shared/directives/line-back-directi
 import { VideoStatisticsComponent } from '../video-statistics/video-statistics.component';
 import { Router } from '@angular/router';
 import { VideoDataService } from 'app/youtube/services/video-data.service';
-import { getThumbnailUrl } from 'app/shared/utils';
+import { getThumbnailUrl } from 'app/shared/utils/utils';
 
 @Component({
   selector: 'app-search-item',

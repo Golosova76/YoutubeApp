@@ -11,6 +11,7 @@ import {
 
 import { LoginService } from 'app/auth/services/login.service';
 import { Subject, takeUntil } from 'rxjs';
+import { passwordStrengthValidator } from 'app/shared/utils/validators';
 
 @Component({
   selector: 'app-login-form',
@@ -33,7 +34,7 @@ export class LoginFormComponent {
   ngOnInit() {
     this.loginForm = this.fb.group({
       username: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, this.passwordStrengthValidator]],
+      password: ['', [Validators.required, passwordStrengthValidator]],
     });
 
     this.loginService.isLoggedIn$
@@ -46,24 +47,6 @@ export class LoginFormComponent {
   ngOnDestroy() {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
-  }
-
-  passwordStrengthValidator(control: AbstractControl): ValidationErrors | null {
-    const value = control.value || '';
-    const hasUpperCase = /[A-Z]/.test(value);
-    const hasLowerCase = /[a-z]/.test(value);
-    const hasNumeric = /\d/.test(value);
-    const hasSpecialChar = /[!@#?\]]/.test(value);
-    const hasMinLength = value.length >= 8;
-
-    const passwordValid =
-      hasUpperCase &&
-      hasLowerCase &&
-      hasNumeric &&
-      hasSpecialChar &&
-      hasMinLength;
-
-    return !passwordValid ? { passwordStrength: true } : null;
   }
 
   onLogin() {

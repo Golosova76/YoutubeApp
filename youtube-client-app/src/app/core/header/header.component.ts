@@ -15,7 +15,7 @@ import { LoginService } from 'app/auth/services/login.service';
 import { NavigationEnd, Router } from '@angular/router';
 import { SearchBarComponent } from './search-bar/search-bar.component';
 import { Subject } from 'rxjs';
-import { DEBOUNCE_TIME_MS } from 'app/shared/utils';
+import { DEBOUNCE_TIME_MS } from 'app/shared/utils/utils';
 
 @Component({
   selector: 'app-header',
@@ -83,6 +83,7 @@ export class HeaderComponent {
       .pipe(takeUntil(this.destroy$))
       .subscribe((isLoggedIn) => {
         this.showLogoutButton = isLoggedIn;
+        this.showCreateCardButton = isLoggedIn;
       });
   }
   onSearchInputChange(query: string): void {

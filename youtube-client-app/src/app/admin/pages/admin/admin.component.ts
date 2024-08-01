@@ -14,6 +14,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { InputComponent } from 'app/shared/input/input.component';
 import { CustomButtonComponent } from 'app/shared/custom-button/custom-button.component';
+import { futureDateValidator } from 'app/shared/utils/validators';
 
 @Component({
   selector: 'app-admin',
@@ -48,7 +49,7 @@ export class AdminComponent {
       description: ['', [Validators.maxLength(255)]],
       imgCard: ['', Validators.required],
       linkVideo: ['', Validators.required],
-      createDate: ['', [Validators.required, this.futureDateValidator]],
+      createDate: ['', [Validators.required, futureDateValidator]],
       tags: this.fb.array([this.createTagInput()]),
     });
   }
@@ -88,13 +89,6 @@ export class AdminComponent {
       createDate: '',
       tags: this.tags.value, // Передаем текущее значение массива тегов после сброса
     });
-  }
-
-  futureDateValidator(control: AbstractControl): ValidationErrors | null {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const inputDate = new Date(control.value);
-    return inputDate > today ? { futureDate: true } : null;
   }
 
   onCreateCard() {
