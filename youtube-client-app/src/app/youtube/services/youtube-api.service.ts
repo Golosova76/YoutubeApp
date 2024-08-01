@@ -13,8 +13,6 @@ import { VideoItem } from 'app/shared/models/search-item.model';
   providedIn: 'root',
 })
 export class YoutubeApiService {
-  private apiKey = environment.youtubeApiKey;
-
   private searchUrl = environment.youtubeSearchUrl;
 
   private videosUrl = environment.youtubeVideosUrl;
@@ -26,23 +24,28 @@ export class YoutubeApiService {
   constructor(private http: HttpClient) {}
 
   searchVideos(
-    query: string,
-    maxResults: number = 15,
+    q: string,
+    maxResults: number = 16,
   ): Observable<YouTubeSearchResponse> {
-    const url = `${this.searchUrl}?type=video&part=snippet&maxResults=${maxResults}&q=${query}`;
-    return this.http.get<YouTubeSearchResponse>(url, {
-      params: { key: this.apiKey },
-    });
+    const params = {
+      type: 'video',
+      part: 'snippet',
+      maxResults,
+      q,
+    };
+    return this.http.get<YouTubeSearchResponse>(this.searchUrl, { params });
   }
 
   getVideoStatistics(videoIds: string[]): Observable<YouTubeVideoListResponse> {
     const ids = videoIds.join(',');
-    const url = `${this.videosUrl}?id=${ids}&part=snippet,statistics`;
-    return this.http.get<YouTubeVideoListResponse>(url, {
-      params: { key: this.apiKey },
-    });
+    const params = {
+      id: ids,
+      part: 'snippet,statistics',
+    };
+    return this.http.get<YouTubeVideoListResponse>(this.videosUrl, { params });
   }
 
+  /*
   searchAndFetchDetails(query: string, maxResults: number = 16): void {
     this.searchVideos(query, maxResults)
       .pipe(
@@ -64,5 +67,25 @@ export class YoutubeApiService {
         },
         error: (error) => console.error('Error fetching videos', error),
       });
+  }
+      */
+
+  searchAndFetchDetails(
+    query: string,
+    maxResults: number = 16,
+  ): Observable<VideoItem[]> {
+    return this.searchVideos(query, maxResults).pipe(
+      switchMap((searchResponse: YouTubeSearchResponse) => {
+        const videoIds = searchResponse.items.map((item) => item.id.videoId);
+        return this.getVideoStatistics(videoIds);
+      }),
+      map((videoDetailsResponse: YouTubeVideoListResponse) =>
+        createVideosData(videoDetailsResponse),
+      ),
+      map(
+        (processedResponse: YouTubeVideoListResponse) =>
+          processedResponse.items,
+      ),
+    );
   }
 }

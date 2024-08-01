@@ -11,3 +11,5 @@ export function getThumbnailUrl(videoData?: VideoItem): string {
     maxres?.url || high?.url || medium?.url || def?.url || 'assets/caption.jpg'
   );
 }
+
+export const DEBOUNCE_TIME_MS = 1000;

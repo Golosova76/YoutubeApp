@@ -10,7 +10,7 @@ import {
 } from '@angular/forms';
 
 import { LoginService } from 'app/auth/services/login.service';
-import { Subscription } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-login-form',
@@ -21,7 +21,8 @@ export class LoginFormComponent {
   loginForm!: FormGroup;
 
   isLoggedIn: boolean = false;
-  private subscription: Subscription = new Subscription();
+
+  private unsubscribe$ = new Subject<void>(); // для кправления отпиской
 
   constructor(
     private loginService: LoginService,
@@ -35,15 +36,16 @@ export class LoginFormComponent {
       password: ['', [Validators.required, this.passwordStrengthValidator]],
     });
 
-    this.subscription.add(
-      this.loginService.isLoggedIn$.subscribe((status) => {
+    this.loginService.isLoggedIn$
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((status) => {
         this.isLoggedIn = status;
-      }),
-    );
+      });
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
   passwordStrengthValidator(control: AbstractControl): ValidationErrors | null {
