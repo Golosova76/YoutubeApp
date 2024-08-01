@@ -23,6 +23,7 @@ import {
   filter,
   merge,
   map,
+  switchMap,
 } from 'rxjs';
 import { FormControl } from '@angular/forms';
 import { DEBOUNCE_TIME_MS } from 'app/shared/utils';
@@ -69,16 +70,14 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
     );
 
     merge(searchQuery$, queryParams$)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((query: string) => {
-        const safeValue = query ?? '';
-        this.updateSearchQueryInURL(safeValue);
-        this.youtubeService.searchAndFetchDetails(safeValue);
-      });
-
-    // Подписка на videos$
-    this.youtubeService.videos$
-      .pipe(takeUntil(this.destroy$))
+      .pipe(
+        takeUntil(this.destroy$),
+        switchMap((query: string) => {
+          const safeValue = query ?? '';
+          this.updateSearchQueryInURL(safeValue);
+          return this.youtubeService.searchAndFetchDetails(safeValue); // Используйте switchMap для подписки
+        }),
+      )
       .subscribe((videos: VideoItem[]) => {
         this.filteredVideos = videos;
         this.searchResultsVisible = videos.length > 0;
