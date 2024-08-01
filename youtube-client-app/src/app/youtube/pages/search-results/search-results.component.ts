@@ -25,6 +25,7 @@ import {
   map,
 } from 'rxjs';
 import { FormControl } from '@angular/forms';
+import { DEBOUNCE_TIME_MS } from 'app/shared/utils';
 
 @Component({
   selector: 'app-search-results',
@@ -56,13 +57,13 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
   ngOnInit() {
     // Объединяем два потока данных в один
     const searchQuery$ = this.searchService.getSearchQuery().pipe(
-      debounceTime(100),
+      debounceTime(DEBOUNCE_TIME_MS),
       filter((value) => value !== null && value.length > 2),
       distinctUntilChanged(),
     );
 
     const queryParams$ = this.route.queryParams.pipe(
-      debounceTime(100),
+      debounceTime(DEBOUNCE_TIME_MS),
       distinctUntilChanged((prev, curr) => prev['search'] === curr['search']),
       map((params) => params['search'] ?? ''),
     );
@@ -93,7 +94,6 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    console.log('SearchResultsComponent destroyed');
     this.destroy$.next();
     this.destroy$.complete();
   }

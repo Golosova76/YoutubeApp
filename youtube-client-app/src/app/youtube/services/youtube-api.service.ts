@@ -24,17 +24,25 @@ export class YoutubeApiService {
   constructor(private http: HttpClient) {}
 
   searchVideos(
-    query: string,
-    maxResults: number = 15,
+    q: string,
+    maxResults: number = 16,
   ): Observable<YouTubeSearchResponse> {
-    const url = `${this.searchUrl}?type=video&part=snippet&maxResults=${maxResults}&q=${query}`;
-    return this.http.get<YouTubeSearchResponse>(url);
+    const params = {
+      type: 'video',
+      part: 'snippet',
+      maxResults,
+      q,
+    };
+    return this.http.get<YouTubeSearchResponse>(this.searchUrl, { params });
   }
 
   getVideoStatistics(videoIds: string[]): Observable<YouTubeVideoListResponse> {
     const ids = videoIds.join(',');
-    const url = `${this.videosUrl}?id=${ids}&part=snippet,statistics`;
-    return this.http.get<YouTubeVideoListResponse>(url);
+    const params = {
+      id: ids,
+      part: 'snippet,statistics',
+    };
+    return this.http.get<YouTubeVideoListResponse>(this.videosUrl, { params });
   }
 
   searchAndFetchDetails(query: string, maxResults: number = 16): void {

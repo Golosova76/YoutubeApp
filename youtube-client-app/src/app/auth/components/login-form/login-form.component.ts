@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 
 import { LoginService } from 'app/auth/services/login.service';
 import { InputComponent } from 'app/shared/input/input.component';
-import { Subscription } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-login-form',
@@ -15,7 +15,8 @@ export class LoginFormComponent {
   @ViewChild('passwordInput', { static: false }) passwordInput!: InputComponent;
 
   isLoggedIn: boolean = false;
-  private subscription: Subscription = new Subscription();
+
+  private unsubscribe$ = new Subject<void>(); // для кправления отпиской
 
   constructor(
     private loginService: LoginService,
@@ -23,15 +24,16 @@ export class LoginFormComponent {
   ) {}
 
   ngOnInit() {
-    this.subscription.add(
-      this.loginService.isLoggedIn$.subscribe((status) => {
+    this.loginService.isLoggedIn$
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((status) => {
         this.isLoggedIn = status;
-      }),
-    );
+      });
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
   onLogin() {

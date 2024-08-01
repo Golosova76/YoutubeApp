@@ -14,7 +14,8 @@ import { SearchService } from 'app/youtube/services/search.service';
 import { LoginService } from 'app/auth/services/login.service';
 import { NavigationEnd, Router } from '@angular/router';
 import { SearchBarComponent } from './search-bar/search-bar.component';
-import { Subject, Subscription } from 'rxjs';
+import { Subject } from 'rxjs';
+import { DEBOUNCE_TIME_MS } from 'app/shared/utils';
 
 @Component({
   selector: 'app-header',
@@ -40,8 +41,6 @@ export class HeaderComponent {
 
   private destroy$ = new Subject<void>();
 
-  private subscription: Subscription = new Subscription();
-
   constructor(
     private router: Router,
     private searchService: SearchService,
@@ -61,7 +60,7 @@ export class HeaderComponent {
     // Подписка на изменения значения поиска через EventEmitter
     this.searchInput.valueChange
       .pipe(
-        debounceTime(300),
+        debounceTime(DEBOUNCE_TIME_MS),
         distinctUntilChanged(),
         filter((query) => query.length >= 3 || query.length === 0),
         takeUntil(this.destroy$),
@@ -78,11 +77,11 @@ export class HeaderComponent {
         }
       });
     // подписка на события входа
-    this.subscription.add(
-      this.loginService.isLoggedIn$.subscribe((isLoggedIn) => {
+    this.loginService.isLoggedIn$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((isLoggedIn) => {
         this.showLogoutButton = isLoggedIn;
-      }),
-    );
+      });
   }
   onSearchInputChange(query: string): void {
     this.searchService.setSearchQuery(query);
@@ -91,7 +90,6 @@ export class HeaderComponent {
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
-    this.subscription.unsubscribe();
   }
 
   // кнопка настроек поиска
