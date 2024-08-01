@@ -15,6 +15,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { InputComponent } from 'app/shared/input/input.component';
 import { CustomButtonComponent } from 'app/shared/custom-button/custom-button.component';
 import { futureDateValidator } from 'app/shared/utils/validators';
+import { getErrorMessage } from 'app/shared/utils/error-messages';
 
 @Component({
   selector: 'app-admin',
@@ -52,6 +53,25 @@ export class AdminComponent {
       createDate: ['', [Validators.required, futureDateValidator]],
       tags: this.fb.array([this.createTagInput()]),
     });
+  }
+
+  getInputClass(fieldName: string): string {
+    const control = this.cardForm.get(fieldName);
+    if (control && control.invalid && (control.dirty || control.touched)) {
+      return `${fieldName}-input error-border`;
+    } else {
+      return `${fieldName}-input`;
+    }
+  }
+
+  isControlInvalid(controlName: string): boolean {
+    const control = this.cardForm.get(controlName);
+    return !!(control && control.invalid && (control.dirty || control.touched));
+  }
+
+  getErrorMessage(controlName: string): string | null {
+    const control = this.cardForm.get(controlName);
+    return getErrorMessage(controlName, control);
   }
 
   createTagInput(): FormControl {

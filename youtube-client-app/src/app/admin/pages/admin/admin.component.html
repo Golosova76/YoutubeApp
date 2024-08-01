@@ -13,15 +13,16 @@
              for="title">Title<span class="required-star">*</span></label>
       <app-input formControlName="title"
                  type="text"
-                 [inputClass]="cardForm.get('title')?.invalid && (cardForm.get('title')?.dirty || cardForm.get('title')?.touched) ? 'title-input error-border' : 'title-input'"
+                 [inputClass]="getInputClass('title')"
                  id="title"
                  name="title"
                  placeholder=""></app-input>
-      <div *ngIf="cardForm.get('title')?.invalid && (cardForm.get('title')?.dirty || cardForm.get('title')?.touched)"
+      <div *ngIf="isControlInvalid('title')"
            class="error-message">
-        <div *ngIf="cardForm.get('title')?.errors?.['required']">Please enter a title</div>
-        <div *ngIf="cardForm.get('title')?.errors?.['minlength']">Title is too short</div>
-        <div *ngIf="cardForm.get('title')?.errors?.['maxlength']">Title is too long</div>
+        <div *ngIf="isControlInvalid('title')"
+             class="error-message">
+          <div>{{ getErrorMessage('title') }}</div>
+        </div>
       </div>
 
 
@@ -29,53 +30,52 @@
              for="description">Description</label>
       <app-input formControlName="description"
                  type="text"
-                 [inputClass]="cardForm.get('description')?.invalid && (cardForm.get('description')?.dirty || cardForm.get('description')?.touched) ? 'description-input error-border' : 'description-input'"
+                 [inputClass]="getInputClass('description')"
                  id="description"
                  name="description"
                  placeholder=""></app-input>
-      <div *ngIf="cardForm.get('description')?.errors?.['maxlength'] && (cardForm.get('description')?.dirty || cardForm.get('description')?.touched)"
+      <div *ngIf="isControlInvalid('description')"
            class="error-message">
-        The description is too long
+        <div>{{ getErrorMessage('description') }}</div>
       </div>
 
       <label class="card-label"
              for="img-card">Img<span class="required-star">*</span></label>
       <app-input formControlName="imgCard"
                  type="text"
-                 [inputClass]="cardForm.get('imgCard')?.invalid && (cardForm.get('imgCard')?.dirty || cardForm.get('imgCard')?.touched) ? 'img-card-input error-border' : 'img-card-input'"
+                 [inputClass]="getInputClass('img-card')"
                  id="img-card"
                  name="img-card"
                  placeholder=""></app-input>
-      <div *ngIf="cardForm.get('imgCard')?.invalid && (cardForm.get('imgCard')?.dirty || cardForm.get('imgCard')?.touched)"
+      <div *ngIf="isControlInvalid('imgCard')"
            class="error-message">
-        <div *ngIf="cardForm.get('imgCard')?.errors?.['required']">Please enter a link to the image</div>
+        <div>{{ getErrorMessage('imgCard') }}</div>
       </div>
 
       <label class="card-label"
              for="link-video">Link video<span class="required-star">*</span></label>
       <app-input formControlName="linkVideo"
                  type="text"
-                 [inputClass]="cardForm.get('linkVideo')?.invalid && (cardForm.get('linkVideo')?.dirty || cardForm.get('linkVideo')?.touched) ? 'link-video-input error-border' : 'link-video-input'"
+                 [inputClass]="getInputClass('link-video')"
                  id="link-video"
                  name="link-video"
                  placeholder=""></app-input>
-      <div *ngIf="cardForm.get('linkVideo')?.invalid && (cardForm.get('linkVideo')?.dirty || cardForm.get('linkVideo')?.touched)"
+      <div *ngIf="isControlInvalid('linkVideo')"
            class="error-message">
-        <div *ngIf="cardForm.get('linkVideo')?.errors?.['required']">Please enter a link to the video</div>
+        <div>{{ getErrorMessage('linkVideo') }}</div>
       </div>
 
       <label class="card-label"
              for="create-date">Creation date<span class="required-star">*</span></label>
       <app-input formControlName="createDate"
                  type="date"
-                 [inputClass]="cardForm.get('createDate')?.invalid && (cardForm.get('createDate')?.dirty || cardForm.get('createDate')?.touched) ? 'create-date-input error-border' : 'create-date-input'"
+                 [inputClass]="getInputClass('create-date')"
                  id="create-date-video"
                  name="create-date-video"
                  placeholder=""></app-input>
-      <div *ngIf="cardForm.get('createDate')?.invalid && (cardForm.get('createDate')?.dirty || cardForm.get('createDate')?.touched)"
+      <div *ngIf="isControlInvalid('createDate')"
            class="error-message">
-        <div *ngIf="cardForm.get('createDate')?.errors?.['required']">Please enter a creation date</div>
-        <div *ngIf="cardForm.get('createDate')?.errors?.['futureDate']">The date is invalid</div>
+        <div>{{ getErrorMessage('createDate') }}</div>
       </div>
 
       <!-- Tags Section -->
