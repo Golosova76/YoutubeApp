@@ -1,18 +1,32 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-
 import {
-  createVideosData,
-  YouTubeVideoListResponse,
-} from 'app/shared/models/search-response.model';
+  Component,
+  OnInit,
+  OnDestroy,
+  ChangeDetectionStrategy,
+} from '@angular/core';
+
+import { YouTubeVideoListResponse } from 'app/shared/models/search-response.model';
 import { VideoItem } from 'app/shared/models/search-item.model';
 import { SearchItemComponent } from '../../components/search-item/search-item.component';
 import { SortVideosPipe } from 'app/shared/pipe/sort-date-count.pipe';
 import { FilterVideosPipe } from 'app/shared/pipe/filter-words.pipe';
 import { SearchService } from 'app/youtube/services/search.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SortService } from 'app/youtube/services/sortsearch.service';
-import { debounceTime, distinctUntilChanged, Subject, takeUntil } from 'rxjs';
+import { YoutubeApiService } from 'app/youtube/services/youtube-api.service';
+import {
+  debounceTime,
+  distinctUntilChanged,
+  Subject,
+  takeUntil,
+  filter,
+  merge,
+  map,
+  switchMap,
+} from 'rxjs';
+import { FormControl } from '@angular/forms';
+import { DEBOUNCE_TIME_MS } from 'app/shared/utils';
 
 @Component({
   selector: 'app-search-results',
@@ -26,33 +40,56 @@ import { debounceTime, distinctUntilChanged, Subject, takeUntil } from 'rxjs';
     FilterVideosPipe,
   ],
 })
-export class SearchResultsComponent implements OnInit {
+export class SearchResultsComponent implements OnInit, OnDestroy {
   public videosData!: YouTubeVideoListResponse;
-
   public filteredVideos: VideoItem[] = [];
-
   public searchResultsVisible: boolean = false;
-
   private destroy$ = new Subject<void>();
+  searchControl = new FormControl('');
 
   constructor(
+    private router: Router,
     private route: ActivatedRoute,
     private searchService: SearchService,
     private sortService: SortService,
+    private youtubeService: YoutubeApiService,
   ) {}
 
   ngOnInit() {
-    this.route.queryParams
+    // Объединяем два потока данных в один
+    const searchQuery$ = this.searchService.getSearchQuery().pipe(
+      debounceTime(DEBOUNCE_TIME_MS),
+      filter((value) => value !== null && value.length > 2),
+      distinctUntilChanged(),
+    );
+
+    const queryParams$ = this.route.queryParams.pipe(
+      debounceTime(DEBOUNCE_TIME_MS),
+      distinctUntilChanged((prev, curr) => prev['search'] === curr['search']),
+      map((params) => params['search'] ?? ''),
+    );
+
+    merge(searchQuery$, queryParams$)
       .pipe(
-        debounceTime(100),
-        distinctUntilChanged((prev, curr) => prev['search'] === curr['search']),
         takeUntil(this.destroy$),
+        switchMap((query: string) => {
+          const safeValue = query ?? '';
+          this.updateSearchQueryInURL(safeValue);
+          return this.youtubeService.searchAndFetchDetails(safeValue); // Используйте switchMap для подписки
+        }),
       )
-      .subscribe((params) => {
-        const searchQuery = params['search'];
-        this.searchService.setSearchQuery(searchQuery || '');
-        this.loadData(searchQuery);
+      .subscribe((videos: VideoItem[]) => {
+        this.filteredVideos = videos;
+        this.searchResultsVisible = videos.length > 0;
       });
+  }
+
+  private updateSearchQueryInURL(query: string) {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { search: query },
+      queryParamsHandling: 'merge', // Объединяем новые параметры с текущими
+    });
   }
 
   ngOnDestroy() {
@@ -60,38 +97,22 @@ export class SearchResultsComponent implements OnInit {
     this.destroy$.complete();
   }
 
-  async loadData(searchQuery?: string) {
-    // eslint-disable-next-line operator-linebreak
-    const url =
-      'https://raw.githubusercontent.com/rolling-scopes-school/tasks/master/tasks/angular/response.json';
-    try {
-      const response = await fetch(url);
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const responseData = await response.json();
-      this.videosData = createVideosData(responseData);
-      console.log('Data loaded:', this.videosData);
-      this.searchResultsVisible =
-        this.searchService.getSearchResultsVisibility();
-      if (this.searchResultsVisible) {
-        this.updateFilteredVideos();
-      }
-    } catch (error) {
-      console.error('Error loading the videos', error);
-    }
-  }
-
   updateFilteredVideos() {
-    if (this.videosData && this.videosData.items) {
-      this.filterVideos(this.searchService.getSearchQuery());
+    if (this.filteredVideos) {
+      console.log(
+        'Using search query words:',
+        this.searchService.getSearchQuery,
+      );
+      this.searchService.getSearchQuery().subscribe((query) => {
+        this.filterVideos(query);
+      });
     } else {
-      console.log('Data not loaded or `items` is undefined');
+      console.log('Data not loaded or `filteredVideos` is undefined');
     }
   }
 
   filterVideos(searchString: string) {
-    this.filteredVideos = this.videosData.items.filter((item) =>
+    this.filteredVideos = this.filteredVideos.filter((item) =>
       item.snippet.title.toLowerCase().includes(searchString.toLowerCase()),
     );
   }
@@ -103,7 +124,6 @@ export class SearchResultsComponent implements OnInit {
   get sortOrder(): string {
     return this.sortService.getSortOrder;
   }
-
   get searchQueryWords(): string {
     return this.sortService.getSearchQueryWords;
   }

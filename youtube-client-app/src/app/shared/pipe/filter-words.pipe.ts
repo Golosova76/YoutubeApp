@@ -14,13 +14,17 @@ export class FilterVideosPipe implements PipeTransform {
 
     const words = searchQueryWords.toLowerCase().split(' ');
 
-    return items.filter((item) =>
-      words.every(
+    return items.filter((item) => {
+      const titleLower = item.snippet.title.toLowerCase();
+      const descriptionLower = item.snippet.description.toLowerCase();
+      const tags = item.snippet.tags || []; // Убедимся, что tags не undefined, используя пустой массив как запасной
+
+      return words.every(
         (word) =>
-          item.snippet.title.toLowerCase().includes(word) ||
-          item.snippet.description.toLowerCase().includes(word) ||
-          item.snippet.tags.some((tag) => tag.toLowerCase().includes(word)),
-      ),
-    );
+          titleLower.includes(word) ||
+          descriptionLower.includes(word) ||
+          tags.some((tag) => tag.toLowerCase().includes(word)),
+      );
+    });
   }
 }

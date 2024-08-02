@@ -1,3 +1,5 @@
+//  для ответа от videos.list API, который включает id, snippet и statistics
+
 import { Thumbnails, VideoItem } from './search-item.model';
 
 export interface PageInfo {

@@ -1,7 +1,22 @@
-<input #inputField
+<!-- Если searchControl предоставлен, используем его с FormControl -->
+<input *ngIf="searchControl; else noControlInput"
+       #inputField
+       [formControl]="searchControl"
        class="input"
        [placeholder]="placeholder"
        [type]="type"
        [ngClass]="inputClass"
        [name]="name"
        [id]="id">
+
+<!-- Fallback input без FormControl -->
+<ng-template #noControlInput>
+       <input #inputField
+              class="input"
+              [placeholder]="placeholder"
+              [type]="type"
+              [ngClass]="inputClass"
+              [name]="name"
+              [id]="id"
+              (input)="valueChange.emit(inputField.value)">
+</ng-template>
