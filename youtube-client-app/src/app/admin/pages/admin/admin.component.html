@@ -1,0 +1,115 @@
+<div class="form-admin-card-container">
+  <form [formGroup]="cardForm"
+        action="#"
+        method="post"
+        autocomplete="on"
+        class="form-card"
+        (ngSubmit)="onCreateCard()">
+    <div class="create-card-container">
+
+      <h1 class="card-title">Create new card</h1>
+
+      <label class="card-label"
+             for="title">Title<span class="required-star">*</span></label>
+      <app-input formControlName="title"
+                 type="text"
+                 [inputClass]="getInputClass('title')"
+                 id="title"
+                 name="title"
+                 placeholder=""></app-input>
+      <div *ngIf="isControlInvalid('title')"
+           class="error-message">
+        <div *ngIf="isControlInvalid('title')"
+             class="error-message">
+          <div>{{ getErrorMessage('title') }}</div>
+        </div>
+      </div>
+
+
+      <label class="card-label"
+             for="description">Description</label>
+      <app-input formControlName="description"
+                 type="text"
+                 [inputClass]="getInputClass('description')"
+                 id="description"
+                 name="description"
+                 placeholder=""></app-input>
+      <div *ngIf="isControlInvalid('description')"
+           class="error-message">
+        <div>{{ getErrorMessage('description') }}</div>
+      </div>
+
+      <label class="card-label"
+             for="img-card">Img<span class="required-star">*</span></label>
+      <app-input formControlName="imgCard"
+                 type="text"
+                 [inputClass]="getInputClass('img-card')"
+                 id="img-card"
+                 name="img-card"
+                 placeholder=""></app-input>
+      <div *ngIf="isControlInvalid('imgCard')"
+           class="error-message">
+        <div>{{ getErrorMessage('imgCard') }}</div>
+      </div>
+
+      <label class="card-label"
+             for="link-video">Link video<span class="required-star">*</span></label>
+      <app-input formControlName="linkVideo"
+                 type="text"
+                 [inputClass]="getInputClass('link-video')"
+                 id="link-video"
+                 name="link-video"
+                 placeholder=""></app-input>
+      <div *ngIf="isControlInvalid('linkVideo')"
+           class="error-message">
+        <div>{{ getErrorMessage('linkVideo') }}</div>
+      </div>
+
+      <label class="card-label"
+             for="create-date">Creation date<span class="required-star">*</span></label>
+      <app-input formControlName="createDate"
+                 type="date"
+                 [inputClass]="getInputClass('create-date')"
+                 id="create-date-video"
+                 name="create-date-video"
+                 placeholder=""></app-input>
+      <div *ngIf="isControlInvalid('createDate')"
+           class="error-message">
+        <div>{{ getErrorMessage('createDate') }}</div>
+      </div>
+
+      <!-- Tags Section -->
+      <div formArrayName="tags">
+        <div *ngFor="let tag of tags.controls; let i = index">
+          <label class="card-label"
+                 for="tag-{{i}}">Tag<span class="required-star">*</span></label>
+          <app-input formControlName="{{i}}"
+                     type="text"
+                     inputClass="create-tag-input"
+                     id="tag"
+                     name="tag"
+                     placeholder=""></app-input>
+          <app-custom-button type="button"
+                             (click)="removeTag(i)"
+                             *ngIf="tags.length > 1"
+                             buttonClass="button-admin-remove-tag">Remove</app-custom-button>
+        </div>
+      </div>
+      <div class="block-button-card">
+        <app-custom-button type="button"
+                           (click)="addTag()"
+                           *ngIf="tags.length < 5"
+                           buttonClass="button-admin-add-tag">Add Tag</app-custom-button>
+        <app-custom-button type="button"
+                           (click)=" resetForm()"
+                           buttonClass="button-admin-reset">Reset</app-custom-button>
+      </div>
+
+      <app-custom-button type="submit"
+                         buttonClass="button-admin-card-submit"
+                         [disabled]="!cardForm.valid">
+        Create card
+      </app-custom-button>
+    </div>
+  </form>
+</div>

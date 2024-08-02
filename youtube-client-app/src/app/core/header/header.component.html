@@ -35,6 +35,13 @@
       Logout
     </app-custom-button>
 
+    <app-custom-button *ngIf="showCreateCardButton"
+                       type="button"
+                       (buttonClick)="createCard()"
+                       buttonClass="button-create-card">
+      Create card
+    </app-custom-button>
+
   </div>
 
   <app-search-bar *ngIf="sortPanelVisible"></app-search-bar>

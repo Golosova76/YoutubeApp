@@ -15,8 +15,9 @@
               class="input"
               [placeholder]="placeholder"
               [type]="type"
-              [ngClass]="inputClass"
+              [ngClass]="[inputClass, classObject]"
               [name]="name"
               [id]="id"
-              (input)="valueChange.emit(inputField.value)">
+              (input)="onInput(inputField.value)"
+              (blur)="onTouched()">
 </ng-template>

@@ -6,6 +6,8 @@ import { Subject } from 'rxjs';
 })
 export class SearchService {
   private searchQuery = new Subject<string>();
+
+  public searchQuery$ = this.searchQuery.asObservable();
   // указывает, видимы ли результаты поиска
   private searchResultsVisible: boolean = false;
 
@@ -13,11 +15,6 @@ export class SearchService {
   setSearchQuery(query: string) {
     this.searchQuery.next(query);
     this.searchResultsVisible = true; // Показываем результаты поиска
-  }
-
-  getSearchQuery() {
-    //Возвращает текущее значение searchQuery.
-    return this.searchQuery.asObservable();
   }
 
   clearSearchQuery() {

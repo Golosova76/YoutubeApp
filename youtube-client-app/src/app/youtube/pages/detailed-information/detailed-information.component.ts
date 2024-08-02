@@ -8,7 +8,7 @@ import { VideoStatisticsComponent } from 'app/youtube/components/video-statistic
 import { VideoItem } from 'app/shared/models/search-item.model';
 import { DateBackgroundDirective } from 'app/shared/directives/line-back-directive';
 import { VideoDataService } from 'app/youtube/services/video-data.service';
-import { getThumbnailUrl } from 'app/shared/utils';
+import { getThumbnailUrl } from 'app/shared/utils/utils';
 import { CustomButtonComponent } from 'app/shared/custom-button/custom-button.component';
 import { Router } from '@angular/router';
 import { SearchService } from 'app/youtube/services/search.service';
@@ -53,7 +53,7 @@ export class DetailedInformationComponent {
 
   navigateToDetail() {
     // Получаем текущий поисковый запрос из сервиса
-    const currentSearchQuery = this.searchService.getSearchQuery();
+    const currentSearchQuery = this.searchService.searchQuery$;
 
     // Передаем этот запрос как параметр URL при навигации
     this.router.navigate(['youtube', 'search-results'], {

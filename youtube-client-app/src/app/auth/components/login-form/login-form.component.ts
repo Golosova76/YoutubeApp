@@ -1,9 +1,17 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import {
+  FormGroup,
+  FormControl,
+  Validators,
+  FormBuilder,
+  AbstractControl,
+  ValidationErrors,
+} from '@angular/forms';
 
 import { LoginService } from 'app/auth/services/login.service';
-import { InputComponent } from 'app/shared/input/input.component';
 import { Subject, takeUntil } from 'rxjs';
+import { passwordStrengthValidator } from 'app/shared/utils/validators';
 
 @Component({
   selector: 'app-login-form',
@@ -11,8 +19,7 @@ import { Subject, takeUntil } from 'rxjs';
   styleUrls: ['./login-form.component.scss'],
 })
 export class LoginFormComponent {
-  @ViewChild('usernameInput', { static: false }) usernameInput!: InputComponent;
-  @ViewChild('passwordInput', { static: false }) passwordInput!: InputComponent;
+  loginForm!: FormGroup;
 
   isLoggedIn: boolean = false;
 
@@ -21,9 +28,15 @@ export class LoginFormComponent {
   constructor(
     private loginService: LoginService,
     private router: Router,
+    private fb: FormBuilder,
   ) {}
 
   ngOnInit() {
+    this.loginForm = this.fb.group({
+      username: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, passwordStrengthValidator]],
+    });
+
     this.loginService.isLoggedIn$
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((status) => {
@@ -37,17 +50,17 @@ export class LoginFormComponent {
   }
 
   onLogin() {
-    if (this.usernameInput && this.passwordInput) {
-      const username = this.usernameInput.value;
-      const password = this.passwordInput.value;
-
-      if (username && password && this.loginService.login(username, password)) {
+    if (this.loginForm.valid) {
+      const { username, password } = this.loginForm.value;
+      if (this.loginService.login(username, password)) {
         this.router.navigate(['youtube']);
       } else {
         alert('Login failed!');
       }
     } else {
-      console.error('Input components are not initialized!');
+      // Отметить все поля формы как "затронутые", чтобы показать ошибки
+      this.loginForm.markAllAsTouched();
+      console.log('Form is invalid');
     }
   }
 

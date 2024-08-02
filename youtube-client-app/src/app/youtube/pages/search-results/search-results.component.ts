@@ -26,7 +26,7 @@ import {
   switchMap,
 } from 'rxjs';
 import { FormControl } from '@angular/forms';
-import { DEBOUNCE_TIME_MS } from 'app/shared/utils';
+import { DEBOUNCE_TIME_MS } from 'app/shared/utils/utils';
 
 @Component({
   selector: 'app-search-results',
@@ -57,7 +57,7 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     // Объединяем два потока данных в один
-    const searchQuery$ = this.searchService.getSearchQuery().pipe(
+    const searchQuery$ = this.searchService.searchQuery$.pipe(
       debounceTime(DEBOUNCE_TIME_MS),
       filter((value) => value !== null && value.length > 2),
       distinctUntilChanged(),
@@ -99,11 +99,7 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
 
   updateFilteredVideos() {
     if (this.filteredVideos) {
-      console.log(
-        'Using search query words:',
-        this.searchService.getSearchQuery,
-      );
-      this.searchService.getSearchQuery().subscribe((query) => {
+      this.searchService.searchQuery$.subscribe((query) => {
         this.filterVideos(query);
       });
     } else {
