@@ -75,7 +75,7 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
         switchMap((query: string) => {
           const safeValue = query ?? '';
           this.updateSearchQueryInURL(safeValue);
-          return this.youtubeService.searchAndFetchDetails(safeValue); // Используйте switchMap для подписки
+          return this.youtubeService.searchAndFetchDetails(safeValue);
         }),
       )
       .subscribe((videos: VideoItem[]) => {
