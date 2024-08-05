@@ -1,10 +1,5 @@
 import { CommonModule } from '@angular/common';
-import {
-  Component,
-  OnInit,
-  OnDestroy,
-  ChangeDetectionStrategy,
-} from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import { YouTubeVideoListResponse } from 'app/shared/models/search-response.model';
 import { VideoItem } from 'app/shared/models/search-item.model';

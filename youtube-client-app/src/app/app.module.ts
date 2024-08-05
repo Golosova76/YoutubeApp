@@ -9,6 +9,7 @@ import { StoreModule } from '@ngrx/store';
 
 import { AppRoutingModule } from './app-routing.module';
 import { FooterComponent } from './core/footer/footer.component';
+import { videoReducer } from './redux/reducers/video.reducer';
 
 @NgModule({
   declarations: [],
@@ -17,7 +18,7 @@ import { FooterComponent } from './core/footer/footer.component';
     AppRoutingModule,
     RouterModule,
     FooterComponent,
-    StoreModule.forRoot({}),
+    StoreModule.forRoot({ videos: videoReducer }),
   ],
   providers: [provideHttpClient(withInterceptorsFromDi())],
 })
