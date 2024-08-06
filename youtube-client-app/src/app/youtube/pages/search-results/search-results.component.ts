@@ -22,6 +22,10 @@ import {
 } from 'rxjs';
 import { FormControl } from '@angular/forms';
 import { DEBOUNCE_TIME_MS } from 'app/shared/utils/utils';
+import { loadVideos } from 'app/redux/actions/actions';
+import { Store } from '@ngrx/store';
+import { VideoState } from 'app/redux/state/app.state';
+import { selectVideoItems } from 'app/redux/selectors/video.selectors';
 
 @Component({
   selector: 'app-search-results',
@@ -48,6 +52,7 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
     private searchService: SearchService,
     private sortService: SortService,
     private youtubeService: YoutubeApiService,
+    private store: Store<{ videos: VideoState }>,
   ) {}
 
   ngOnInit() {
@@ -70,7 +75,8 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
         switchMap((query: string) => {
           const safeValue = query ?? '';
           this.updateSearchQueryInURL(safeValue);
-          return this.youtubeService.searchAndFetchDetails(safeValue);
+          this.store.dispatch(loadVideos({ query: safeValue }));
+          return this.store.select(selectVideoItems);
         }),
       )
       .subscribe((videos: VideoItem[]) => {
