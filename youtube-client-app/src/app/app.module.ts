@@ -18,8 +18,7 @@ import { videosReducer } from './redux/reducers/video.reducer';
     AppRoutingModule,
     RouterModule,
     FooterComponent,
-    StoreModule.forRoot({}), // Основное состояние без редьюсеров
-    StoreModule.forFeature('videos', videosReducer),
+    StoreModule.forRoot({ videos: videosReducer }),
   ],
   providers: [provideHttpClient(withInterceptorsFromDi())],
 })

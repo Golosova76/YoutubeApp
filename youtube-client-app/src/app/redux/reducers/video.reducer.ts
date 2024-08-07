@@ -1,14 +1,20 @@
 import { createReducer, on } from '@ngrx/store';
-import { initialState } from '../state/app.state';
+import { VideoState } from '../state/app.state';
 import {
   loadVideos,
   loadVideosFailure,
   loadVideosSuccess,
 } from '../actions/actions';
 
+export const initialVideoState: VideoState = {
+  items: [],
+  loading: false,
+  error: null,
+};
+
 // Редьюсер для работы с видео
 export const videosReducer = createReducer(
-  initialState,
+  initialVideoState,
   on(loadVideos, (state) => ({
     ...state,
     loading: true,
