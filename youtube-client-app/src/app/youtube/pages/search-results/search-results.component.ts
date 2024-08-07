@@ -75,7 +75,7 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
         switchMap((query: string) => {
           const safeValue = query ?? '';
           this.updateSearchQueryInURL(safeValue);
-          console.log('Dispatching loadVideos');
+          console.log('Dispatching loadVideos with query:', safeValue);
           this.store.dispatch(loadVideos({ query: safeValue }));
           return this.store.select(selectVideoItems);
         }),

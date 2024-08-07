@@ -10,6 +10,8 @@ import { StoreModule } from '@ngrx/store';
 import { AppRoutingModule } from './app-routing.module';
 import { FooterComponent } from './core/footer/footer.component';
 import { videosReducer } from './redux/reducers/video.reducer';
+import { EffectsModule } from '@ngrx/effects';
+import { VideoEffects } from './redux/effects/video.effects';
 
 @NgModule({
   declarations: [],
@@ -19,6 +21,7 @@ import { videosReducer } from './redux/reducers/video.reducer';
     RouterModule,
     FooterComponent,
     StoreModule.forRoot({ videos: videosReducer }),
+    EffectsModule.forRoot([VideoEffects]),
   ],
   providers: [provideHttpClient(withInterceptorsFromDi())],
 })
