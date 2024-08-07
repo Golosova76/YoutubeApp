@@ -9,7 +9,7 @@ import { StoreModule } from '@ngrx/store';
 
 import { AppRoutingModule } from './app-routing.module';
 import { FooterComponent } from './core/footer/footer.component';
-import { videoReducer } from './redux/reducers/video.reducer';
+import { videosReducer } from './redux/reducers/video.reducer';
 
 @NgModule({
   declarations: [],
@@ -19,8 +19,12 @@ import { videoReducer } from './redux/reducers/video.reducer';
     RouterModule,
     FooterComponent,
     StoreModule.forRoot({}), // Основное состояние без редьюсеров
-    StoreModule.forFeature('videos', videoReducer),
+    StoreModule.forFeature('videos', videosReducer),
   ],
   providers: [provideHttpClient(withInterceptorsFromDi())],
 })
-export class AppModule {}
+export class AppModule {
+  constructor() {
+    console.log('AppModule loaded');
+  }
+}

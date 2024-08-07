@@ -12,7 +12,7 @@ export interface AppState {
 export interface VideoState {
   items: VideoItem[];
   loading: boolean;
-  error: any;
+  error: Error | null;
 }
 
 export const initialState: AppState = {

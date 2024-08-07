@@ -1,32 +1,28 @@
 import { createReducer, on } from '@ngrx/store';
-import { initialState, VideoState } from '../state/app.state';
+import { initialState } from '../state/app.state';
 import {
   loadVideos,
   loadVideosFailure,
   loadVideosSuccess,
 } from '../actions/actions';
 
-// Начальное состояние для части состояния `videos`
-export const initialVideoState: VideoState = {
-  items: [],
-  loading: false,
-  error: null,
-};
-
-export const videoReducer = createReducer(
-  initialVideoState, // Используем начальное состояние
+// Редьюсер для работы с видео
+export const videosReducer = createReducer(
+  initialState,
   on(loadVideos, (state) => ({
     ...state,
     loading: true,
+    error: null,
   })),
   on(loadVideosSuccess, (state, { videos }) => ({
     ...state,
-    items: videos, // Обновляем `items` в состоянии `videos`
+    items: videos,
     loading: false,
+    error: null,
   })),
   on(loadVideosFailure, (state, { error }) => ({
     ...state,
-    error, // Обновляем `error` в состоянии `videos`
     loading: false,
+    error: error,
   })),
 );
