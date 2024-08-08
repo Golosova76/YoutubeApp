@@ -12,6 +12,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { FooterComponent } from './core/footer/footer.component';
 import { videosReducer } from './redux/reducers/video.reducer';
 import { VideoEffects } from './redux/effects/video.effects';
+import { customCardReducer } from './redux/reducers/custom-card.reducer';
 
 @NgModule({
   declarations: [],
@@ -20,7 +21,10 @@ import { VideoEffects } from './redux/effects/video.effects';
     AppRoutingModule,
     RouterModule,
     FooterComponent,
-    StoreModule.forRoot({ videos: videosReducer }),
+    StoreModule.forRoot({
+      videos: videosReducer,
+      customCards: customCardReducer,
+    }),
     EffectsModule.forRoot([VideoEffects]),
   ],
   providers: [provideHttpClient(withInterceptorsFromDi())],

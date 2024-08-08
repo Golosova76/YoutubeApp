@@ -49,6 +49,7 @@ export interface VideoItem {
 }
 
 export interface CustomCard {
+  id: string;
   title: string;
   description: string;
   imageUrl: string;

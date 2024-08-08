@@ -87,6 +87,7 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe((videos: VideoItem[]) => {
         this.filteredVideos = videos;
+        console.log(this.filteredVideos);
         this.searchResultsVisible = videos.length > 0;
       });
   }

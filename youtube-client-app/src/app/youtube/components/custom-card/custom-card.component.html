@@ -1,0 +1,14 @@
+<article *ngIf="videoData"
+         class="search-item">
+  <div class="search-item-container">
+    <div class="search-item-image">
+      <img src="Image Pucture"
+           alt=" {{ customCard?.imageUrl }} ">
+    </div>
+    <div class="search-item-about">
+      <div class="search-item-title">{{ customCard?.title }}</div>
+    </div>
+  </div>
+</article>
+<span class="search-item-line"
+      [appDateBackground]="customCard?.creationDate"></span>
