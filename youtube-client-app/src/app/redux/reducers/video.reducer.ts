@@ -1,5 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
-import { VideoState } from '../state/app.state';
+import { AppState, initialState, VideoState } from '../state/app.state';
 import {
   loadVideos,
   loadVideosFailure,

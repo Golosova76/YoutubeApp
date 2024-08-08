@@ -3,15 +3,15 @@ import { CustomCard, VideoItem } from 'app/shared/models/search-item.model';
 
 // Действия для работы с видео
 export const loadVideos = createAction(
-  '[Video API] Load Videos',
+  '[search-results] Load Videos',
   props<{ query: string }>(),
 );
 export const loadVideosSuccess = createAction(
-  '[Video API] Load Videos Success',
+  '[Effect] Load Videos Success',
   props<{ videos: VideoItem[] }>(),
 );
 export const loadVideosFailure = createAction(
-  '[Video API] Load Videos Failure',
+  '[Effect] Load Videos Failure',
   props<{ error: Error }>(),
 );
 

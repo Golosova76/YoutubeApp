@@ -9,12 +9,6 @@ import { SearchResultsComponent } from './youtube/pages/search-results/search-re
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterModule,
-    HeaderComponent,
-
-    SearchResultsComponent,
-  ],
+  imports: [CommonModule, RouterModule, HeaderComponent],
 })
 export class AppComponent {}

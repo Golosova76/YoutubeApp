@@ -19,13 +19,18 @@ import {
   merge,
   map,
   switchMap,
+  Observable,
+  tap,
 } from 'rxjs';
 import { FormControl } from '@angular/forms';
 import { DEBOUNCE_TIME_MS } from 'app/shared/utils/utils';
 import { loadVideos } from 'app/redux/actions/actions';
 import { Store } from '@ngrx/store';
 import { VideoState } from 'app/redux/state/app.state';
-import { selectVideoItems } from 'app/redux/selectors/video.selectors';
+import {
+  selectFilteredVideos,
+  selectSearchResultsVisible,
+} from 'app/redux/selectors/video.selectors';
 
 @Component({
   selector: 'app-search-results',
@@ -46,6 +51,9 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   searchControl = new FormControl('');
 
+  filteredVideos$!: Observable<VideoItem[]>;
+  //searchResultsVisible$!: Observable<boolean>;
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -56,6 +64,9 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    this.filteredVideos$ = this.store.select(selectFilteredVideos);
+    // this.searchResultsVisible$ = this.store.select(selectSearchResultsVisible);
+
     // Объединяем два потока данных в один
     const searchQuery$ = this.searchService.searchQuery$.pipe(
       debounceTime(DEBOUNCE_TIME_MS),
@@ -72,17 +83,25 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
     merge(searchQuery$, queryParams$)
       .pipe(
         takeUntil(this.destroy$),
-        switchMap((query: string) => {
+        tap((query: string) => {
           const safeValue = query ?? '';
           this.updateSearchQueryInURL(safeValue);
           console.log('Dispatching loadVideos with query:', safeValue);
           this.store.dispatch(loadVideos({ query: safeValue }));
-          return this.store.select(selectVideoItems);
         }),
+      )
+      .subscribe();
+
+    this.filteredVideos$
+      .pipe(
+        takeUntil(this.destroy$),
+        tap((videos) => console.log('Filtered videos:', videos)),
       )
       .subscribe((videos: VideoItem[]) => {
         this.filteredVideos = videos;
         this.searchResultsVisible = videos.length > 0;
+        console.log('Updated filteredVideos:', this.filteredVideos);
+        console.log('Search results visible:', this.searchResultsVisible);
       });
   }
 
@@ -97,16 +116,6 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
-  }
-
-  updateFilteredVideos() {
-    if (this.filteredVideos) {
-      this.searchService.searchQuery$.subscribe((query) => {
-        this.filterVideos(query);
-      });
-    } else {
-      console.log('Data not loaded or `filteredVideos` is undefined');
-    }
   }
 
   filterVideos(searchString: string) {
