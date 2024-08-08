@@ -12,6 +12,8 @@ import { YoutubeApiInterceptorService } from 'app/youtube/services/interceptor/y
 import { provideStore } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
+import { VideoEffects } from 'app/redux/effects/video.effects';
+import { videosReducer } from 'app/redux/reducers/video.reducer';
 
 bootstrapApplication(AppComponent, {
   providers: [
@@ -19,12 +21,12 @@ bootstrapApplication(AppComponent, {
     importProvidersFrom(BrowserAnimationsModule),
     provideHttpClient(withInterceptorsFromDi()),
     {
-        provide: HTTP_INTERCEPTORS,
-        useClass: YoutubeApiInterceptorService,
-        multi: true,
+      provide: HTTP_INTERCEPTORS,
+      useClass: YoutubeApiInterceptorService,
+      multi: true,
     },
-    provideStore(),
-    provideEffects(),
-    provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() })
-],
+    provideStore({ videos: videosReducer }),
+    provideEffects([VideoEffects]),
+    provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
+  ],
 }).catch((err) => console.error(err));

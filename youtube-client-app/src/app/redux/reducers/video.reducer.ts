@@ -13,7 +13,7 @@ export const initialVideoState: VideoState = {
 };
 
 // Редьюсер для работы с видео
-export const videosReducer = createReducer(
+export const videosReducer = createReducer<VideoState>(
   initialVideoState,
   on(loadVideos, (state) => ({
     ...state,

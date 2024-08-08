@@ -20,7 +20,6 @@ import { VideoEffects } from './redux/effects/video.effects';
     AppRoutingModule,
     RouterModule,
     FooterComponent,
-    StoreModule.forRoot({}),
     StoreModule.forRoot({ videos: videosReducer }),
     EffectsModule.forRoot([VideoEffects]),
   ],

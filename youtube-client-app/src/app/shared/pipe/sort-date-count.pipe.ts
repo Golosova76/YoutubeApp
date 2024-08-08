@@ -36,7 +36,8 @@ export class SortVideosPipe implements PipeTransform {
       }
     };
 
-    return items.sort((a, b) => {
+    // Создаем новый массив перед сортировкой
+    return items.slice().sort((a, b) => {
       const valueA = getValue(a);
       const valueB = getValue(b);
       return sortOrder === 'asc' ? valueA - valueB : valueB - valueA;

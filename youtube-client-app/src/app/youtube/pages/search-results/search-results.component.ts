@@ -9,7 +9,6 @@ import { FilterVideosPipe } from 'app/shared/pipe/filter-words.pipe';
 import { SearchService } from 'app/youtube/services/search.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SortService } from 'app/youtube/services/sortsearch.service';
-import { YoutubeApiService } from 'app/youtube/services/youtube-api.service';
 import {
   debounceTime,
   distinctUntilChanged,
@@ -18,7 +17,6 @@ import {
   filter,
   merge,
   map,
-  switchMap,
   Observable,
   tap,
 } from 'rxjs';
@@ -27,10 +25,7 @@ import { DEBOUNCE_TIME_MS } from 'app/shared/utils/utils';
 import { loadVideos } from 'app/redux/actions/actions';
 import { Store } from '@ngrx/store';
 import { VideoState } from 'app/redux/state/app.state';
-import {
-  selectFilteredVideos,
-  selectSearchResultsVisible,
-} from 'app/redux/selectors/video.selectors';
+import { selectFilteredVideos } from 'app/redux/selectors/video.selectors';
 
 @Component({
   selector: 'app-search-results',
@@ -52,20 +47,17 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
   searchControl = new FormControl('');
 
   filteredVideos$!: Observable<VideoItem[]>;
-  //searchResultsVisible$!: Observable<boolean>;
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private searchService: SearchService,
     private sortService: SortService,
-    private youtubeService: YoutubeApiService,
     private store: Store<{ videos: VideoState }>,
   ) {}
 
   ngOnInit() {
     this.filteredVideos$ = this.store.select(selectFilteredVideos);
-    // this.searchResultsVisible$ = this.store.select(selectSearchResultsVisible);
 
     // Объединяем два потока данных в один
     const searchQuery$ = this.searchService.searchQuery$.pipe(
@@ -86,22 +78,16 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
         tap((query: string) => {
           const safeValue = query ?? '';
           this.updateSearchQueryInURL(safeValue);
-          console.log('Dispatching loadVideos with query:', safeValue);
           this.store.dispatch(loadVideos({ query: safeValue }));
         }),
       )
       .subscribe();
 
     this.filteredVideos$
-      .pipe(
-        takeUntil(this.destroy$),
-        tap((videos) => console.log('Filtered videos:', videos)),
-      )
+      .pipe(takeUntil(this.destroy$))
       .subscribe((videos: VideoItem[]) => {
         this.filteredVideos = videos;
         this.searchResultsVisible = videos.length > 0;
-        console.log('Updated filteredVideos:', this.filteredVideos);
-        console.log('Search results visible:', this.searchResultsVisible);
       });
   }
 
