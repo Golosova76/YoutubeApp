@@ -10,7 +10,12 @@
       <div class="custom-card-description">{{ customCard.description }}</div>
       <div class="custom-card-description">{{ customCard.creationDate }}</div>
     </div>
+    <div class="search-item-more">
+      <app-custom-button (buttonClick)="navigateToDetail()"
+                         buttonClass="button-search-item-more">more...
+      </app-custom-button>
+    </div>
   </div>
 </article>
-<span class="search-item-line"
+<span class="custom-card-line"
       [appDateBackground]="customCard?.creationDate?.toISOString()"></span>

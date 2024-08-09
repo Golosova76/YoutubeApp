@@ -1,12 +1,10 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
-  AbstractControl,
   FormArray,
   FormBuilder,
   FormControl,
   FormGroup,
-  ValidationErrors,
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -118,7 +116,6 @@ export class AdminComponent {
 
   onCreateCard() {
     if (this.cardForm.valid) {
-      console.log('Submitting card data:', this.cardForm.value);
       const formData = this.cardForm.value;
 
       const creationDate = new Date(formData.createDate);
@@ -136,10 +133,15 @@ export class AdminComponent {
       // Диспатчим действие для добавления карточки
       console.log(newCard);
       this.store.dispatch(addCustomCard({ card: newCard }));
+      console.log('Dispatched new card:', newCard);
       this.resetForm();
     } else {
       this.cardForm.markAllAsTouched();
       console.error('Form is invalid');
     }
+  }
+
+  navigateToLogin() {
+    this.router.navigate(['youtube', 'search-results']);
   }
 }

@@ -14,6 +14,7 @@ import { provideEffects } from '@ngrx/effects';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { VideoEffects } from 'app/redux/effects/video.effects';
 import { videosReducer } from 'app/redux/reducers/video.reducer';
+import { customCardReducer } from 'app/redux/reducers/custom-card.reducer';
 
 bootstrapApplication(AppComponent, {
   providers: [
@@ -25,7 +26,10 @@ bootstrapApplication(AppComponent, {
       useClass: YoutubeApiInterceptorService,
       multi: true,
     },
-    provideStore({ videos: videosReducer }),
+    provideStore({
+      videos: videosReducer,
+      customCards: customCardReducer,
+    }),
     provideEffects([VideoEffects]),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
   ],

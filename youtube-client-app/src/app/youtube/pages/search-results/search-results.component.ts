@@ -6,6 +6,7 @@ import { CustomCard, VideoItem } from 'app/shared/models/search-item.model';
 import { SearchItemComponent } from '../../components/search-item/search-item.component';
 import { SortVideosPipe } from 'app/shared/pipe/sort-date-count.pipe';
 import { FilterVideosPipe } from 'app/shared/pipe/filter-words.pipe';
+import { FilterCustomCardsPipe } from 'app/shared/pipe/filter-words-custom.pipe';
 import { SearchService } from 'app/youtube/services/search.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SortService } from 'app/youtube/services/sortsearch.service';
@@ -24,9 +25,10 @@ import { FormControl } from '@angular/forms';
 import { DEBOUNCE_TIME_MS } from 'app/shared/utils/utils';
 import { loadVideos } from 'app/redux/actions/actions';
 import { Store } from '@ngrx/store';
-import { VideoState } from 'app/redux/state/app.state';
+import { AppState, VideoState } from 'app/redux/state/app.state';
 import { selectFilteredVideos } from 'app/redux/selectors/video.selectors';
 import { CustomCardComponent } from 'app/youtube/components/custom-card/custom-card.component';
+import { selectCustomCards } from 'app/redux/selectors/custom-card.selectors';
 
 @Component({
   selector: 'app-search-results',
@@ -39,29 +41,40 @@ import { CustomCardComponent } from 'app/youtube/components/custom-card/custom-c
     SortVideosPipe,
     FilterVideosPipe,
     CustomCardComponent,
+    FilterCustomCardsPipe,
   ],
 })
 export class SearchResultsComponent implements OnInit, OnDestroy {
   public videosData!: YouTubeVideoListResponse;
   public filteredVideos: VideoItem[] = [];
+  public filteredCustomCards: CustomCard[] = [];
   public searchResultsVisible: boolean = false;
   private destroy$ = new Subject<void>();
   searchControl = new FormControl('');
 
-  customCards: CustomCard[] = [];
-
   filteredVideos$!: Observable<VideoItem[]>;
+  customCards$!: Observable<CustomCard[]>;
+  customCards: CustomCard[] = [];
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private searchService: SearchService,
     private sortService: SortService,
-    private store: Store<{ videos: VideoState }>,
+    private store: Store<AppState>,
   ) {}
 
   ngOnInit() {
+    // Проверка состояния хранилища при инициализации компонента
+    this.store.subscribe((state) => {
+      console.log('Current state:', state); // Выводим текущее состояние в консоль
+    });
+
     this.filteredVideos$ = this.store.select(selectFilteredVideos);
+    this.customCards$ = this.store.select(selectCustomCards);
+
+    // Проверка, что селектор `selectCustomCards` возвращает Observable
+    console.log('Initialized customCards$:', this.customCards$);
 
     // Объединяем два потока данных в один
     const searchQuery$ = this.searchService.searchQuery$.pipe(
@@ -92,7 +105,17 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
       .subscribe((videos: VideoItem[]) => {
         this.filteredVideos = videos;
         console.log(this.filteredVideos);
-        this.searchResultsVisible = videos.length > 0;
+        // Обновляем видимость результатов поиска
+        this.updateSearchResultsVisibility();
+      });
+    // Подписываемся на изменения customCards, если они существуют
+    this.customCards$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((customCards: CustomCard[]) => {
+        console.log('Received customCards:', customCards);
+        this.filteredCustomCards = customCards || []; // Если customCards не определены, используем пустой массив
+        console.log(this.filteredCustomCards);
+        this.updateSearchResultsVisibility();
       });
   }
 
@@ -109,10 +132,22 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
+  filterCustomCards(searchString: string) {
+    this.filteredCustomCards = this.filteredCustomCards.filter((card) =>
+      card.title.toLowerCase().includes(searchString.toLowerCase()),
+    );
+  }
+
   filterVideos(searchString: string) {
     this.filteredVideos = this.filteredVideos.filter((item) =>
       item.snippet.title.toLowerCase().includes(searchString.toLowerCase()),
     );
+  }
+
+  private updateSearchResultsVisibility() {
+    // Видимость результатов поиска
+    this.searchResultsVisible =
+      this.filteredCustomCards.length > 0 || this.filteredVideos.length > 0;
   }
 
   get sortField(): 'date' | 'count' {
