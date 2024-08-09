@@ -1,5 +1,13 @@
 <div class="main-search-container">
   <div *ngIf="searchResultsVisible">
+    <div class="custom-card-list-container">
+      <div *ngIf="customCards && customCards.length">
+        <div *ngFor="let customCard of customCards | filterVideos:searchQueryWords; let i = index">
+          <!-- Компонент пользовательской карточки -->
+          <app-custom-card [customCard]="customCard"></app-custom-card>
+        </div>
+      </div>
+    </div>
     <div class="video-list-container"
          *ngIf="filteredVideos && filteredVideos.length">
       <div *ngFor="let video of filteredVideos | sortVideos:sortField:sortOrder | filterVideos:searchQueryWords">

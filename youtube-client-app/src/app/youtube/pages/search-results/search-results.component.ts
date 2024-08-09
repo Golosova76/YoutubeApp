@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import { YouTubeVideoListResponse } from 'app/shared/models/search-response.model';
-import { VideoItem } from 'app/shared/models/search-item.model';
+import { CustomCard, VideoItem } from 'app/shared/models/search-item.model';
 import { SearchItemComponent } from '../../components/search-item/search-item.component';
 import { SortVideosPipe } from 'app/shared/pipe/sort-date-count.pipe';
 import { FilterVideosPipe } from 'app/shared/pipe/filter-words.pipe';
@@ -26,6 +26,7 @@ import { loadVideos } from 'app/redux/actions/actions';
 import { Store } from '@ngrx/store';
 import { VideoState } from 'app/redux/state/app.state';
 import { selectFilteredVideos } from 'app/redux/selectors/video.selectors';
+import { CustomCardComponent } from 'app/youtube/components/custom-card/custom-card.component';
 
 @Component({
   selector: 'app-search-results',
@@ -37,6 +38,7 @@ import { selectFilteredVideos } from 'app/redux/selectors/video.selectors';
     SearchItemComponent,
     SortVideosPipe,
     FilterVideosPipe,
+    CustomCardComponent,
   ],
 })
 export class SearchResultsComponent implements OnInit, OnDestroy {
@@ -45,6 +47,8 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
   public searchResultsVisible: boolean = false;
   private destroy$ = new Subject<void>();
   searchControl = new FormControl('');
+
+  customCards: CustomCard[] = [];
 
   filteredVideos$!: Observable<VideoItem[]>;
 

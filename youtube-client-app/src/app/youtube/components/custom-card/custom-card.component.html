@@ -1,14 +1,16 @@
-<article *ngIf="videoData"
-         class="search-item">
-  <div class="search-item-container">
-    <div class="search-item-image">
+<article *ngIf="customCard"
+         class="custom-card">
+  <div class="custom-card-container">
+    <div class="custom-card-image">
       <img src="Image Pucture"
-           alt=" {{ customCard?.imageUrl }} ">
+           alt=" {{ customCard.imageUrl }} ">
     </div>
-    <div class="search-item-about">
-      <div class="search-item-title">{{ customCard?.title }}</div>
+    <div class="custom-card-about">
+      <div class="custom-card-title">{{ customCard.title }}</div>
+      <div class="custom-card-description">{{ customCard.description }}</div>
+      <div class="custom-card-description">{{ customCard.creationDate }}</div>
     </div>
   </div>
 </article>
 <span class="search-item-line"
-      [appDateBackground]="customCard?.creationDate"></span>
+      [appDateBackground]="customCard?.creationDate?.toISOString()"></span>
