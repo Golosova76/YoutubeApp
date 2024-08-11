@@ -1,0 +1,14 @@
+<div class="main-search-container favorite">
+  <h1>Your Favorites</h1>
+
+  <div class="video-list-container"
+       *ngIf="favoriteVideos && favoriteVideos.length">
+    <div *ngFor="let video of favoriteVideos">
+      <app-search-item [videoData]="video"></app-search-item>
+    </div>
+  </div>
+
+  <div *ngIf="!favoriteVideos || !favoriteVideos.length">
+    No favorites yet.
+  </div>
+</div>

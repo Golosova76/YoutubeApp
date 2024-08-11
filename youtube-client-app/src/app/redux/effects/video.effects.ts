@@ -1,15 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { YoutubeApiService } from 'app/youtube/services/youtube-api.service';
-import {
-  catchError,
-  filter,
-  map,
-  of,
-  switchMap,
-  tap,
-  withLatestFrom,
-} from 'rxjs';
+import { catchError, filter, map, of, switchMap, withLatestFrom } from 'rxjs';
 import {
   loadVideos,
   loadVideosSuccess,
