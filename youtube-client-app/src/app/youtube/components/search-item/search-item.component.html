@@ -14,6 +14,11 @@
       <app-custom-button (buttonClick)="navigateToDetail()"
                          buttonClass="button-search-item-more">more...
       </app-custom-button>
+      <app-custom-button buttonClass="button-heart"
+                         (buttonClick)="addToFavorite()">
+        <img src="assets/heart.svg"
+             alt="Favorite">
+      </app-custom-button>
     </div>
   </div>
 </article>

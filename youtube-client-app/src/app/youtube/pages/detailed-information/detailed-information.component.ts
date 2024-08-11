@@ -60,4 +60,6 @@ export class DetailedInformationComponent {
       queryParams: { search: currentSearchQuery },
     });
   }
+
+  addToFavorite() {}
 }

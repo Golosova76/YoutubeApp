@@ -25,7 +25,7 @@ export class YoutubeApiService {
 
   searchVideos(
     q: string,
-    maxResults: number = 16,
+    maxResults: number = 8,
   ): Observable<YouTubeSearchResponse> {
     const params = {
       type: 'video',
@@ -47,7 +47,7 @@ export class YoutubeApiService {
 
   searchAndFetchDetails(
     query: string,
-    maxResults: number = 16,
+    maxResults: number = 8,
   ): Observable<VideoItem[]> {
     return this.searchVideos(query, maxResults).pipe(
       switchMap((searchResponse: YouTubeSearchResponse) => {

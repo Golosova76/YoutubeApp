@@ -87,7 +87,44 @@
 }
 
 .button-admin-card-submit:disabled {
-  background-color: #cccccc; /* Серый цвет фона для неактивной кнопки */
-  cursor: not-allowed; /* Указывает, что кнопка неактивна */
-  opacity: 0.6; /* Полупрозрачный вид для неактивной кнопки */
+  background-color: #cccccc;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.button-heart {
+  width: 56px;
+  height: 56px;
+  img {
+    width: 100%;
+  }
+  background-color: initial;
+  border: none;
+  border-radius: initial;
+  box-shadow: none;
+  transition: transform 0.2s ease;
+  transform: none;
+  &:active {
+    transform: none;
+    box-shadow: none;
+  }
+  @media (any-hover: hover) {
+    &:hover {
+      background-color: initial;
+      border: none;
+      transform: scale(1.1);
+
+      .no-text-transform {
+        color: black;
+      }
+    }
+  }
+}
+
+.button-heart.detailed {
+  width: 56px;
+  height: 56px;
+  position: absolute;
+  top: 0;
+  right: 24px;
 }

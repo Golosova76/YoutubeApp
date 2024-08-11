@@ -3,6 +3,11 @@
                      buttonClass="button-details-back">
     <fa-icon [icon]="faBackward"></fa-icon>
   </app-custom-button>
+  <app-custom-button buttonClass="button-heart detailed"
+                     (buttonClick)="addToFavorite()">
+    <img src="assets/heart.svg"
+         alt="Favorite">
+  </app-custom-button>
   <div class="detail-inform-container">
     <div class="detail-inform-image">
       <img [src]="getThumbnailUrl()"

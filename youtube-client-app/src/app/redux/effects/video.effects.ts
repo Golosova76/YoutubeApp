@@ -33,7 +33,7 @@ export class VideoEffects {
       withLatestFrom(this.store.select(selectVideoState)), // Получаем данные из стора
       filter(([action]) => !!action.query && action.query.trim().length > 2),
       switchMap(([action]) => {
-        return this.youtubeService.searchAndFetchDetails(action.query, 16).pipe(
+        return this.youtubeService.searchAndFetchDetails(action.query, 8).pipe(
           map((videos) => loadVideosSuccess({ videos })),
           catchError((error) => of(loadVideosFailure({ error }))),
         );
