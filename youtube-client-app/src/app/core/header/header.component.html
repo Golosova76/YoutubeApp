@@ -21,7 +21,8 @@
              alt="Search Setting">
       </app-custom-button>
 
-      <app-custom-button buttonClass="button-login"
+      <app-custom-button *ngIf="showLoginButton"
+                         buttonClass="button-login"
                          (buttonClick)="navigateToLogin()">
         <img src="assets/login.svg"
              alt="Login">
@@ -40,6 +41,13 @@
                        (buttonClick)="createCard()"
                        buttonClass="button-create-card">
       Create card
+    </app-custom-button>
+
+    <app-custom-button *ngIf="showFavoriteButton"
+                       buttonClass="button-heart"
+                       (buttonClick)="navigateTofavorite()">
+      <img [src]="isFavoritePage ? 'assets/heart_select.svg' : 'assets/heart.svg'"
+           alt="Favorite">
     </app-custom-button>
 
   </div>

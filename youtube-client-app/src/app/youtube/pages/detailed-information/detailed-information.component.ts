@@ -12,6 +12,14 @@ import { getThumbnailUrl } from 'app/shared/utils/utils';
 import { CustomButtonComponent } from 'app/shared/custom-button/custom-button.component';
 import { Router } from '@angular/router';
 import { SearchService } from 'app/youtube/services/search.service';
+import { Store } from '@ngrx/store';
+import { AppState } from 'app/redux/state/app.state';
+import { map, Subject, takeUntil } from 'rxjs';
+import { selectFavoriteIds } from 'app/redux/selectors/favorite.selectors';
+import {
+  addFavorite,
+  removeFavorite,
+} from 'app/redux/actions/favorite.actions';
 
 @Component({
   selector: 'app-detailed-information',
@@ -31,20 +39,40 @@ export class DetailedInformationComponent {
 
   faBackward = faBackward;
 
+  isFavorite: boolean = false;
+  private destroy$ = new Subject<void>();
+
   constructor(
     private videoDataService: VideoDataService,
     private router: Router,
     private searchService: SearchService,
+    private store: Store<AppState>,
   ) {}
 
   ngOnInit(): void {
     // Загружаем данные, не удаляем их
     this.videoData = this.videoDataService.currentVideoData;
+    // Подписываемся на список избранных видео, чтобы определить, является ли текущее видео избранным
+    if (this.videoData) {
+      this.store
+        .select(selectFavoriteIds)
+        .pipe(
+          map((favoriteIds: string[]) =>
+            favoriteIds.includes(this.videoData!.id),
+          ),
+          takeUntil(this.destroy$),
+        )
+        .subscribe((isFavorite) => {
+          this.isFavorite = isFavorite;
+        });
+    }
   }
 
   ngOnDestroy(): void {
     // Очищаем данные при уничтожении компонента
     this.videoDataService.clearVideoData();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   getThumbnailUrl(): string {
@@ -61,5 +89,16 @@ export class DetailedInformationComponent {
     });
   }
 
-  addToFavorite() {}
+  addToFavorite() {
+    if (this.isFavorite) {
+      this.store.dispatch(removeFavorite({ videoId: this.videoData!.id }));
+    } else {
+      this.store.dispatch(addFavorite({ videoId: this.videoData!.id }));
+    }
+  }
+
+  // Метод для получения пути к изображению сердечка в зависимости от состояния
+  getHeartIcon(): string {
+    return this.isFavorite ? 'assets/heart_select.svg' : 'assets/heart.svg';
+  }
 }

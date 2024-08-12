@@ -5,7 +5,7 @@
   </app-custom-button>
   <app-custom-button buttonClass="button-heart detailed"
                      (buttonClick)="addToFavorite()">
-    <img src="assets/heart.svg"
+    <img [src]="getHeartIcon()"
          alt="Favorite">
   </app-custom-button>
   <div class="detail-inform-container">

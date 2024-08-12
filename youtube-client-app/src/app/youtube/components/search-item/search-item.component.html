@@ -16,11 +16,11 @@
       </app-custom-button>
       <app-custom-button buttonClass="button-heart"
                          (buttonClick)="addToFavorite()">
-        <img src="assets/heart.svg"
+        <img [src]="getHeartIcon()"
              alt="Favorite">
       </app-custom-button>
     </div>
   </div>
 </article>
 <span class="search-item-line"
-      [appDateBackground]="videoData?.snippet?.publishedAt"></span>
+      [appDateBackground]="videoData.snippet.publishedAt"></span>

@@ -22,11 +22,17 @@ export class VideoEffects {
   loadVideos$ = createEffect(() =>
     this.actions$.pipe(
       ofType(loadVideos),
-      withLatestFrom(this.store.select(selectVideoState)), // Получаем данные из стора
+      withLatestFrom(this.store.select(selectVideoState)),
       filter(([action]) => !!action.query && action.query.trim().length > 2),
       switchMap(([action]) => {
         return this.youtubeService.searchAndFetchDetails(action.query, 8).pipe(
-          map((videos) => loadVideosSuccess({ videos })),
+          map((videos) => {
+            const videoEntities = videos.reduce((entities, video) => {
+              return { ...entities, [video.id]: video };
+            }, {});
+            const videoListIds = videos.map((video) => video.id);
+            return loadVideosSuccess({ videoEntities, videoListIds });
+          }),
           catchError((error) => of(loadVideosFailure({ error }))),
         );
       }),

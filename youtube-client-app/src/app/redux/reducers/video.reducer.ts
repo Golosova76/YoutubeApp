@@ -7,7 +7,9 @@ import {
 } from '../actions/actions';
 
 export const initialVideoState: VideoState = {
-  items: [],
+  videoEntities: {},
+  videoListIds: [],
+  favoriteIds: [],
   loading: false,
   error: null,
 };
@@ -20,9 +22,10 @@ export const videosReducer = createReducer<VideoState>(
     loading: true,
     error: null,
   })),
-  on(loadVideosSuccess, (state, { videos }) => ({
+  on(loadVideosSuccess, (state, { videoEntities, videoListIds }) => ({
     ...state,
-    items: videos,
+    videoEntities: { ...state.videoEntities, ...videoEntities },
+    videoListIds,
     loading: false,
     error: null,
   })),

@@ -1,5 +1,6 @@
 import { CustomCard, VideoItem } from 'app/shared/models/search-item.model';
-
+//корневая структура state приложения
+//объединяет разные slice state
 export interface AppState {
   videos: VideoState;
   customCards: CustomCard[];
@@ -9,34 +10,6 @@ export interface AppState {
   };
 }
 
-export interface VideoState {
-  items: VideoItem[];
-  loading: boolean;
-  error: Error | null;
-}
-
-export const initialState: AppState = {
-  videos: {
-    items: [],
-    loading: false,
-    error: null,
-  },
-  customCards: [],
-  pagination: {
-    currentPage: 1,
-    pageTokens: {},
-  },
-};
-
-/*
-export interface AppState {
-  videos: VideoState;
-  customCards: CustomCard[];
-  pagination: {
-    currentPage: number;
-    pageTokens: { [key: number]: string };
-  };
-}
 export interface VideoState {
   videoEntities: { [id: string]: VideoItem }; // Объект, где ключ - videoId, значение - данные видео
   videoListIds: string[]; // Массив идентификаторов для списка видео
@@ -45,6 +18,7 @@ export interface VideoState {
   error: Error | null;
 }
 
+//Начальное состояние store
 export const initialState: AppState = {
   videos: {
     videoEntities: {}, // Пустой объект для видео
@@ -59,4 +33,3 @@ export const initialState: AppState = {
     pageTokens: {},
   },
 };
-*/

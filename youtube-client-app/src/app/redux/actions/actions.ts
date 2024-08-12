@@ -8,7 +8,10 @@ export const loadVideos = createAction(
 );
 export const loadVideosSuccess = createAction(
   '[Effect] Load Videos Success',
-  props<{ videos: VideoItem[] }>(),
+  props<{
+    videoEntities: { [id: string]: VideoItem };
+    videoListIds: string[];
+  }>(),
 );
 export const loadVideosFailure = createAction(
   '[Effect] Load Videos Failure',
@@ -23,10 +26,4 @@ export const addCustomCard = createAction(
 export const deleteCustomCard = createAction(
   '[Custom Card] Delete',
   props<{ cardId: string }>(),
-);
-
-// Фильтровать и объединять видео и кастомные карточки по поисковому запросу
-export const filterAndCombineCards = createAction(
-  '[Video/Card List] Filter and Combine Cards',
-  props<{ query: string }>(),
 );

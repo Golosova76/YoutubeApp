@@ -31,6 +31,13 @@ const routes: Routes = [
             './youtube/pages/detailed-information/detailed-information.component'
           ).then((m) => m.DetailedInformationComponent),
       },
+      {
+        path: 'favorite',
+        loadComponent: () =>
+          import('./youtube/pages/favorite/favorite.component').then(
+            (m) => m.FavoriteVideosComponent,
+          ),
+      },
     ],
   },
   {

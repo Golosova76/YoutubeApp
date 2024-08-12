@@ -70,7 +70,6 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
       console.log('Current state:', state); // Выводим текущее состояние в консоль
     });
 
-    this.filteredVideos$ = this.store.select(selectFilteredVideos);
     this.customCards$ = this.store.select(selectCustomCards);
 
     // Проверка, что селектор `selectCustomCards` возвращает Observable
@@ -99,6 +98,9 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
         }),
       )
       .subscribe();
+
+    // Обновляем поток filteredVideos$ при изменении строки поиска
+    this.filteredVideos$ = this.store.select(selectFilteredVideos(''));
 
     this.filteredVideos$
       .pipe(takeUntil(this.destroy$))
@@ -135,12 +137,6 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
   filterCustomCards(searchString: string) {
     this.filteredCustomCards = this.filteredCustomCards.filter((card) =>
       card.title.toLowerCase().includes(searchString.toLowerCase()),
-    );
-  }
-
-  filterVideos(searchString: string) {
-    this.filteredVideos = this.filteredVideos.filter((item) =>
-      item.snippet.title.toLowerCase().includes(searchString.toLowerCase()),
     );
   }
 
