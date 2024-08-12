@@ -29,6 +29,10 @@ import { AppState, VideoState } from 'app/redux/state/app.state';
 import { selectFilteredVideos } from 'app/redux/selectors/video.selectors';
 import { CustomCardComponent } from 'app/youtube/components/custom-card/custom-card.component';
 import { selectCustomCards } from 'app/redux/selectors/custom-card.selectors';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faBackward } from '@fortawesome/free-solid-svg-icons';
+import { CustomButtonComponent } from 'app/shared/custom-button/custom-button.component';
+import { selectPaginationState } from 'app/redux/selectors/pagination.selectors';
 
 @Component({
   selector: 'app-search-results',
@@ -42,6 +46,8 @@ import { selectCustomCards } from 'app/redux/selectors/custom-card.selectors';
     FilterVideosPipe,
     CustomCardComponent,
     FilterCustomCardsPipe,
+    FontAwesomeModule,
+    CustomButtonComponent,
   ],
 })
 export class SearchResultsComponent implements OnInit, OnDestroy {
@@ -55,6 +61,12 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
   filteredVideos$!: Observable<VideoItem[]>;
   customCards$!: Observable<CustomCard[]>;
   customCards: CustomCard[] = [];
+
+  public currentPage: number = 1; // Текущая страница
+  public hasNextPage: boolean = false; // Флаг для наличия следующей страницы
+  public hasPreviousPage: boolean = false; // Флаг для наличия предыдущей страницы
+
+  faBackward = faBackward;
 
   constructor(
     private router: Router,
@@ -93,6 +105,7 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$),
         tap((query: string) => {
           const safeValue = query ?? '';
+          this.currentPage = 1;
           this.updateSearchQueryInURL(safeValue);
           this.store.dispatch(loadVideos({ query: safeValue }));
         }),
@@ -119,6 +132,33 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
         console.log(this.filteredCustomCards);
         this.updateSearchResultsVisibility();
       });
+    // Подписка на изменения состояния пагинации
+    this.store
+      .select(selectPaginationState)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((paginationState) => {
+        this.currentPage = paginationState.currentPage;
+        this.hasNextPage = !!paginationState.pageTokens[this.currentPage + 1]; // Проверка наличия следующей страницы
+        this.hasPreviousPage = this.currentPage > 1; // Проверка наличия предыдущей страницы
+      });
+  }
+
+  // Метод для загрузки следующей страницы
+  loadNextPage() {
+    if (this.hasNextPage) {
+      this.store.dispatch(
+        loadVideos({ query: this.route.snapshot.queryParams['search'] }),
+      );
+    }
+  }
+
+  // Метод для загрузки предыдущей страницы
+  loadPreviousPage() {
+    if (this.hasPreviousPage) {
+      this.store.dispatch(
+        loadVideos({ query: this.route.snapshot.queryParams['search'] }),
+      );
+    }
   }
 
   private updateSearchQueryInURL(query: string) {

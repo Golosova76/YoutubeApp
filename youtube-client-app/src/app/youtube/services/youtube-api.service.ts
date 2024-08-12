@@ -25,14 +25,27 @@ export class YoutubeApiService {
 
   searchVideos(
     q: string,
-    maxResults: number = 8,
+    maxResults: number = 40,
+    nextPageToken?: string,
   ): Observable<YouTubeSearchResponse> {
-    const params = {
+    const params: {
+      type: string;
+      part: string;
+      maxResults: number;
+      q: string;
+      pageToken?: string; // Здесь добавляем токен страницы как опциональный параметр
+    } = {
       type: 'video',
       part: 'snippet',
       maxResults,
       q,
     };
+
+    // Если передан токен страницы, добавляем его в параметры запроса
+    if (nextPageToken) {
+      params.pageToken = nextPageToken;
+    }
+
     return this.http.get<YouTubeSearchResponse>(this.searchUrl, { params });
   }
 
@@ -47,20 +60,19 @@ export class YoutubeApiService {
 
   searchAndFetchDetails(
     query: string,
-    maxResults: number = 8,
-  ): Observable<VideoItem[]> {
-    return this.searchVideos(query, maxResults).pipe(
+    maxResults: number = 40,
+    nextPageToken?: string, // Используем nextPageToken вместо pageToken
+  ): Observable<YouTubeVideoListResponse> {
+    return this.searchVideos(query, maxResults, nextPageToken).pipe(
       switchMap((searchResponse: YouTubeSearchResponse) => {
         const videoIds = searchResponse.items.map((item) => item.id.videoId);
-        return this.getVideoStatistics(videoIds);
+        return this.getVideoStatistics(videoIds).pipe(
+          map((videoDetailsResponse: YouTubeVideoListResponse) => ({
+            ...createVideosData(videoDetailsResponse), // Объединяем полученные данные
+            nextPageToken: searchResponse.nextPageToken, // Передаем nextPageToken из searchResponse
+          })),
+        );
       }),
-      map((videoDetailsResponse: YouTubeVideoListResponse) =>
-        createVideosData(videoDetailsResponse),
-      ),
-      map(
-        (processedResponse: YouTubeVideoListResponse) =>
-          processedResponse.items,
-      ),
     );
   }
 }
