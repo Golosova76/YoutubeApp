@@ -4,18 +4,11 @@ import { CustomCard, VideoItem } from 'app/shared/models/search-item.model';
 export interface AppState {
   videos: VideoState;
   customCards: CustomCard[];
-  pagination: PaginationState;
+  pagination: {
+    currentPage: number;
+    pageTokens: { [key: number]: string };
+  };
 }
-
-export interface PaginationState {
-  currentPage: number;
-  pageTokens: { [key: number]: string }; // Ассоциативный массив токенов страниц
-}
-
-export const initialPaginationState: PaginationState = {
-  currentPage: 1,
-  pageTokens: {},
-};
 
 export interface VideoState {
   videoEntities: { [id: string]: VideoItem }; // Объект, где ключ - videoId, значение - данные видео
@@ -35,5 +28,8 @@ export const initialState: AppState = {
     error: null,
   },
   customCards: [],
-  pagination: initialPaginationState,
+  pagination: {
+    currentPage: 1,
+    pageTokens: {},
+  },
 };

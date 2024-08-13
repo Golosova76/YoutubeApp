@@ -14,7 +14,6 @@ import { videosReducer } from './redux/reducers/video.reducer';
 import { VideoEffects } from './redux/effects/video.effects';
 import { customCardReducer } from './redux/reducers/custom-card.reducer';
 import { videoFavoriteReducer } from './redux/reducers/favorite.reducer';
-import { paginationReducer } from './redux/reducers/pagination.reducer';
 
 @NgModule({
   declarations: [],
@@ -27,7 +26,6 @@ import { paginationReducer } from './redux/reducers/pagination.reducer';
       videos: videosReducer,
       customCards: customCardReducer,
       favoriteVideos: videoFavoriteReducer,
-      pagination: paginationReducer,
     }),
     EffectsModule.forRoot([VideoEffects]),
   ],

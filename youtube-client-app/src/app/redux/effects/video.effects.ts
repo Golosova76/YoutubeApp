@@ -8,71 +8,33 @@ import {
   loadVideosFailure,
 } from '../actions/actions';
 import { Store } from '@ngrx/store';
-import { AppState } from '../state/app.state';
+import { VideoState } from '../state/app.state';
 import { selectVideoState } from '../selectors/video.selectors';
-import { selectCustomCards } from '../selectors/custom-card.selectors';
-import { selectPaginationState } from '../selectors/pagination.selectors';
-import { setPageToken } from '../actions/pagination.actions';
 
 @Injectable()
 export class VideoEffects {
   constructor(
     private actions$: Actions,
     private youtubeService: YoutubeApiService,
-    private store: Store<AppState>,
+    private store: Store<{ videos: VideoState }>,
   ) {}
 
   loadVideos$ = createEffect(() =>
     this.actions$.pipe(
       ofType(loadVideos),
-      withLatestFrom(
-        this.store.select(selectCustomCards), // Получаем пользовательские карточки
-        this.store.select(selectPaginationState),
-      ),
-      switchMap(([action, customCards, paginationState]) => {
-        const numberOfCustomCards = customCards.length;
-        const remainingSlots = 40 - numberOfCustomCards;
-
-        if (remainingSlots <= 0) {
-          // Если у нас уже достаточно пользовательских карточек, просто возвращаем пустой успех
-          return of(loadVideosSuccess({ videoEntities: {}, videoListIds: [] }));
-        }
-
-        const pageToken =
-          paginationState.pageTokens[paginationState.currentPage] || '';
-
-        return this.youtubeService
-          .searchAndFetchDetails(action.query, remainingSlots, pageToken)
-          .pipe(
-            switchMap((response) => {
-              const { items: videos, nextPageToken } = response;
-
-              const videoEntities = videos.reduce((entities, video) => {
-                return { ...entities, [video.id]: video };
-              }, {});
-              const videoListIds = videos.map((video) => video.id);
-
-              // Сначала отправляем действие с загруженными видео
-              const successAction = loadVideosSuccess({
-                videoEntities,
-                videoListIds,
-              });
-
-              // Если есть nextPageToken, отправляем действие для его сохранения
-              const pageTokenAction = nextPageToken
-                ? setPageToken({
-                    pageNumber: paginationState.currentPage + 1,
-                    pageToken: nextPageToken,
-                  })
-                : null;
-
-              // Возвращаем действия одно за другим
-              return pageTokenAction
-                ? [successAction, pageTokenAction] // Возвращаем оба действия
-                : [successAction]; // Если нет токена, возвращаем только действие загрузки видео
-            }),
-            catchError((error) => of(loadVideosFailure({ error }))),
-          );
+      withLatestFrom(this.store.select(selectVideoState)),
+      filter(([action]) => !!action.query && action.query.trim().length > 2),
+      switchMap(([action]) => {
+        return this.youtubeService.searchAndFetchDetails(action.query, 8).pipe(
+          map((videos) => {
+            const videoEntities = videos.reduce((entities, video) => {
+              return { ...entities, [video.id]: video };
+            }, {});
+            const videoListIds = videos.map((video) => video.id);
+            return loadVideosSuccess({ videoEntities, videoListIds });
+          }),
+          catchError((error) => of(loadVideosFailure({ error }))),
+        );
       }),
     ),
   );

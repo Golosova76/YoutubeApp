@@ -20,20 +20,5 @@
       No results found.
     </div>
 
-    <!-- Кнопки для перехода между страницами -->
-    <div class="pagination-buttons">
-      <app-custom-button *ngIf="hasPreviousPage"
-                         (click)="loadPreviousPage()"
-                         buttonClass="button-prev-page">
-        <fa-icon [icon]="faBackward"></fa-icon>
-      </app-custom-button>
-      <app-custom-button *ngIf="hasNextPage"
-                         (click)="loadNextPage()"
-                         buttonClass="button-next-page">
-        <fa-icon [icon]="faBackward"></fa-icon>
-      </app-custom-button>
-    </div>
-
-
   </div>
 </div>

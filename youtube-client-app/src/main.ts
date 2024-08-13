@@ -16,7 +16,6 @@ import { VideoEffects } from 'app/redux/effects/video.effects';
 import { videosReducer } from 'app/redux/reducers/video.reducer';
 import { customCardReducer } from 'app/redux/reducers/custom-card.reducer';
 import { videoFavoriteReducer } from 'app/redux/reducers/favorite.reducer';
-import { paginationReducer } from 'app/redux/reducers/pagination.reducer';
 
 bootstrapApplication(AppComponent, {
   providers: [
@@ -32,7 +31,6 @@ bootstrapApplication(AppComponent, {
       videos: videosReducer,
       customCards: customCardReducer,
       favoriteVideos: videoFavoriteReducer,
-      pagination: paginationReducer,
     }),
     provideEffects([VideoEffects]),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),

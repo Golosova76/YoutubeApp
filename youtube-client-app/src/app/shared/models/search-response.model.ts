@@ -10,7 +10,6 @@ export interface PageInfo {
 export interface YouTubeVideoListResponse {
   kind: string;
   etag: string;
-  nextPageToken?: string;
   pageInfo: PageInfo;
   items: VideoItem[];
 }
