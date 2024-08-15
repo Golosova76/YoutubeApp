@@ -1,18 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { FavoriteComponent } from './favorite.component';
+import { provideMockStore } from '@ngrx/store/testing'; // Импортируем provideMockStore
+import { FavoriteVideosComponent } from './favorite.component';
 
 describe('FavoriteComponent', () => {
-  let component: FavoriteComponent;
-  let fixture: ComponentFixture<FavoriteComponent>;
+  let component: FavoriteVideosComponent;
+  let fixture: ComponentFixture<FavoriteVideosComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [FavoriteComponent]
-    })
-    .compileComponents();
+      imports: [FavoriteVideosComponent],
+      providers: [
+        provideMockStore(), // Добавляем provideMockStore для предоставления Store
+      ],
+    }).compileComponents();
 
-    fixture = TestBed.createComponent(FavoriteComponent);
+    fixture = TestBed.createComponent(FavoriteVideosComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

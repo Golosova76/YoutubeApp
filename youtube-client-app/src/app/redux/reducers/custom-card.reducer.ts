@@ -11,3 +11,6 @@ export const customCardReducer = createReducer<CustomCard[]>(
     state.filter((card) => card.id !== cardId),
   ),
 );
+
+// Экспортируем редьюсер и начальное состояние
+export { customCardReducer as reducer, initialCustomCard as initialState };

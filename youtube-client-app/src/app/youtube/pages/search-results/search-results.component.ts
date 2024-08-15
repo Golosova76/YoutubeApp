@@ -25,7 +25,7 @@ import { FormControl } from '@angular/forms';
 import { DEBOUNCE_TIME_MS } from 'app/shared/utils/utils';
 import { loadVideos } from 'app/redux/actions/actions';
 import { Store } from '@ngrx/store';
-import { AppState, VideoState } from 'app/redux/state/app.state';
+import { AppState } from 'app/redux/state/app.state';
 import { selectFilteredVideos } from 'app/redux/selectors/video.selectors';
 import { CustomCardComponent } from 'app/youtube/components/custom-card/custom-card.component';
 import { selectCustomCards } from 'app/redux/selectors/custom-card.selectors';
