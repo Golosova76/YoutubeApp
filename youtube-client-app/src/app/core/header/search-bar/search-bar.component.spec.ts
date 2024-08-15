@@ -8,7 +8,7 @@ describe('SearchBarComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [SearchBarComponent],
+      imports: [SearchBarComponent],
     });
     fixture = TestBed.createComponent(SearchBarComponent);
     component = fixture.componentInstance;

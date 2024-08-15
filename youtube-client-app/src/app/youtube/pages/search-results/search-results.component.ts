@@ -84,7 +84,7 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
       });
   }
 
-  private updateSearchQueryInURL(query: string) {
+  updateSearchQueryInURL(query: string) {
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: { search: query },

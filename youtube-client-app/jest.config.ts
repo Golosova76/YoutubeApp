@@ -17,6 +17,8 @@ const config: Config = {
   moduleFileExtensions: ['ts', 'html', 'js', 'json'],
   moduleNameMapper: {
     '^@src/(.*)$': '<rootDir>/src/$1',
+    '^app/(.*)$': '<rootDir>/src/app/$1',
+    '^environments/(.*)$': '<rootDir>/src/environments/$1',
   },
   testMatch: ['**/+(*.)+(spec).+(ts|js)?(x)'],
   collectCoverage: true,
