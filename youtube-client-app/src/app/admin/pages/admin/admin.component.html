@@ -1,7 +1,5 @@
 <div class="form-admin-card-container">
   <form [formGroup]="cardForm"
-        action="#"
-        method="post"
         autocomplete="on"
         class="form-card"
         (ngSubmit)="onCreateCard()">
@@ -105,7 +103,8 @@
                            buttonClass="button-admin-reset">Reset</app-custom-button>
       </div>
 
-      <app-custom-button type="submit"
+      <app-custom-button type="button"
+                         (buttonClick)="onCreateCard(); navigateToLogin()"
                          buttonClass="button-admin-card-submit"
                          [disabled]="!cardForm.valid">
         Create card

@@ -14,6 +14,10 @@ import { InputComponent } from 'app/shared/input/input.component';
 import { CustomButtonComponent } from 'app/shared/custom-button/custom-button.component';
 import { futureDateValidator } from 'app/shared/utils/validators';
 import { getErrorMessage } from 'app/shared/utils/error-messages';
+import { CustomCard } from 'app/shared/models/search-item.model';
+import { Store } from '@ngrx/store';
+import { addCustomCard } from 'app/redux/actions/actions';
+import { generateUUID } from 'app/shared/utils/utils';
 
 @Component({
   selector: 'app-admin',
@@ -33,6 +37,7 @@ export class AdminComponent {
   constructor(
     private router: Router,
     private fb: FormBuilder,
+    private store: Store<{ customCards: CustomCard }>,
   ) {}
 
   ngOnInit() {
@@ -111,11 +116,32 @@ export class AdminComponent {
 
   onCreateCard() {
     if (this.cardForm.valid) {
-      console.log('Submitting card data:', this.cardForm.value);
-      // Дальнейшая логика после отправки формы
+      const formData = this.cardForm.value;
+
+      const creationDate = new Date(formData.createDate);
+
+      // Создаем объект CustomCard
+      const newCard: CustomCard = {
+        id: generateUUID(),
+        title: formData.title,
+        description: formData.description,
+        imageUrl: formData.imgCard,
+        videoUrl: formData.linkVideo,
+        creationDate: creationDate,
+      };
+
+      // Диспатчим действие для добавления карточки
+      console.log(newCard);
+      this.store.dispatch(addCustomCard({ card: newCard }));
+      console.log('Dispatched new card:', newCard);
+      this.resetForm();
     } else {
       this.cardForm.markAllAsTouched();
       console.error('Form is invalid');
     }
+  }
+
+  navigateToLogin() {
+    this.router.navigate(['youtube', 'search-results']);
   }
 }

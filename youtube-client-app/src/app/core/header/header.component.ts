@@ -35,9 +35,14 @@ export class HeaderComponent {
 
   showLogoutButton: boolean = false;
 
+  showLoginButton: boolean = true;
+
   showCreateCardButton: boolean = false;
 
+  showFavoriteButton: boolean = false;
+
   public sortPanelVisible: boolean = false;
+  isFavoritePage: boolean = false; // Переменная для отслеживания страницы "Избранное"
 
   searchControl = new FormControl('');
 
@@ -53,11 +58,14 @@ export class HeaderComponent {
     this.updateLogoutButtonVisibility();
     this.router.events
       .pipe(
-        filter((event) => event instanceof NavigationEnd),
+        filter(
+          (event): event is NavigationEnd => event instanceof NavigationEnd,
+        ),
         takeUntil(this.destroy$),
       )
-      .subscribe(() => {
+      .subscribe((event: NavigationEnd) => {
         this.updateLogoutButtonVisibility();
+        this.isFavoritePage = event.urlAfterRedirects.includes('favorite'); // Отслеживаем, находимся ли на странице "Избранное"
       });
     // Подписка на изменения значения поиска через EventEmitter
     this.searchInput.valueChange
@@ -84,6 +92,7 @@ export class HeaderComponent {
       .subscribe((isLoggedIn) => {
         this.showLogoutButton = isLoggedIn;
         this.showCreateCardButton = isLoggedIn;
+        this.showFavoriteButton = isLoggedIn;
       });
   }
   onSearchInputChange(query: string): void {
@@ -109,6 +118,10 @@ export class HeaderComponent {
     this.router.navigate(['auth']);
   }
 
+  navigateTofavorite() {
+    this.router.navigate(['youtube', 'favorite']);
+  }
+
   logout() {
     this.loginService.logout();
     this.updateLogoutButtonVisibility();
@@ -116,7 +129,10 @@ export class HeaderComponent {
   }
 
   updateLogoutButtonVisibility() {
-    this.showLogoutButton = this.loginService.isLoggedIn();
+    const isLoggedIn = this.loginService.isLoggedIn();
+    this.showLogoutButton = isLoggedIn;
+    this.showLoginButton = !isLoggedIn;
+    this.showFavoriteButton = isLoggedIn;
   }
 
   createCard() {

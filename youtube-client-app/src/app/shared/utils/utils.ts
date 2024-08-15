@@ -13,3 +13,11 @@ export function getThumbnailUrl(videoData?: VideoItem): string {
 }
 
 export const DEBOUNCE_TIME_MS = 1000;
+
+export function generateUUID(): string {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+    const r = (Math.random() * 8) | 0,
+      v = c == 'x' ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
+}
