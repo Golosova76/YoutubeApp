@@ -5,7 +5,6 @@ import {
   EventEmitter,
   forwardRef,
   Input,
-  OnDestroy,
   OnInit,
   Output,
   ViewChild,

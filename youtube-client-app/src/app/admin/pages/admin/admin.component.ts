@@ -131,9 +131,7 @@ export class AdminComponent {
       };
 
       // Диспатчим действие для добавления карточки
-      console.log(newCard);
       this.store.dispatch(addCustomCard({ card: newCard }));
-      console.log('Dispatched new card:', newCard);
       this.resetForm();
     } else {
       this.cardForm.markAllAsTouched();

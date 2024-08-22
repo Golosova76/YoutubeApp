@@ -60,7 +60,6 @@ export class LoginFormComponent {
     } else {
       // Отметить все поля формы как "затронутые", чтобы показать ошибки
       this.loginForm.markAllAsTouched();
-      console.log('Form is invalid');
     }
   }
 

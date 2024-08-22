@@ -8,7 +8,7 @@ import { SearchItemComponent } from '../../components/search-item/search-item.co
 import { CustomButtonComponent } from 'app/shared/custom-button/custom-button.component';
 import { Store } from '@ngrx/store';
 import { AppState } from 'app/redux/state/app.state';
-import { Observable, Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { VideoItem } from 'app/shared/models/search-item.model';
 import { selectFavoriteVideos } from 'app/redux/selectors/favorite.selectors';
 import { Router } from '@angular/router';

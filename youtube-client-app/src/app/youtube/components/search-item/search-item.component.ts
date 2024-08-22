@@ -12,7 +12,7 @@ import { getThumbnailUrl } from 'app/shared/utils/utils';
 import { Store } from '@ngrx/store';
 import { AppState } from 'app/redux/state/app.state';
 import { selectFavoriteIds } from 'app/redux/selectors/favorite.selectors';
-import { map, Observable, Subject, take, takeUntil } from 'rxjs';
+import { map, Subject, takeUntil } from 'rxjs';
 import {
   addFavorite,
   removeFavorite,
