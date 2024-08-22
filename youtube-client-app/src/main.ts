@@ -3,12 +3,19 @@ import {
   provideHttpClient,
   withInterceptorsFromDi,
 } from '@angular/common/http';
-import { importProvidersFrom } from '@angular/core';
+import { importProvidersFrom, isDevMode } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from 'app/app-routing.module';
 import { AppComponent } from 'app/app.component';
 import { YoutubeApiInterceptorService } from 'app/youtube/services/interceptor/youtube-api-interceptor.service';
+import { provideStore } from '@ngrx/store';
+import { provideEffects } from '@ngrx/effects';
+import { provideStoreDevtools } from '@ngrx/store-devtools';
+import { VideoEffects } from 'app/redux/effects/video.effects';
+import { videosReducer } from 'app/redux/reducers/video.reducer';
+import { customCardReducer } from 'app/redux/reducers/custom-card.reducer';
+import { videoFavoriteReducer } from 'app/redux/reducers/favorite.reducer';
 
 bootstrapApplication(AppComponent, {
   providers: [
@@ -20,5 +27,12 @@ bootstrapApplication(AppComponent, {
       useClass: YoutubeApiInterceptorService,
       multi: true,
     },
+    provideStore({
+      videos: videosReducer,
+      customCards: customCardReducer,
+      favoriteVideos: videoFavoriteReducer,
+    }),
+    provideEffects([VideoEffects]),
+    provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
   ],
 }).catch((err) => console.error(err));

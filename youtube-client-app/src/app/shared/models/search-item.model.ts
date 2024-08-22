@@ -47,3 +47,12 @@ export interface VideoItem {
   snippet: VideoSnippet;
   statistics: VideoStatistics;
 }
+
+export interface CustomCard {
+  id: string;
+  title: string;
+  description: string;
+  imageUrl: string;
+  videoUrl: string;
+  creationDate: Date;
+}

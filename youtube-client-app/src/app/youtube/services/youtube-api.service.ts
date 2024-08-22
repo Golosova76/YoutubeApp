@@ -25,7 +25,7 @@ export class YoutubeApiService {
 
   searchVideos(
     q: string,
-    maxResults: number = 16,
+    maxResults: number = 8,
   ): Observable<YouTubeSearchResponse> {
     const params = {
       type: 'video',
@@ -45,34 +45,9 @@ export class YoutubeApiService {
     return this.http.get<YouTubeVideoListResponse>(this.videosUrl, { params });
   }
 
-  /*
-  searchAndFetchDetails(query: string, maxResults: number = 16): void {
-    this.searchVideos(query, maxResults)
-      .pipe(
-        switchMap((searchResponse: YouTubeSearchResponse) => {
-          const videoIds = searchResponse.items.map((item) => item.id.videoId);
-          return this.getVideoStatistics(videoIds);
-        }),
-        map((videoDetailsResponse: YouTubeVideoListResponse) =>
-          createVideosData(videoDetailsResponse),
-        ),
-        map(
-          (processedResponse: YouTubeVideoListResponse) =>
-            processedResponse.items,
-        ),
-      )
-      .subscribe({
-        next: (videos) => {
-          this.videosSubject.next(videos);
-        },
-        error: (error) => console.error('Error fetching videos', error),
-      });
-  }
-      */
-
   searchAndFetchDetails(
     query: string,
-    maxResults: number = 16,
+    maxResults: number = 8,
   ): Observable<VideoItem[]> {
     return this.searchVideos(query, maxResults).pipe(
       switchMap((searchResponse: YouTubeSearchResponse) => {

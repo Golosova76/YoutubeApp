@@ -14,11 +14,31 @@ const routes: Routes = [
   },
   {
     path: 'youtube',
-    loadChildren: () =>
-      import('./youtube/youtube-routing.module').then(
-        (m) => m.YoutubeRoutingModule,
-      ),
     canActivate: [authGuard],
+    children: [
+      { path: '', redirectTo: 'search-results', pathMatch: 'full' },
+      {
+        path: 'search-results',
+        loadComponent: () =>
+          import(
+            './youtube/pages/search-results/search-results.component'
+          ).then((m) => m.SearchResultsComponent),
+      },
+      {
+        path: 'detailed-information/:id',
+        loadComponent: () =>
+          import(
+            './youtube/pages/detailed-information/detailed-information.component'
+          ).then((m) => m.DetailedInformationComponent),
+      },
+      {
+        path: 'favorite',
+        loadComponent: () =>
+          import('./youtube/pages/favorite/favorite.component').then(
+            (m) => m.FavoriteVideosComponent,
+          ),
+      },
+    ],
   },
   {
     path: 'admin',

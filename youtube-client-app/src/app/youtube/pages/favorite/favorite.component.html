@@ -1,0 +1,19 @@
+<div class="main-favorite-container">
+  <h1 class="main-favorite-title">Your Favorites</h1>
+
+  <app-custom-button (buttonClick)="navigateToDetail()"
+                     buttonClass="button-favorites-back">
+    <fa-icon [icon]="faBackward"></fa-icon>
+  </app-custom-button>
+
+  <div class="video-list-container"
+       *ngIf="favoriteVideos && favoriteVideos.length">
+    <div *ngFor="let video of favoriteVideos">
+      <app-search-item [videoData]="video"></app-search-item>
+    </div>
+  </div>
+
+  <div *ngIf="!favoriteVideos || !favoriteVideos.length">
+    No favorites yet.
+  </div>
+</div>
