@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal, WritableSignal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable, Subject, switchMap } from 'rxjs';
 import { environment } from 'environments/environment';
@@ -8,18 +8,17 @@ import {
 } from 'app/shared/models/search-response.model';
 import { YouTubeSearchResponse } from 'app/shared/models/search-list-api.model';
 import { VideoItem } from 'app/shared/models/search-item.model';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Injectable({
   providedIn: 'root',
 })
 export class YoutubeApiService {
   private searchUrl = environment.youtubeSearchUrl;
-
   private videosUrl = environment.youtubeVideosUrl;
 
-  private videosSubject = new Subject<VideoItem[]>();
-
-  public videos$ = this.videosSubject.asObservable();
+  // Используем WritableSignal для возможности изменения данных
+  public videosSignal: WritableSignal<VideoItem[]> = signal<VideoItem[]>([]);
 
   constructor(private http: HttpClient) {}
 
@@ -45,22 +44,19 @@ export class YoutubeApiService {
     return this.http.get<YouTubeVideoListResponse>(this.videosUrl, { params });
   }
 
-  searchAndFetchDetails(
-    query: string,
-    maxResults: number = 8,
-  ): Observable<VideoItem[]> {
-    return this.searchVideos(query, maxResults).pipe(
+  searchAndFetchDetails(query: string, maxResults: number = 8): void {
+    const videosObservable = this.searchVideos(query, maxResults).pipe(
       switchMap((searchResponse: YouTubeSearchResponse) => {
         const videoIds = searchResponse.items.map((item) => item.id.videoId);
         return this.getVideoStatistics(videoIds);
       }),
-      map((videoDetailsResponse: YouTubeVideoListResponse) =>
-        createVideosData(videoDetailsResponse),
-      ),
-      map(
-        (processedResponse: YouTubeVideoListResponse) =>
-          processedResponse.items,
-      ),
+      map((videoDetailsResponse: YouTubeVideoListResponse) => {
+        return videoDetailsResponse.items;
+      }),
     );
+
+    // Преобразуем Observable в Signal и обновляем WritableSignal
+    const signalValue = toSignal(videosObservable, { initialValue: [] });
+    this.videosSignal.set(signalValue());
   }
 }
