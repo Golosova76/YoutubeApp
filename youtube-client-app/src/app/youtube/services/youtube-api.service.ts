@@ -44,19 +44,19 @@ export class YoutubeApiService {
     return this.http.get<YouTubeVideoListResponse>(this.videosUrl, { params });
   }
 
-  searchAndFetchDetails(query: string, maxResults: number = 8): void {
-    const videosObservable = this.searchVideos(query, maxResults).pipe(
+  searchAndFetchDetails(
+    query: string,
+    maxResults: number = 8,
+  ): Observable<VideoItem[]> {
+    return this.searchVideos(query, maxResults).pipe(
       switchMap((searchResponse: YouTubeSearchResponse) => {
         const videoIds = searchResponse.items.map((item) => item.id.videoId);
         return this.getVideoStatistics(videoIds);
       }),
-      map((videoDetailsResponse: YouTubeVideoListResponse) => {
-        return videoDetailsResponse.items;
-      }),
+      map(
+        (videoDetailsResponse: YouTubeVideoListResponse) =>
+          videoDetailsResponse.items,
+      ),
     );
-
-    // Преобразуем Observable в Signal и обновляем WritableSignal
-    const signalValue = toSignal(videosObservable, { initialValue: [] });
-    this.videosSignal.set(signalValue());
   }
 }

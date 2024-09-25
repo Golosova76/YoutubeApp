@@ -10,13 +10,13 @@
     </div>
 
     <div class="video-list-container"
-         *ngIf="filteredVideos && filteredVideos.length">
-      <div *ngFor="let video of filteredVideos | sortVideos:sortField:sortOrder | filterVideos:searchQueryWords">
+         *ngIf="videosSignal() && videosSignal().length">
+      <div *ngFor="let video of (videosSignal() | filterVideosSearchString:searchString | sortVideos:sortField:sortOrder | filterVideos:searchQueryWords)">
         <app-search-item [videoData]="video"></app-search-item>
       </div>
     </div>
 
-    <div *ngIf="!customCards.length && !filteredVideos.length">
+    <div *ngIf="!customCards.length && !videosSignal().length">
       No results found.
     </div>
 

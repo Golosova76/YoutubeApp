@@ -1,5 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  signal,
+  Signal,
+  effect,
+  WritableSignal,
+} from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 
 import { YouTubeVideoListResponse } from 'app/shared/models/search-response.model';
 import { CustomCard, VideoItem } from 'app/shared/models/search-item.model';
@@ -20,6 +29,7 @@ import {
   map,
   Observable,
   tap,
+  take,
 } from 'rxjs';
 import { FormControl } from '@angular/forms';
 import { DEBOUNCE_TIME_MS } from 'app/shared/utils/utils';
@@ -29,6 +39,9 @@ import { AppState } from 'app/redux/state/app.state';
 import { selectFilteredVideos } from 'app/redux/selectors/video.selectors';
 import { CustomCardComponent } from 'app/youtube/components/custom-card/custom-card.component';
 import { selectCustomCards } from 'app/redux/selectors/custom-card.selectors';
+import { YoutubeApiService } from 'app/youtube/services/youtube-api.service';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { FilterVideosSearchStringPipe } from 'app/shared/pipe/filter-videos.pipe';
 
 @Component({
   selector: 'app-search-results',
@@ -42,6 +55,7 @@ import { selectCustomCards } from 'app/redux/selectors/custom-card.selectors';
     FilterVideosPipe,
     CustomCardComponent,
     FilterCustomCardsPipe,
+    FilterVideosSearchStringPipe,
   ],
 })
 export class SearchResultsComponent implements OnInit, OnDestroy {
@@ -51,6 +65,10 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
   public searchResultsVisible: boolean = false;
   private destroy$ = new Subject<void>();
   searchControl = new FormControl('');
+  public searchString: string = '';
+
+  // Добавляем videosSignal как сигнал для хранения списка видео
+  public videosSignal: WritableSignal<VideoItem[]> = signal<VideoItem[]>([]);
 
   filteredVideos$!: Observable<VideoItem[]>;
   customCards$!: Observable<CustomCard[]>;
@@ -60,9 +78,16 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private searchService: SearchService,
+    public youtubeService: YoutubeApiService,
     private sortService: SortService,
     private store: Store<AppState>,
-  ) {}
+  ) {
+    effect(() => {
+      const videos = this.videosSignal(); // Получаем текущее значение сигнала
+      this.filteredVideos = videos; // Обновляем filteredVideos на основе сигнала
+      this.updateSearchResultsVisibility(); // Обновляем видимость результатов поиска
+    });
+  }
 
   ngOnInit() {
     // Проверка состояния хранилища при инициализации компонента
@@ -89,21 +114,19 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
         tap((query: string) => {
           const safeValue = query ?? '';
           this.updateSearchQueryInURL(safeValue);
-          this.store.dispatch(loadVideos({ query: safeValue }));
+          // Запрашиваем данные и обновляем сигнал
+          this.youtubeService
+            .searchAndFetchDetails(safeValue)
+            .pipe(
+              take(1), // Нам нужно только одно значение
+            )
+            .subscribe((videos) => {
+              this.videosSignal.set(videos); // Обновляем сигнал через set()
+            });
         }),
       )
       .subscribe();
 
-    // Обновляем поток filteredVideos$ при изменении строки поиска
-    this.filteredVideos$ = this.store.select(selectFilteredVideos(''));
-
-    this.filteredVideos$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((videos: VideoItem[]) => {
-        this.filteredVideos = videos;
-        // Обновляем видимость результатов поиска
-        this.updateSearchResultsVisibility();
-      });
     // Подписываемся на изменения customCards, если они существуют
     this.customCards$
       .pipe(takeUntil(this.destroy$))
@@ -133,9 +156,8 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
   }
 
   private updateSearchResultsVisibility() {
-    // Видимость результатов поиска
     this.searchResultsVisible =
-      this.filteredCustomCards.length > 0 || this.filteredVideos.length > 0;
+      this.filteredCustomCards.length > 0 || this.videosSignal().length > 0;
   }
 
   get sortField(): 'date' | 'count' {

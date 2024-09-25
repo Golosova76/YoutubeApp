@@ -42,18 +42,20 @@ export class SearchItemComponent {
   ) {}
 
   ngOnInit() {
-    // Подписываемся на список избранных видео, чтобы определить, является ли текущее видео избранным
-    this.store
-      .select(selectFavoriteIds)
-      .pipe(
-        map((favoriteIds: string[]) => favoriteIds.includes(this.videoData.id)),
-        takeUntil(this.destroy$), // Добавляем оператор takeUntil для управления отпиской
-      )
-      .subscribe((isFavorite) => {
-        this.isFavorite = isFavorite;
-      });
+    if (this.videoData && this.videoData.id) {
+      this.store
+        .select(selectFavoriteIds)
+        .pipe(
+          map((favoriteIds: string[]) =>
+            favoriteIds.includes(this.videoData.id),
+          ),
+          takeUntil(this.destroy$), // Добавляем оператор takeUntil для управления отпиской
+        )
+        .subscribe((isFavorite) => {
+          this.isFavorite = isFavorite;
+        });
+    }
   }
-
   toggleFavorite() {
     if (this.isFavorite) {
       this.store.dispatch(removeFavorite({ videoId: this.videoData.id }));
