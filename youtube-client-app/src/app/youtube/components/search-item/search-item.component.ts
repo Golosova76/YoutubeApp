@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, effect, Input, SimpleChanges } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 import { CustomButtonComponent } from 'app/shared/custom-button/custom-button.component';
 
@@ -9,14 +9,7 @@ import { VideoStatisticsComponent } from '../video-statistics/video-statistics.c
 import { Router } from '@angular/router';
 import { VideoDataService } from 'app/youtube/services/video-data.service';
 import { getThumbnailUrl } from 'app/shared/utils/utils';
-import { Store } from '@ngrx/store';
-import { AppState } from 'app/redux/state/app.state';
-import { selectFavoriteIds } from 'app/redux/selectors/favorite.selectors';
-import { map, Subject, takeUntil } from 'rxjs';
-import {
-  addFavorite,
-  removeFavorite,
-} from 'app/redux/actions/favorite.actions';
+
 import { FavoriteService } from 'app/youtube/services/favorite.service';
 
 @Component({
@@ -34,12 +27,9 @@ import { FavoriteService } from 'app/youtube/services/favorite.service';
 export class SearchItemComponent {
   @Input() videoData!: VideoItem;
 
-  private destroy$ = new Subject<void>();
-
   constructor(
     private router: Router,
     private videoDataService: VideoDataService,
-    private store: Store<AppState>,
     private favoriteService: FavoriteService,
   ) {}
 
@@ -72,12 +62,6 @@ export class SearchItemComponent {
   }
 
   get isFavorite(): boolean {
-    // Проверяем через сигнал, избранное ли видео
     return this.favoriteService.isFavorite(this.videoData.id);
-  }
-
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 }
