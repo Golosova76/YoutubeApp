@@ -7,13 +7,13 @@
   </app-custom-button>
 
   <div class="video-list-container"
-       *ngIf="favoriteVideos && favoriteVideos.length">
-    <div *ngFor="let video of favoriteVideos">
+       *ngIf="favoriteVideosSignal() && favoriteVideosSignal().length">
+    <div *ngFor="let video of favoriteVideosSignal()">
       <app-search-item [videoData]="video"></app-search-item>
     </div>
   </div>
 
-  <div *ngIf="!favoriteVideos || !favoriteVideos.length">
+  <div *ngIf="!favoriteVideosSignal().length">
     No favorites yet.
   </div>
 </div>

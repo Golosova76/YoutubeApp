@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, effect, Input, SimpleChanges } from '@angular/core';
 
 import { CustomButtonComponent } from 'app/shared/custom-button/custom-button.component';
 
@@ -17,6 +17,7 @@ import {
   addFavorite,
   removeFavorite,
 } from 'app/redux/actions/favorite.actions';
+import { FavoriteService } from 'app/youtube/services/favorite.service';
 
 @Component({
   selector: 'app-search-item',
@@ -32,37 +33,15 @@ import {
 })
 export class SearchItemComponent {
   @Input() videoData!: VideoItem;
-  isFavorite: boolean = false;
+
   private destroy$ = new Subject<void>();
 
   constructor(
     private router: Router,
     private videoDataService: VideoDataService,
     private store: Store<AppState>,
+    private favoriteService: FavoriteService,
   ) {}
-
-  ngOnInit() {
-    if (this.videoData && this.videoData.id) {
-      this.store
-        .select(selectFavoriteIds)
-        .pipe(
-          map((favoriteIds: string[]) =>
-            favoriteIds.includes(this.videoData.id),
-          ),
-          takeUntil(this.destroy$), // Добавляем оператор takeUntil для управления отпиской
-        )
-        .subscribe((isFavorite) => {
-          this.isFavorite = isFavorite;
-        });
-    }
-  }
-  toggleFavorite() {
-    if (this.isFavorite) {
-      this.store.dispatch(removeFavorite({ videoId: this.videoData.id }));
-    } else {
-      this.store.dispatch(addFavorite({ videoId: this.videoData.id }));
-    }
-  }
 
   getThumbnailUrl(): string {
     return getThumbnailUrl(this.videoData);
@@ -80,12 +59,21 @@ export class SearchItemComponent {
   }
 
   addToFavorite() {
-    this.toggleFavorite();
+    if (this.favoriteService.isFavorite(this.videoData.id)) {
+      this.favoriteService.removeFavorite(this.videoData.id);
+    } else {
+      this.favoriteService.addFavorite(this.videoData);
+    }
   }
 
   // Метод для получения пути к изображению сердечка в зависимости от состояния
   getHeartIcon(): string {
     return this.isFavorite ? 'assets/heart_select.svg' : 'assets/heart.svg';
+  }
+
+  get isFavorite(): boolean {
+    // Проверяем через сигнал, избранное ли видео
+    return this.favoriteService.isFavorite(this.videoData.id);
   }
 
   ngOnDestroy() {

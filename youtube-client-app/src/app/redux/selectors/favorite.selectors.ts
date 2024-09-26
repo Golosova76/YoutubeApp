@@ -11,13 +11,19 @@ export const selectFavoriteVideoState =
 // Селектор для получения списка избранных видео по их идентификаторам
 export const selectFavoriteIds = createSelector(
   selectFavoriteVideoState,
-  (state: VideoState) => state.favoriteIds,
+  (state: VideoState) => {
+    console.log('Updated favoriteIds:', state.favoriteIds); // Лог для проверки
+    return state.favoriteIds;
+  },
 );
 
 // Селектор для получения всех видео (уже из общего состояния videos)
 export const selectVideoEntities = createSelector(
   selectVideoState,
-  (state: VideoState) => state.videoEntities,
+  (state: VideoState) => {
+    console.log('Video Entities:', state.videoEntities);
+    return state.videoEntities;
+  },
 );
 
 // Селектор для получения полного списка избранных видео
@@ -25,6 +31,12 @@ export const selectFavoriteVideos = createSelector(
   selectFavoriteIds,
   selectVideoEntities,
   (favoriteIds, videoEntities) => {
-    return favoriteIds.map((id) => videoEntities[id]);
+    const favoriteVideos = favoriteIds
+      .map((id) => videoEntities[id])
+      .filter((video) => video !== undefined);
+
+    console.log('Favorite videos:', favoriteVideos);
+
+    return favoriteVideos;
   },
 );
