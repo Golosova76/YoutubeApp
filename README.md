@@ -7,7 +7,7 @@ This is a YouTube Client Application built using Angular. The app provides users
 - **Search Videos**: Users can search for videos using keywords and view results in a structured layout.
 - **Video Playback**: Watch YouTube videos directly within the app.
 - **Related Content**: Explore related videos based on current selections.
-- **Responsive Design**: The app is optimized for both desktop and mobile devices.
+- **Responsive Design**: The app is optimized for both desktop and tablet devices.
 
 ## Technology Stack
 
